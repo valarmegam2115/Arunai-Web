@@ -4,6 +4,7 @@ const Routing = ()=>{
     return(
         <div>
             Routing page
+            Sample
         </div>
     )
 }
