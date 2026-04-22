@@ -3,7 +3,7 @@ import React from "react";
 const Routing = ()=>{
     return(
         <div>
-            Routing
+            Routing page
         </div>
     )
 }
