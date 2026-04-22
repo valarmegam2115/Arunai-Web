@@ -1,11 +1,9 @@
-import React from "react";
+import React from 'react'
 
-const Routing = ()=>{
-    return(
-        <div>
-            Routing page
-            Sample
-        </div>
-    )
+const Routing = () => {
+  return (
+    <div>Routing</div>
+  )
 }
-export default Routing;
+
+export default Routing
