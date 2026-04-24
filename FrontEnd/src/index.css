@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+@keyframes verticalNewsScroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.news-marquee-track {
+  animation: verticalNewsScroll 22s linear infinite;
+}
+
+.news-marquee-viewport:hover .news-marquee-track {
+  animation-play-state: paused;
+}
