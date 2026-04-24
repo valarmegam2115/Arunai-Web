@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Autoplay } from 'swiper/modules'
 import 'swiper/css'
@@ -8,9 +8,46 @@ import Img from '../../public/hero-image.png'
 import Coursepg from '../../public/course/course-pg.png'
 import Courseug from '../../public/course/course-ug.png'
 import CourseResearch from '../../public/course/course-research.png'
+import { initAnimations, cleanupAnimations } from '../utils/animations'
 
 // Add CSS for auto-scroll animation
 const style = document.createElement('style')
+style.textContent = `
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  
+  @keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  
+  @keyframes scroll-right-to-left {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+  
+  .carousel-container:hover .carousel-track {
+    animation-play-state: paused;
+  }
+  
+  .animate-scroll {
+    animation: scroll-left 8s linear infinite;
+  }
+  
+  .animate-scroll:hover {
+    animation-play-state: paused;
+  }
+  
+  .animate-scroll-right-to-left {
+    animation: scroll-right-to-left 8s linear infinite;
+  }
+  
+  .animate-scroll-right-to-left:hover {
+    animation-play-state: paused;
+  }
+`
 
 document.head.appendChild(style)
 // Using existing course images as placeholders until facility images are added
@@ -28,6 +65,11 @@ const Home = ({ showHero = false }) => {
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',
     maxHeight: '80vh',
+  }
+
+  const innerStyle = {
+    fontFamily: "Source Serif Pro",
+
   }
 
   // Replace this static structure with API/admin data later.
@@ -271,6 +313,61 @@ const Home = ({ showHero = false }) => {
     { id: 12, name: 'Cisco', image: CourseResearch }
   ]
 
+  const events = [
+    {
+      id: 1,
+      title: 'Tech Symposium 2024',
+      date: 'March 15, 2024',
+      image: Courseug,
+      description: 'Annual technical symposium featuring workshops, competitions, and guest lectures from industry experts.'
+    },
+    {
+      id: 2,
+      title: 'Cultural Festival',
+      date: 'April 20-22, 2024',
+      image: Coursepg,
+      description: 'Three-day cultural extravaganza showcasing music, dance, drama, and various artistic performances.'
+    },
+    {
+      id: 3,
+      title: 'Sports Meet 2024',
+      date: 'May 10-12, 2024',
+      image: CourseResearch,
+      description: 'Inter-college sports competition with various athletic events and team sports.'
+    },
+    {
+      id: 4,
+      title: 'Hackathon 2024',
+      date: 'June 5-6, 2024',
+      image: Courseug,
+      description: '48-hour coding challenge to develop innovative solutions for real-world problems.'
+    },
+    {
+      id: 5,
+      title: 'Alumni Meet',
+      date: 'July 15, 2024',
+      image: Coursepg,
+      description: 'Annual alumni reunion bringing together graduates from across the years.'
+    },
+    {
+      id: 6,
+      title: 'Convocation Ceremony',
+      date: 'August 25, 2024',
+      image: CourseResearch,
+      description: 'Graduation ceremony celebrating the achievements of our graduating students.'
+    }
+  ]
+
+  useEffect(() => {
+    // Initialize GSAP animations
+    initAnimations()
+    
+    // Cleanup on unmount
+    return () => {
+      cleanupAnimations()
+    }
+  }, [])
+
   return (
     <>
       {showHero && (
@@ -279,18 +376,15 @@ const Home = ({ showHero = false }) => {
             className="relative h-[120vh] bg-cover bg-center text-white"
             style={heroStyle}
           >
-            <div className="sticky top-[30%] z-40 flex items-center justify-center pointer-events-none">
-              <h1
-                className="text-white [text-shadow:0_4px_16px_rgba(0,0,0,0.5)]"
-                style={{
-                  fontSize: 'clamp(64px,15vw,180px)',
-                  letterSpacing: '6px',
-                  fontFamily: "'Playfair Display', serif",
-                  fontWeight: 400,
-                }}
-              >
-                ARUNAI
-              </h1>
+            <div className="absolute inset-0 z-40 flex items-center justify-center px-4">
+              <div className="text-center max-w-6xl">
+                <h1
+                  className="hero-title text-[3rem] sm:text-[4rem] md:text-[5rem] lg:text-[6rem] leading-tight tracking-wide text-white mb-4"
+                  style={innerStyle}
+                >
+                  ARUNAI
+                </h1>
+              </div>
             </div>
 
             <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/10 via-black/5 to-black/25" />
@@ -667,11 +761,136 @@ const Home = ({ showHero = false }) => {
             </div>
           </section>
 
-          <section>
-            <div>
-              <h1>Our Recruiters</h1>
-              <p>Our Placement Cell supports students through industry-focused training and campus recruitment drives, enabling them to secure opportunities with leading organizations.</p>
-              
+          <section className="bg-white px-6 py-16">
+            <div className="mx-auto max-w-7xl">
+              <div className="text-center mb-12">
+                <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] mb-4">
+                  Our Recruiters
+                </h2>
+                <p className="mx-auto max-w-4xl text-[20px] text-[#2d2d2d] leading-relaxed">
+                  Our Placement Cell supports students through industry-focused training and campus recruitment drives, enabling them to secure opportunities with leading organizations.
+                </p>
+              </div>
+
+              <div className="space-y-8">
+                {/* First Row - Left to Right */}
+                <div className="overflow-hidden">
+                  <div className="flex space-x-8 animate-scroll">
+                    {recruiters.concat(recruiters).map((recruiter, index) => (
+                      <div key={`${recruiter.id}-top-${index}`} className="flex-shrink-0">
+                        <div className="w-45 h-32 bg-gray-50 rounded-lg shadow-sm flex items-center justify-center border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                          <img 
+                            src={recruiter.image} 
+                            alt={recruiter.name} 
+                            className="w-45 h-32 object-contain"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Second Row - Right to Left */}
+                <div className="overflow-hidden">
+                  <div className="flex space-x-8 animate-scroll-right-to-left">
+                    {recruiters.concat(recruiters).map((recruiter, index) => (
+                      <div key={`${recruiter.id}-bottom-${index}`} className="flex-shrink-0">
+                        <div className="w-45 h-32 bg-gray-50 rounded-lg shadow-sm flex items-center justify-center border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                          <img 
+                            src={recruiter.image} 
+                            alt={recruiter.name} 
+                            className="w-45 h-32 object-contain"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section className="bg-[#EEF2F6] px-6 py-16">
+            <div className="mx-auto max-w-7xl">
+              <div className="text-center mb-12">
+                <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] mb-4">
+                  Our Events
+                </h2>
+                <p className="mx-auto max-w-4xl text-[20px] text-[#2d2d2d] leading-relaxed">
+                  Our events inspire learning, collaboration, innovation, and vibrant campus community life.
+                </p>
+              </div>
+
+              <div className="mx-auto mt-12 max-w-7xl relative">
+
+              <div className="relative">
+                <Swiper
+                  modules={[Navigation, Pagination, Autoplay]}
+                  slidesPerView={1}
+                  spaceBetween={25}
+                  loop={true}
+                  autoplay={{
+                    delay: 3000,
+                    disableOnInteraction: false,
+                  }}
+                  navigation={{
+                    nextEl: ".events-custom-next",
+                    prevEl: ".events-custom-prev",
+                  }}
+                  pagination={{ clickable: true }}
+                  breakpoints={{
+                    768: { slidesPerView: 2 },
+                    1024: { slidesPerView: 3 },
+                  }}
+                  className="events-swiper"
+                >
+                  {events.map((event) => (
+                    <SwiperSlide key={event.id}>
+                      <div className="bg-[#F9FAFB] rounded-xl shadow-sm p-6 border border-gray-200 h-full">
+                        <div className="relative h-48 overflow-hidden rounded-lg mb-4">
+                          <img 
+                            src={event.image} 
+                            alt={event.title} 
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute top-2 right-2 bg-white px-3 py-1 rounded-full shadow-sm">
+                            <span className="text-xs font-semibold text-[#061a66]">
+                              {event.date}
+                            </span>
+                          </div>
+                        </div>
+                        <h3 className="text-[16px] font-bold text-[#1e3a5f] mb-3">
+                          {event.title}
+                        </h3>
+                        <p className="text-[14px] text-gray-700 leading-relaxed mb-4">
+                          {event.description}
+                        </p>
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <h4 className="text-[15px] font-semibold text-red-700">
+                              Event - AEC
+                            </h4>
+                            <p className="text-[13px] text-[#061a66] font-medium">
+                              {event.date}
+                            </p>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+
+                {/* Custom Navigation Arrows */}
+                <button className="events-custom-prev absolute -left-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md">
+                  ‹
+                </button>
+
+                <button className="events-custom-next absolute -right-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md">
+                  ›
+                </button>
+
+              </div>
+            </div>
             </div>
           </section>
         </>

@@ -49,7 +49,7 @@ const Routing = () => {
         </a>
       </aside>
       {isHome && (
-        <span className="fixed bottom-4 left-2 z-40 rounded-2xl bg-orange-500 px-4 py-2 text-xs text-white shadow-lg">
+        <span className="fixed bottom-4 left-4 z-40 rounded-3xl bg-orange-500 px-6 py-3 text-md text-white shadow-lg">
           Admissions Open 2026 - 2027
         </span>
       )}
