@@ -10,11 +10,11 @@ export const animations = {
   hero: {
     title: {
       from: { opacity: 0, y: 50 },
-      to: { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }
+      to: { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
     },
     subtitle: {
       from: { opacity: 0, y: 30 },
-      to: { opacity: 1, y: 0, duration: 1, delay: 0.3, ease: 'power3.out' }
+      to: { opacity: 1, y: 0, duration: 0.7, delay: 0.2, ease: 'power3.out' }
     },
     buttons: {
       from: { opacity: 0, scale: 0.8 },
@@ -25,20 +25,20 @@ export const animations = {
   // Section animations
   section: {
     fadeInUp: {
-      from: { opacity: 0, y: 60 },
-      to: { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }
+      from: { opacity: 0, y: 40 },
+      to: { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }
     },
     fadeInLeft: {
-      from: { opacity: 0, x: -60 },
-      to: { opacity: 1, x: 0, duration: 1, ease: 'power3.out' }
+      from: { opacity: 0, x: -40 },
+      to: { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out' }
     },
     fadeInRight: {
-      from: { opacity: 0, x: 60 },
-      to: { opacity: 1, x: 0, duration: 1, ease: 'power3.out' }
+      from: { opacity: 0, x: 40 },
+      to: { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out' }
     },
     staggerCards: {
-      from: { opacity: 0, y: 40, scale: 0.9 },
-      to: { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }
+      from: { opacity: 0, y: 30, scale: 0.95 },
+      to: { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power2.out' }
     }
   },
 
@@ -86,7 +86,7 @@ export const initAnimations = () => {
 
   // Section scroll animations
   const sections = document.querySelectorAll('section')
-  sections.forEach((section, index) => {
+  sections.forEach((section) => {
     const sectionTitle = section.querySelector('h2')
     const sectionParagraph = section.querySelector('p')
     const cards = section.querySelectorAll('.grid > div, .grid > article, .swiper-slide')
@@ -130,8 +130,8 @@ export const initAnimations = () => {
         animations.section.staggerCards.from,
         {
           ...animations.section.staggerCards.to,
-          stagger: 0.1,
-          delay: 0.3,
+          stagger: 0.05,
+          delay: 0.1,
           scrollTrigger: {
             trigger: section,
             start: 'top 85%',

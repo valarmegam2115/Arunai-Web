@@ -4,52 +4,13 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import Img from '../../public/hero-image.png'
-import Coursepg from '../../public/course/course-pg.png'
-import Courseug from '../../public/course/course-ug.png'
-import CourseResearch from '../../public/course/course-research.png'
+const Img = '/hero-image.png'
+const Coursepg = '/course/course-pg.png'
+const Courseug = '/course/course-ug.png'
+const CourseResearch = '/course/course-research.png'
 import { initAnimations, cleanupAnimations } from '../utils/animations'
 
-// Add CSS for auto-scroll animation
-const style = document.createElement('style')
-style.textContent = `
-  @keyframes scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  
-  @keyframes scroll-left {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  
-  @keyframes scroll-right-to-left {
-    0% { transform: translateX(-50%); }
-    100% { transform: translateX(0); }
-  }
-  
-  .carousel-container:hover .carousel-track {
-    animation-play-state: paused;
-  }
-  
-  .animate-scroll {
-    animation: scroll-left 8s linear infinite;
-  }
-  
-  .animate-scroll:hover {
-    animation-play-state: paused;
-  }
-  
-  .animate-scroll-right-to-left {
-    animation: scroll-right-to-left 8s linear infinite;
-  }
-  
-  .animate-scroll-right-to-left:hover {
-    animation-play-state: paused;
-  }
-`
 
-document.head.appendChild(style)
 // Using existing course images as placeholders until facility images are added
 const DigitalClassrooms = Courseug
 const DigitalLibrary = Coursepg
@@ -358,30 +319,6 @@ const Home = ({ showHero = false }) => {
     }
   ]
 
-  const achievements = [
-    {
-      id: 1,
-      icon: '🏆',
-      title: 'Best Engineering College',
-      description: 'Awarded the best engineering college in the region for the year 2023.',
-      value: '1st'
-    },
-    {
-      id: 2,
-      icon: '🎓',
-      title: 'Placement Record',
-      description: 'Highest number of placements with top MNCs in the current academic year.',
-      value: '95%'
-    },
-    {
-      id: 3,
-      icon: '🔬',
-      title: 'Research Grants',
-      description: 'Secured significant funding for advanced research projects and innovation.',
-      value: '50M+'
-    }
-  ]
-
   const accreditations = [
     { id: 'naac1', image: Courseug, alt: 'NAAC A Grade' },
     { id: 'dnv', image: Coursepg, alt: 'DNV ISO 9001' },
@@ -396,7 +333,7 @@ const Home = ({ showHero = false }) => {
   useEffect(() => {
     // Initialize GSAP animations
     initAnimations()
-    
+
     // Cleanup on unmount
     return () => {
       cleanupAnimations()
@@ -436,13 +373,12 @@ const Home = ({ showHero = false }) => {
               Applications are now open for UG and PG programs for the academic year 2026 - 2027 - Apply Now
             </marquee>
           </div>
-          <section className="bg-[#ffffff] px-6 py-16 text-center text-slate-900">
+          <section className="bg-[#ffffff] px-4 sm:px-6 py-12 sm:py-16 text-center text-slate-900">
             <div className="mx-auto max-w-7xl">
-              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0">
+              <h2 className="text-[28px] sm:text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0 leading-tight">
                 Welcome to Arunai Engineering College
               </h2>
-              <p className="mx-auto mt-8 max-w-7xl text-[20px] leading-[2.1] text-black opacity-0">
-
+              <p className="mx-auto mt-6 sm:mt-8 max-w-7xl text-[16px] sm:text-[20px] leading-[1.8] sm:leading-[2.1] text-black opacity-0 text-justify sm:text-center">
 
                 In a rapidly evolving world, today's graduates face constant challenges brought by emerging technologies, dynamic work environments, and changing global trends. To thrive in such a landscape, students require adaptable mindsets and versatile skill sets. Arunai Engineering College (AEC) is committed to equipping students with these essential competencies, ensuring they are well-prepared to succeed in their careers and contribute meaningfully to society.
 
@@ -458,8 +394,8 @@ const Home = ({ showHero = false }) => {
               <div className="flex w-max animate-scroll py-4">
                 <div className="flex gap-6 pr-6">
                   {accreditations.map((item) => (
-                    <div 
-                      key={item.id} 
+                    <div
+                      key={item.id}
                       className="flex-shrink-0 w-52 h-52 flex items-center justify-center rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow p-2"
                     >
                       <img src={item.image} alt={item.alt} className="w-full h-full object-contain" />
@@ -468,8 +404,8 @@ const Home = ({ showHero = false }) => {
                 </div>
                 <div className="flex gap-6 pr-6">
                   {accreditations.map((item) => (
-                    <div 
-                      key={`${item.id}-clone`} 
+                    <div
+                      key={`${item.id}-clone`}
                       className="flex-shrink-0 w-52 h-52 flex items-center justify-center rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow p-2"
                     >
                       <img src={item.image} alt={item.alt} className="w-full h-full object-contain" />
@@ -508,10 +444,10 @@ const Home = ({ showHero = false }) => {
           </section>
           <section className="bg-[#ffffff] px-6 pb-16 pt-4 text-center">
             <div className="mx-auto max-w-7xl">
-              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0">
+              <h2 className="text-[32px] md:text-[44px] font-extrabold tracking-tight text-[#061a66] leading-tight opacity-0">
                 Courses Offered
               </h2>
-              <p className="mt-2 text-[20px] text-[#2d2d2d] opacity-0">
+              <p className="mt-2 text-[16px] md:text-[20px] text-[#2d2d2d] opacity-0">
                 Equipping students to lead with purpose and contribute meaningfully to a complex, evolving world.
               </p>
 
@@ -554,10 +490,10 @@ const Home = ({ showHero = false }) => {
           </section>
           <section className="bg-[#EEF2F6] px-6 py-16">
             <div className="mx-auto max-w-7xl text-center">
-              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0">
+              <h2 className="text-[32px] md:text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0 leading-tight">
                 Facilities
               </h2>
-              <p className="mx-auto mt-4 max-w-4xl text-[20px] text-[#2d2d2d] opacity-0">
+              <p className="mx-auto mt-4 max-w-4xl text-[16px] md:text-[20px] text-[#2d2d2d] opacity-0">
                 Our college facilities provide modern infrastructure, advanced laboratories, libraries, and supportive spaces for holistic learning.
               </p>
             </div>
@@ -672,10 +608,10 @@ const Home = ({ showHero = false }) => {
           </section>
           <section className="bg-[#EEF2F6] px-6 py-16">
             <div className="mx-auto max-w-7xl text-center">
-              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0">
+              <h2 className="text-[32px] md:text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0 leading-tight">
                 Extra-Curricular Activities
               </h2>
-              <p className="mx-auto mt-4 max-w-4xl text-[20px] text-[#2d2d2d] opacity-0">
+              <p className="mx-auto mt-4 max-w-4xl text-[16px] md:text-[20px] text-[#2d2d2d] opacity-0">
                 Vibrant extracurricular activities encourage talent development, physical fitness, cultural expression, and student engagement.
               </p>
             </div>
@@ -710,19 +646,19 @@ const Home = ({ showHero = false }) => {
             </div>
           </section>
 
-          <section className="bg-[#EEF2F6] px-6 py-16">
+          <section className="bg-[#EEF2F6] px-6 py-16 overflow-hidden">
             <div className="mx-auto max-w-7.5xl">
               <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 flex flex-col lg:flex-row items-center ">
                 {/* Left Column - Text Content */}
                 <div className="space-y-6 px-3">
-                  <h2 className="text-[40px] font-bold text-[#061a66] leading-tight">
+                  <h2 className="text-[30px] md:text-[40px] font-bold text-[#061a66] leading-tight">
                     Placement & Career Development Cell
                   </h2>
                   <div className="space-y-4  ">
-                    <p className="text-[17px] leading-9 text-black text-justify">
+                    <p className="text-[17px] leading-7 md:leading-9 text-black text-justify">
                       Arunai Engineering College is committed to ensuring strong career outcomes for its students through a structured and proactive Placement & Career Development Cell. The college maintains close collaboration with leading industries, corporate organizations, and recruiters to bridge the gap between academic learning and professional requirements.
                     </p>
-                    <p className="text-[17px] leading-9 text-black text-justify">
+                    <p className="text-[17px] leading-7 md:leading-9 text-black text-justify">
                       The Placement Cell focuses on enhancing students' employability by offering continuous training in technical skills, aptitude, communication, and personality development. Regular workshops, mock interviews, group discussions, and industry interaction programs are conducted to prepare students for competitive recruitment processes.
                     </p>
                   </div>
@@ -732,23 +668,29 @@ const Home = ({ showHero = false }) => {
                   </a>
                 </div>
 
-                {/* Right Column - Congratulations Card */}
-                <div className="relative overflow-hidden rounded-lg shadow-lg">
-                  <img
-                    src={Coursepg}
-                    alt="Course Program"
-                    className="w-full h-full object-cover"
-                  />
+                
+                <div className="relative pr-4 py-7 ">
+                  {/* The Blue Background Box (The "Plate") */}
+                  <div className="absolute inset-0 bg-[#061a66] rounded-[2rem] shadow-xl translate-x-[10%] -translate-y-0 hidden sm:block" />
+
+                  {/* The Image Box */}
+                  <div className="relative z-10 overflow-hidden rounded-2xl shadow-2xl ">
+                    <img
+                      src={Coursepg}
+                      alt="Placement Cell"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </section>
           <section className="bg-[#EEF2F6] px-6 py-16">
             <div className="mx-auto max-w-7.5xl text-center">
-              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0">
+              <h2 className="text-[32px] md:text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0 leading-tight">
                 Alumni Testimonials
               </h2>
-              <p className="mx-auto mt-4 max-w-4xl text-[20px] text-[#2d2d2d] opacity-0">
+              <p className="mx-auto mt-4 max-w-4xl text-[16px] md:text-[20px] text-[#2d2d2d] opacity-0">
                 Hear from our alumni about their journey at Arunai Engineering College and beyond.
               </p>
             </div>
@@ -823,10 +765,10 @@ const Home = ({ showHero = false }) => {
           <section className="bg-white px-6 py-16">
             <div className="mx-auto max-w-7xl">
               <div className="text-center mb-12">
-                <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] mb-4 opacity-0">
+                <h2 className="text-[32px] md:text-[44px] font-extrabold tracking-tight text-[#061a66] mb-4 opacity-0 leading-tight">
                   Our Recruiters
                 </h2>
-                <p className="mx-auto max-w-4xl text-[20px] text-[#2d2d2d] leading-relaxed opacity-0">
+                <p className="mx-auto max-w-4xl text-[16px] md:text-[20px] text-[#2d2d2d] leading-relaxed opacity-0">
                   Our Placement Cell supports students through industry-focused training and campus recruitment drives, enabling them to secure opportunities with leading organizations.
                 </p>
               </div>
@@ -839,9 +781,9 @@ const Home = ({ showHero = false }) => {
                       {recruiters.map((recruiter) => (
                         <div key={`${recruiter.id}-top`} className="flex-shrink-0">
                           <div className="w-45 h-32 bg-gray-50 rounded-lg shadow-sm flex items-center justify-center border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                            <img 
-                              src={recruiter.image} 
-                              alt={recruiter.name} 
+                            <img
+                              src={recruiter.image}
+                              alt={recruiter.name}
                               className="w-45 h-32 object-contain"
                             />
                           </div>
@@ -852,9 +794,9 @@ const Home = ({ showHero = false }) => {
                       {recruiters.map((recruiter) => (
                         <div key={`${recruiter.id}-top-clone`} className="flex-shrink-0">
                           <div className="w-45 h-32 bg-gray-50 rounded-lg shadow-sm flex items-center justify-center border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                            <img 
-                              src={recruiter.image} 
-                              alt={recruiter.name} 
+                            <img
+                              src={recruiter.image}
+                              alt={recruiter.name}
                               className="w-45 h-32 object-contain"
                             />
                           </div>
@@ -871,9 +813,9 @@ const Home = ({ showHero = false }) => {
                       {recruiters.map((recruiter) => (
                         <div key={`${recruiter.id}-bottom`} className="flex-shrink-0">
                           <div className="w-45 h-32 bg-gray-50 rounded-lg shadow-sm flex items-center justify-center border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                            <img 
-                              src={recruiter.image} 
-                              alt={recruiter.name} 
+                            <img
+                              src={recruiter.image}
+                              alt={recruiter.name}
                               className="w-45 h-32 object-contain"
                             />
                           </div>
@@ -884,9 +826,9 @@ const Home = ({ showHero = false }) => {
                       {recruiters.map((recruiter) => (
                         <div key={`${recruiter.id}-bottom-clone`} className="flex-shrink-0">
                           <div className="w-45 h-32 bg-gray-50 rounded-lg shadow-sm flex items-center justify-center border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                            <img 
-                              src={recruiter.image} 
-                              alt={recruiter.name} 
+                            <img
+                              src={recruiter.image}
+                              alt={recruiter.name}
                               className="w-45 h-32 object-contain"
                             />
                           </div>
@@ -901,88 +843,88 @@ const Home = ({ showHero = false }) => {
           <section className="bg-[#EEF2F6] px-6 py-16">
             <div className="mx-auto max-w-7xl">
               <div className="text-center mb-12">
-                <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] mb-4 opacity-0">
+                <h2 className="text-[32px] md:text-[44px] font-extrabold tracking-tight text-[#061a66] mb-4 opacity-0 leading-tight">
                   Our Events
                 </h2>
-                <p className="mx-auto max-w-4xl text-[20px] text-[#2d2d2d] leading-relaxed opacity-0">
+                <p className="mx-auto max-w-4xl text-[16px] md:text-[20px] text-[#2d2d2d] leading-relaxed opacity-0">
                   Our events inspire learning, collaboration, innovation, and vibrant campus community life.
                 </p>
               </div>
 
               <div className="mx-auto mt-12 max-w-7xl relative">
 
-              <div className="relative">
-                <Swiper
-                  modules={[Navigation, Pagination, Autoplay]}
-                  slidesPerView={1}
-                  spaceBetween={25}
-                  loop={true}
-                  autoplay={{
-                    delay: 3000,
-                    disableOnInteraction: false,
-                  }}
-                  navigation={{
-                    nextEl: ".events-custom-next",
-                    prevEl: ".events-custom-prev",
-                  }}
-                  pagination={{ clickable: true }}
-                  breakpoints={{
-                    768: { slidesPerView: 2 },
-                    1024: { slidesPerView: 3 },
-                  }}
-                  className="events-swiper"
-                >
-                  {events.map((event) => (
-                    <SwiperSlide key={event.id}>
-                      <div className="bg-[#F9FAFB] rounded-xl shadow-sm p-6 border border-gray-200 h-full">
-                        <div className="relative h-48 overflow-hidden rounded-lg mb-4">
-                          <img 
-                            src={event.image} 
-                            alt={event.title} 
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute top-2 right-2 bg-white px-3 py-1 rounded-full shadow-sm">
-                            <span className="text-xs font-semibold text-[#061a66]">
-                              {event.date}
-                            </span>
+                <div className="relative">
+                  <Swiper
+                    modules={[Navigation, Pagination, Autoplay]}
+                    slidesPerView={1}
+                    spaceBetween={25}
+                    loop={true}
+                    autoplay={{
+                      delay: 3000,
+                      disableOnInteraction: false,
+                    }}
+                    navigation={{
+                      nextEl: ".events-custom-next",
+                      prevEl: ".events-custom-prev",
+                    }}
+                    pagination={{ clickable: true }}
+                    breakpoints={{
+                      768: { slidesPerView: 2 },
+                      1024: { slidesPerView: 3 },
+                    }}
+                    className="events-swiper"
+                  >
+                    {events.map((event) => (
+                      <SwiperSlide key={event.id}>
+                        <div className="bg-[#F9FAFB] rounded-xl shadow-sm p-6 border border-gray-200 h-full">
+                          <div className="relative h-48 overflow-hidden rounded-lg mb-4">
+                            <img
+                              src={event.image}
+                              alt={event.title}
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute top-2 right-2 bg-white px-3 py-1 rounded-full shadow-sm">
+                              <span className="text-xs font-semibold text-[#061a66]">
+                                {event.date}
+                              </span>
+                            </div>
                           </div>
-                        </div>                                                                                                                                                                                 
-                        <h3 className="text-[16px] font-bold text-[#1e3a5f] mb-3">
-                          {event.title}
-                        </h3>
-                        <p className="text-[14px] text-gray-700 leading-relaxed mb-4">
-                          {event.description}
-                        </p>
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <h4 className="text-[15px] font-semibold text-red-700">
-                              Event - AEC
-                            </h4>
-                            <p className="text-[13px] text-[#061a66] font-medium">
-                              {event.date}
-                            </p>
+                          <h3 className="text-[16px] font-bold text-[#1e3a5f] mb-3">
+                            {event.title}
+                          </h3>
+                          <p className="text-[14px] text-gray-700 leading-relaxed mb-4">
+                            {event.description}
+                          </p>
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <h4 className="text-[15px] font-semibold text-red-700">
+                                Event - AEC
+                              </h4>
+                              <p className="text-[13px] text-[#061a66] font-medium">
+                                {event.date}
+                              </p>
+                            </div>
+
                           </div>
-                          
                         </div>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
 
-                {/* Custom Navigation Arrows */}
-                <button className="events-custom-prev absolute -left-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md">
-                  ‹
-                </button>
+                  {/* Custom Navigation Arrows */}
+                  <button className="events-custom-prev absolute -left-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md">
+                    ‹
+                  </button>
 
-                <button className="events-custom-next absolute -right-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md">
-                  ›
-                </button>
+                  <button className="events-custom-next absolute -right-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md">
+                    ›
+                  </button>
 
+                </div>
               </div>
             </div>
-            </div>
           </section>
-           
+
         </>
       )}
 

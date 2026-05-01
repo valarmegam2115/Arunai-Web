@@ -1,9 +1,11 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
 
 @keyframes verticalNewsScroll {
   0% {
     transform: translateY(0);
   }
+
   100% {
     transform: translateY(-50%);
   }
@@ -18,13 +20,23 @@
 }
 
 @keyframes horizontalScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes horizontalScrollReverse {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .animate-scroll {
@@ -35,7 +47,8 @@
   animation: horizontalScrollReverse 30s linear infinite;
 }
 
-.animate-scroll:hover, .animate-scroll-right-to-left:hover {
+.animate-scroll:hover,
+.animate-scroll-right-to-left:hover {
   animation-play-state: paused;
 }
 
