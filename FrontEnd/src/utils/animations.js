@@ -89,7 +89,7 @@ export const initAnimations = () => {
   sections.forEach((section, index) => {
     const sectionTitle = section.querySelector('h2')
     const sectionParagraph = section.querySelector('p')
-    const cards = section.querySelectorAll('.grid > div, .swiper-slide')
+    const cards = section.querySelectorAll('.grid > div, .grid > article, .swiper-slide')
 
     // Animate section title
     if (sectionTitle) {
@@ -134,9 +134,8 @@ export const initAnimations = () => {
           delay: 0.3,
           scrollTrigger: {
             trigger: section,
-            start: 'top 70%',
-            end: 'bottom 30%',
-            toggleActions: 'play none none reverse'
+            start: 'top 85%',
+            once: true
           }
         }
       )
@@ -170,6 +169,34 @@ export const initAnimations = () => {
         }
       }
     )
+  })
+
+  // Achievements section animations
+  const achievementCards = document.querySelectorAll('.grid.grid-cols-1 > div')
+  achievementCards.forEach((card, index) => {
+    gsap.fromTo(card,
+      animations.section.fadeInUp.from,
+      {
+        ...animations.section.fadeInUp.to,
+        delay: index * 0.15,
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 80%',
+          end: 'bottom 30%',
+          toggleActions: 'play none none reverse'
+        }
+      }
+    )
+  })
+
+  // Achievement hover animations
+  achievementCards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      gsap.to(card, animations.card.hover)
+    })
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, animations.card.enter)
+    })
   })
 
   // Navigation animations

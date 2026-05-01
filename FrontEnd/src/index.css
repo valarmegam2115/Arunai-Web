@@ -16,3 +16,30 @@
 .news-marquee-viewport:hover .news-marquee-track {
   animation-play-state: paused;
 }
+
+@keyframes horizontalScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes horizontalScrollReverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-scroll {
+  animation: horizontalScroll 30s linear infinite;
+}
+
+.animate-scroll-right-to-left {
+  animation: horizontalScrollReverse 30s linear infinite;
+}
+
+.animate-scroll:hover, .animate-scroll-right-to-left:hover {
+  animation-play-state: paused;
+}
+
+.mask-horizontal-edges {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}

@@ -358,6 +358,41 @@ const Home = ({ showHero = false }) => {
     }
   ]
 
+  const achievements = [
+    {
+      id: 1,
+      icon: '🏆',
+      title: 'Best Engineering College',
+      description: 'Awarded the best engineering college in the region for the year 2023.',
+      value: '1st'
+    },
+    {
+      id: 2,
+      icon: '🎓',
+      title: 'Placement Record',
+      description: 'Highest number of placements with top MNCs in the current academic year.',
+      value: '95%'
+    },
+    {
+      id: 3,
+      icon: '🔬',
+      title: 'Research Grants',
+      description: 'Secured significant funding for advanced research projects and innovation.',
+      value: '50M+'
+    }
+  ]
+
+  const accreditations = [
+    { id: 'naac1', image: Courseug, alt: 'NAAC A Grade' },
+    { id: 'dnv', image: Coursepg, alt: 'DNV ISO 9001' },
+    { id: 'iic', image: CourseResearch, alt: 'IIC' },
+    { id: 'csi', image: Courseug, alt: 'CSI' },
+    { id: 'ieee', image: Coursepg, alt: 'IEEE' },
+    { id: 'nba', image: CourseResearch, alt: 'NBA' },
+    { id: 'naac2', image: Courseug, alt: 'NAAC A Grade' },
+    { id: 'dnv2', image: Coursepg, alt: 'DNV ISO 9001' },
+  ]
+
   useEffect(() => {
     // Initialize GSAP animations
     initAnimations()
@@ -403,10 +438,10 @@ const Home = ({ showHero = false }) => {
           </div>
           <section className="bg-[#ffffff] px-6 py-16 text-center text-slate-900">
             <div className="mx-auto max-w-7xl">
-              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66]">
+              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0">
                 Welcome to Arunai Engineering College
               </h2>
-              <p className="mx-auto mt-8 max-w-7xl text-[20px] leading-[2.1] text-black">
+              <p className="mx-auto mt-8 max-w-7xl text-[20px] leading-[2.1] text-black opacity-0">
 
 
                 In a rapidly evolving world, today's graduates face constant challenges brought by emerging technologies, dynamic work environments, and changing global trends. To thrive in such a landscape, students require adaptable mindsets and versatile skill sets. Arunai Engineering College (AEC) is committed to equipping students with these essential competencies, ensuring they are well-prepared to succeed in their careers and contribute meaningfully to society.
@@ -419,18 +454,42 @@ const Home = ({ showHero = false }) => {
                 More about Arunai
               </button>
             </div>
+            <div className="mt-8 overflow-hidden mask-horizontal-edges">
+              <div className="flex w-max animate-scroll py-4">
+                <div className="flex gap-6 pr-6">
+                  {accreditations.map((item) => (
+                    <div 
+                      key={item.id} 
+                      className="flex-shrink-0 w-52 h-52 flex items-center justify-center rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow p-2"
+                    >
+                      <img src={item.image} alt={item.alt} className="w-full h-full object-contain" />
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-6 pr-6">
+                  {accreditations.map((item) => (
+                    <div 
+                      key={`${item.id}-clone`} 
+                      className="flex-shrink-0 w-52 h-52 flex items-center justify-center rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow p-2"
+                    >
+                      <img src={item.image} alt={item.alt} className="w-full h-full object-contain" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </section>
           <section className="bg-[#EEF2F6] px-6 py-14">
             <div className="mx-auto max-w-7xl text-center">
-              <h2 className="text-[40px] font-extrabold tracking-tight text-[#061a66]">Campus News</h2>
-              <p className="mt-2 text-[16px] text-[#c75b22]">
+              <h2 className="text-[40px] font-extrabold tracking-tight text-[#061a66] opacity-0">Campus News</h2>
+              <p className="mt-2 text-[16px] text-[#c75b22] opacity-0">
                 Celebrating people, research, and innovation shaping the campus
               </p>
             </div>
 
             <div className="mx-auto mt-7 grid max-w-7xl gap-3 md:grid-cols-3">
               {campusNewsCards.map((card) => (
-                <div key={card.id} className="border border-[#d4d6db] bg-[#fdfdfd] shadow-sm">
+                <div key={card.id} className="border border-[#d4d6db] bg-[#fdfdfd] shadow-sm opacity-0">
                   <h3 className={`border-b border-[#e6e8ed] px-4 py-3 text-left text-[20px] font-extrabold tracking-wide ${card.titleColor}`}>
                     {card.title}
                   </h3>
@@ -449,16 +508,16 @@ const Home = ({ showHero = false }) => {
           </section>
           <section className="bg-[#ffffff] px-6 pb-16 pt-4 text-center">
             <div className="mx-auto max-w-7xl">
-              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66]">
+              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0">
                 Courses Offered
               </h2>
-              <p className="mt-2 text-[20px] text-[#2d2d2d]">
+              <p className="mt-2 text-[20px] text-[#2d2d2d] opacity-0">
                 Equipping students to lead with purpose and contribute meaningfully to a complex, evolving world.
               </p>
 
               <div className="mx-auto mt-9 grid max-w-7xl gap-6 md:grid-cols-3">
                 {coursesOffered.map((course) => (
-                  <article key={course.id} className="overflow-hidden rounded-md bg-[#001c6d] shadow-md">
+                  <article key={course.id} className="overflow-hidden rounded-md bg-[#001c6d] shadow-md opacity-0">
                     <img src={course.image} alt={course.cta} className="h-[250px] w-full object-cover" />
                     <div className="px-6 pb-4 pt-3 text-white">
                       <p className="text-[15px] leading-[1.8]">{course.description}</p>
@@ -476,7 +535,7 @@ const Home = ({ showHero = false }) => {
             <div className="mx-auto max-w-9xl">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {collegeStats.map((stat) => (
-                  <div key={stat.id} className="relative overflow-hidden rounded-lg shadow-lg ">
+                  <div key={stat.id} className="relative overflow-hidden rounded-lg shadow-lg opacity-0">
                     <img
                       src={stat.image}
                       alt={stat.text}
@@ -495,17 +554,17 @@ const Home = ({ showHero = false }) => {
           </section>
           <section className="bg-[#EEF2F6] px-6 py-16">
             <div className="mx-auto max-w-7xl text-center">
-              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66]">
+              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0">
                 Facilities
               </h2>
-              <p className="mx-auto mt-4 max-w-4xl text-[20px] text-[#2d2d2d]">
+              <p className="mx-auto mt-4 max-w-4xl text-[20px] text-[#2d2d2d] opacity-0">
                 Our college facilities provide modern infrastructure, advanced laboratories, libraries, and supportive spaces for holistic learning.
               </p>
             </div>
 
             <div className="mx-auto mt-12 grid max-w-7xl gap-6 lg:grid-cols-4">
               {/* First Row: 50% + 25% + 25% */}
-              <div className="lg:col-span-2 relative overflow-hidden rounded-lg shadow-lg">
+              <div className="lg:col-span-2 relative overflow-hidden rounded-lg shadow-lg opacity-0">
                 <img
                   src={facilitiesOffered[0].image}
                   alt={facilitiesOffered[0].title}
@@ -522,7 +581,7 @@ const Home = ({ showHero = false }) => {
                   </h3>
                 </div>
               </div>
-              <div className="relative overflow-hidden rounded-lg shadow-lg">
+              <div className="relative overflow-hidden rounded-lg shadow-lg opacity-0">
                 <img
                   src={facilitiesOffered[1].image}
                   alt={facilitiesOffered[1].title}
@@ -539,7 +598,7 @@ const Home = ({ showHero = false }) => {
                   </h3>
                 </div>
               </div>
-              <div className="relative overflow-hidden rounded-lg shadow-lg">
+              <div className="relative overflow-hidden rounded-lg shadow-lg opacity-0">
                 <img
                   src={facilitiesOffered[2].image}
                   alt={facilitiesOffered[2].title}
@@ -558,7 +617,7 @@ const Home = ({ showHero = false }) => {
               </div>
 
               {/* Second Row: 25% + 25% + 50% */}
-              <div className="relative overflow-hidden rounded-lg shadow-lg">
+              <div className="relative overflow-hidden rounded-lg shadow-lg opacity-0">
                 <img
                   src={facilitiesOffered[3].image}
                   alt={facilitiesOffered[3].title}
@@ -575,7 +634,7 @@ const Home = ({ showHero = false }) => {
                   </h3>
                 </div>
               </div>
-              <div className="relative overflow-hidden rounded-lg shadow-lg">
+              <div className="relative overflow-hidden rounded-lg shadow-lg opacity-0">
                 <img
                   src={facilitiesOffered[4].image}
                   alt={facilitiesOffered[4].title}
@@ -592,7 +651,7 @@ const Home = ({ showHero = false }) => {
                   </h3>
                 </div>
               </div>
-              <div className="lg:col-span-2 relative overflow-hidden rounded-lg shadow-lg">
+              <div className="lg:col-span-2 relative overflow-hidden rounded-lg shadow-lg opacity-0">
                 <img
                   src={facilitiesOffered[5].image}
                   alt={facilitiesOffered[5].title}
@@ -613,17 +672,17 @@ const Home = ({ showHero = false }) => {
           </section>
           <section className="bg-[#EEF2F6] px-6 py-16">
             <div className="mx-auto max-w-7xl text-center">
-              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66]">
+              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0">
                 Extra-Curricular Activities
               </h2>
-              <p className="mx-auto mt-4 max-w-4xl text-[20px] text-[#2d2d2d]">
+              <p className="mx-auto mt-4 max-w-4xl text-[20px] text-[#2d2d2d] opacity-0">
                 Vibrant extracurricular activities encourage talent development, physical fitness, cultural expression, and student engagement.
               </p>
             </div>
 
             <div className="mx-auto mt-12 grid max-w-7xl gap-8 md:grid-cols-3">
               {extraCurricularActivities.map((activity) => (
-                <div key={activity.id} className="overflow-hidden rounded-lg bg-white shadow-md transition-transform duration-300 hover:scale-105">
+                <div key={activity.id} className="overflow-hidden rounded-lg bg-white shadow-md transition-transform duration-300 hover:scale-105 opacity-0">
                   <div className="relative h-48 overflow-hidden">
                     <img
                       src={activity.image}
@@ -685,11 +744,11 @@ const Home = ({ showHero = false }) => {
             </div>
           </section>
           <section className="bg-[#EEF2F6] px-6 py-16">
-            <div className="mx-auto max-w-7xl text-center">
-              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66]">
+            <div className="mx-auto max-w-7.5xl text-center">
+              <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] opacity-0">
                 Alumni Testimonials
               </h2>
-              <p className="mx-auto mt-4 max-w-4xl text-[20px] text-[#2d2d2d]">
+              <p className="mx-auto mt-4 max-w-4xl text-[20px] text-[#2d2d2d] opacity-0">
                 Hear from our alumni about their journey at Arunai Engineering College and beyond.
               </p>
             </div>
@@ -764,46 +823,76 @@ const Home = ({ showHero = false }) => {
           <section className="bg-white px-6 py-16">
             <div className="mx-auto max-w-7xl">
               <div className="text-center mb-12">
-                <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] mb-4">
+                <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] mb-4 opacity-0">
                   Our Recruiters
                 </h2>
-                <p className="mx-auto max-w-4xl text-[20px] text-[#2d2d2d] leading-relaxed">
+                <p className="mx-auto max-w-4xl text-[20px] text-[#2d2d2d] leading-relaxed opacity-0">
                   Our Placement Cell supports students through industry-focused training and campus recruitment drives, enabling them to secure opportunities with leading organizations.
                 </p>
               </div>
 
               <div className="space-y-8">
                 {/* First Row - Left to Right */}
-                <div className="overflow-hidden">
-                  <div className="flex space-x-8 animate-scroll">
-                    {recruiters.concat(recruiters).map((recruiter, index) => (
-                      <div key={`${recruiter.id}-top-${index}`} className="flex-shrink-0">
-                        <div className="w-45 h-32 bg-gray-50 rounded-lg shadow-sm flex items-center justify-center border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                          <img 
-                            src={recruiter.image} 
-                            alt={recruiter.name} 
-                            className="w-45 h-32 object-contain"
-                          />
+                <div className="overflow-hidden mask-horizontal-edges">
+                  <div className="flex w-max animate-scroll">
+                    <div className="flex gap-8 pr-8">
+                      {recruiters.map((recruiter) => (
+                        <div key={`${recruiter.id}-top`} className="flex-shrink-0">
+                          <div className="w-45 h-32 bg-gray-50 rounded-lg shadow-sm flex items-center justify-center border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                            <img 
+                              src={recruiter.image} 
+                              alt={recruiter.name} 
+                              className="w-45 h-32 object-contain"
+                            />
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                    <div className="flex gap-8 pr-8">
+                      {recruiters.map((recruiter) => (
+                        <div key={`${recruiter.id}-top-clone`} className="flex-shrink-0">
+                          <div className="w-45 h-32 bg-gray-50 rounded-lg shadow-sm flex items-center justify-center border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                            <img 
+                              src={recruiter.image} 
+                              alt={recruiter.name} 
+                              className="w-45 h-32 object-contain"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
                 {/* Second Row - Right to Left */}
-                <div className="overflow-hidden">
-                  <div className="flex space-x-8 animate-scroll-right-to-left">
-                    {recruiters.concat(recruiters).map((recruiter, index) => (
-                      <div key={`${recruiter.id}-bottom-${index}`} className="flex-shrink-0">
-                        <div className="w-45 h-32 bg-gray-50 rounded-lg shadow-sm flex items-center justify-center border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                          <img 
-                            src={recruiter.image} 
-                            alt={recruiter.name} 
-                            className="w-45 h-32 object-contain"
-                          />
+                <div className="overflow-hidden mask-horizontal-edges">
+                  <div className="flex w-max animate-scroll-right-to-left">
+                    <div className="flex gap-8 pr-8">
+                      {recruiters.map((recruiter) => (
+                        <div key={`${recruiter.id}-bottom`} className="flex-shrink-0">
+                          <div className="w-45 h-32 bg-gray-50 rounded-lg shadow-sm flex items-center justify-center border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                            <img 
+                              src={recruiter.image} 
+                              alt={recruiter.name} 
+                              className="w-45 h-32 object-contain"
+                            />
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                    <div className="flex gap-8 pr-8">
+                      {recruiters.map((recruiter) => (
+                        <div key={`${recruiter.id}-bottom-clone`} className="flex-shrink-0">
+                          <div className="w-45 h-32 bg-gray-50 rounded-lg shadow-sm flex items-center justify-center border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                            <img 
+                              src={recruiter.image} 
+                              alt={recruiter.name} 
+                              className="w-45 h-32 object-contain"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -812,10 +901,10 @@ const Home = ({ showHero = false }) => {
           <section className="bg-[#EEF2F6] px-6 py-16">
             <div className="mx-auto max-w-7xl">
               <div className="text-center mb-12">
-                <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] mb-4">
+                <h2 className="text-[44px] font-extrabold tracking-tight text-[#061a66] mb-4 opacity-0">
                   Our Events
                 </h2>
-                <p className="mx-auto max-w-4xl text-[20px] text-[#2d2d2d] leading-relaxed">
+                <p className="mx-auto max-w-4xl text-[20px] text-[#2d2d2d] leading-relaxed opacity-0">
                   Our events inspire learning, collaboration, innovation, and vibrant campus community life.
                 </p>
               </div>
@@ -857,7 +946,7 @@ const Home = ({ showHero = false }) => {
                               {event.date}
                             </span>
                           </div>
-                        </div>
+                        </div>                                                                                                                                                                                 
                         <h3 className="text-[16px] font-bold text-[#1e3a5f] mb-3">
                           {event.title}
                         </h3>
@@ -893,6 +982,7 @@ const Home = ({ showHero = false }) => {
             </div>
             </div>
           </section>
+           
         </>
       )}
 
