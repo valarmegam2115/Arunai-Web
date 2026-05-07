@@ -7,15 +7,15 @@ export const aboutSidebar = {
   title: 'Profile',
   links: [
     { label: 'About AEC',              path: '/about',                     icon: 'info' },
-    { label: 'Founder Chairman',       path: '/about/founder',             icon: 'person' },
+    { label: 'Founder Chairman',       path: '/about/founder',             icon: 'crown' },
     { label: 'Chairperson',            path: '/about/chairperson',         icon: 'person' },
     { label: 'Vice Chairman',          path: '/about/vice-chairman',       icon: 'person' },
-    { label: 'The Principal',          path: '/about/principal',           icon: 'person' },
+    { label: 'The Principal',          path: '/about/principal',           icon: 'building' },
     { label: 'Governing Body Members', path: '/about/governing-body',      icon: 'people' },
     { label: 'Key Functionaries',      path: '/about/key-functionaries',   icon: 'star' },
     { label: 'Academic Council Members',path: '/about/academic-council',   icon: 'people' },
     { label: 'Academic Calendar',      path: '/about/academic-calendar',   icon: 'calendar' },
-    { label: 'Code of Conduct',        path: '/about/code-of-conduct',     icon: 'doc' },
+    { label: 'Code of Conduct',        path: '/about/code-of-conduct',     icon: 'scales' },
     { label: 'Organizational Structure',path: '/about/org-structure',      icon: 'chart' },
   ],
 }

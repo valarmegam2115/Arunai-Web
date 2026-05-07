@@ -1,7 +1,7 @@
 import React from 'react'
-import InnerPageLayout from '../../components/InnerPageLayout'
-import { PageHeader, SectionBlock, BodyText, BannerImage } from '../../components/blocks'
-import { aboutSidebar } from '../../utils/sidebarConfig'
+import InnerPageLayout from '../../../components/InnerPageLayout'
+import { PageHeader, SectionBlock, BodyText, BannerImage } from '../../../components/blocks'
+import { aboutSidebar } from '../../../utils/sidebarConfig'
 
 const AboutAEC = () => (
   <InnerPageLayout sidebarTitle={aboutSidebar.title} sidebarLinks={aboutSidebar.links}>

@@ -750,11 +750,11 @@ const Home = ({ showHero = false }) => {
                   ))}
                 </Swiper>
 
-                <button className="custom-prev absolute -left-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md">
+                <button className="custom-prev absolute -left-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md cursor-pointer">
                   ‹
                 </button>
 
-                <button className="custom-next absolute -right-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md">
+                <button className="custom-next absolute -right-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md cursor-pointer">
                   ›
                 </button>
 
@@ -912,11 +912,11 @@ const Home = ({ showHero = false }) => {
                   </Swiper>
 
                   {/* Custom Navigation Arrows */}
-                  <button className="events-custom-prev absolute -left-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md">
+                  <button className="events-custom-prev absolute -left-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md cursor-pointer">
                     ‹
                   </button>
 
-                  <button className="events-custom-next absolute -right-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md">
+                  <button className="events-custom-next absolute -right-6 top-1/2 -translate-y-1/2 z-10 bg-[#1e3a5f] text-white w-11 h-11 rounded-full flex items-center justify-center shadow-md cursor-pointer">
                     ›
                   </button>
 

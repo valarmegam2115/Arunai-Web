@@ -22,6 +22,8 @@ const icons = {
   courses:   <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>,
   placement: <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.36C18 2.51 16.49 1 14.64 1 13.45 1 12.5 1.56 11.8 2.38L11 3.3l-.8-.93C9.5 1.56 8.55 1 7.36 1 5.51 1 4 2.51 4 4.36c0 .48.11.92.18 1.36H2a2 2 0 00-1.99 2l-.01 11c0 1.1.9 2 2 2h18a2 2 0 002-2V8a2 2 0 00-2-2z"/></svg>,
   feedback:  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2z"/></svg>,
+  crown:     <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16h14l-1.5-9L15 11l-3-7-3 7-2.5-4L5 16zm14 2H5v2h14v-2z"/></svg>,
+  scales:    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L1 6v2h2v14h2V8h6v14h2V8h6v14h2V8h2V6l-11-4zm-4 8l-3 4-3-4h6zm14 0l-3 4-3-4h6z"/></svg>,
 }
 
 // ── SidebarLink ──────────────────────────────────────────────────
@@ -43,20 +45,20 @@ const SidebarLink = ({ item, currentPath, depth = 0 }) => {
   }
 
   return (
-    <li>
+    <li className="border-b border-white/10 last:border-0">
       <a
         href={item.path}
         onClick={handleClick}
         className={`
-          flex items-center gap-2 px-4 py-[10px] text-[13px] font-semibold transition-all
+          flex items-center gap-3 px-4 py-[11px] text-[15px] font-medium transition-all w
           ${depth > 0 ? 'pl-10' : ''}
           ${isActive
-            ? 'bg-[#1a3080] text-[#f5c518] border-l-4 border-[#f5c518]'
-            : 'text-white/80 hover:bg-[#1a3080] hover:text-white border-l-4 border-transparent'
+            ? 'bg-[#374574] text-white border-l-4 border-[#f5c518]'
+            : 'text-white hover:bg-[#374574] hover:text-white border-l-4 border-transparent'
           }
         `}
       >
-        <span className={`flex-shrink-0 ${isActive ? 'text-[#f5c518]' : 'text-white/60'}`}>
+        <span className="flex-shrink-0 text-[#f5c518]">
           {depth > 0
             ? <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             : icon
@@ -102,14 +104,14 @@ const InnerPageLayout = ({
 
   return (
     <div className="min-h-screen bg-slate-50 pt-28 pb-16">
-      <div className="mx-auto max-w-7xl px-4">
+      <div className="mx-auto max-w-7xl">
         <div className="flex gap-6 items-start">
 
           {/* ── Sidebar ──────────────────────────── */}
-          <aside className="hidden lg:block w-[260px] flex-shrink-0 sticky top-28">
+          <aside className="hidden lg:block w-[280px] flex-shrink-0 sticky top-40 ">
             {/* Header */}
             <div className={`${headerColor} px-4 py-3 rounded-t`}>
-              <h2 className="text-[15px] font-extrabold uppercase tracking-wider text-[#001a66] text-center">
+              <h2 className="text-[16px] font-extrabold uppercase tracking-wider text-[#001a66] text-center">
                 {sidebarTitle}
               </h2>
             </div>
@@ -146,7 +148,7 @@ const InnerPageLayout = ({
           </div>
 
           {/* ── Main Content ─────────────────────── */}
-          <main className="flex-1 min-w-0 rounded-xl bg-white shadow-sm border border-gray-100 p-8">
+          <main className="flex-1 min-w-0 rounded-xl bg-white shadow-sm border border-gray-100 p-8 mt-11">
             {children}
           </main>
 

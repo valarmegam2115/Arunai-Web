@@ -172,7 +172,7 @@ export const initAnimations = () => {
   })
 
   // Achievements section animations
-  const achievementCards = document.querySelectorAll('.grid.grid-cols-1 > div')
+  const achievementCards = document.querySelectorAll('section .grid.grid-cols-1 > div')
   achievementCards.forEach((card, index) => {
     gsap.fromTo(card,
       animations.section.fadeInUp.from,

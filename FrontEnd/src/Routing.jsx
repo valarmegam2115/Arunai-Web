@@ -8,7 +8,18 @@ import Home from './pages/Home'
 import NISP from './pages/NISP'
 
 // Inner pages
-import AboutAEC from './pages/inner/AboutAEC'
+import AboutAEC from './pages/inner/about/AboutAEC'
+import FounderChairman from './pages/inner/about/FounderChairman'
+import Chairperson from './pages/inner/about/Chairperson'
+import ViceChairman from './pages/inner/about/ViceChairman'
+import Principal from './pages/inner/about/Principal'
+import GoverningBody from './pages/inner/about/GoverningBody'
+import KeyFunctionaries from './pages/inner/about/KeyFunctionaries'
+import AcademicCouncil from './pages/inner/about/AcademicCouncil'
+import AcademicCalendar from './pages/inner/about/AcademicCalendar'
+import CodeOfConduct from './pages/inner/about/CodeOfConduct'
+import OrgStructure from './pages/inner/about/OrgStructure'
+
 import AboutResearch from './pages/inner/AboutResearch'
 import DeptCSE from './pages/inner/DeptCSE'
 
@@ -19,7 +30,17 @@ const routes = [
   { path: '/nisp',                component: <NISP /> },
 
   // About section
-  { path: '/about',               component: <AboutAEC /> },
+  { path: '/about',                       component: <AboutAEC /> },
+  { path: '/about/founder',               component: <FounderChairman /> },
+  { path: '/about/chairperson',           component: <Chairperson /> },
+  { path: '/about/vice-chairman',         component: <ViceChairman /> },
+  { path: '/about/principal',             component: <Principal /> },
+  { path: '/about/governing-body',        component: <GoverningBody /> },
+  { path: '/about/key-functionaries',     component: <KeyFunctionaries /> },
+  { path: '/about/academic-council',      component: <AcademicCouncil /> },
+  { path: '/about/academic-calendar',     component: <AcademicCalendar /> },
+  { path: '/about/code-of-conduct',       component: <CodeOfConduct /> },
+  { path: '/about/org-structure',         component: <OrgStructure /> },
 
   // Research section
   { path: '/research',            component: <AboutResearch /> },

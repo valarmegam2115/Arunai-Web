@@ -151,7 +151,7 @@ export const ProfileCard = ({ name, title, qualification, image, bio }) => (
 // Full-width image at the top of a page (like college gate, dept lab)
 export const BannerImage = ({ src, alt = '' }) => (
   <div className="mb-8 overflow-hidden rounded-xl shadow-md">
-    <img src={src} alt={alt} className="h-64 w-full object-cover" />
+    <img src={src} alt={alt} className="h-94 w-full object-cover hover:scale-110 transition-transform duration-1000 ease-in-out" />
   </div>
 )
 
