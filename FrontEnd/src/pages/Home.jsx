@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Autoplay } from 'swiper/modules'
 import 'swiper/css'
@@ -33,48 +33,12 @@ const Home = ({ showHero = false }) => {
 
   }
 
-  // Replace this static structure with API/admin data later.
-  const campusNewsCards = [
-    {
-      id: 'news',
-      title: 'NEWS & ANNOUNCEMENTS',
-      titleColor: 'text-[#d0a622]',
-      items: [
-        { id: 'n1', day: '15th', month: 'APRIL', year: '2026', text: 'Fees is 15 April 2026' },
-        { id: 'n2', day: '18th', month: 'APRIL', year: '2026', text: 'University Theory Exams for both UG & PG will commence on 13-05-2026' },
-        { id: 'n3', day: '16th', month: 'APRIL', year: '2026', text: 'University practical exams for PG will commence on 08-05-2026.' },
-      ],
-    },
-    {
-      id: 'events',
-      title: 'EVENTS UPCOMING',
-      titleColor: 'text-[#d0a622]',
-      items: [
-        { id: 'e1', day: '27th', month: 'MARCH', year: '2026', text: "INNOVISTA'2026 - Department of IT" },
-        { id: 'e2', day: '31st', month: 'MARCH', year: '2026', text: "ACHIEVERS DAY'2026" },
-        { id: 'e3', day: '07th', month: 'APRIL', year: '2026', text: "NEXZEN'2026 - Department of Management Studies" },
-      ],
-    },
-    {
-      id: 'achievements',
-      title: 'ACHIEVEMENTS',
-      titleColor: 'text-[#111827]',
-      items: [
-        { id: 'a1', day: '08th', month: 'APRIL', year: '2026', text: 'Mr. J.Joyal (EEE Dept) won 3rd Prize Rs. 50000 in TM IMPACT Hackathon conducted by TANCAM at KIT, Coimbatore' },
-        { id: 'a2', day: '10th', month: 'APRIL', year: '2026', text: 'Mr. J.Joyal (EEE Dept) won 3rd Prize Rs. 50000 in TM IMPACT Hackathon conducted by TANCAM at KIT, Coimbatore' },
-        { id: 'a3', day: '15th', month: 'APRIL', year: '2026', text: 'Department toppers honored during annual academic excellence ceremony' },
-        { id: 'a4', day: '18th', month: 'APRIL', year: '2026', text: 'Guest lecture on Artificial Intelligence organized by CSE Department' },
-        { id: 'a5', day: '20th', month: 'APRIL', year: '2026', text: 'Sports meet concludes with record participation from all departments' },
-        { id: 'a6', day: '22nd', month: 'APRIL', year: '2026', text: 'Industry visit arranged for Mechanical Engineering students' },
-        { id: 'a7', day: '25th', month: 'APRIL', year: '2026', text: 'Workshop on Cyber Security conducted by IT Department' },
-        { id: 'a8', day: '28th', month: 'APRIL', year: '2026', text: 'Cultural festival "TechnoFest 2026" announced for next month' },
-        { id: 'a9', day: '30th', month: 'APRIL', year: '2026', text: 'Placement drive scheduled with leading MNCs' },
-        { id: 'a10', day: '02nd', month: 'MAY', year: '2026', text: 'Alumni meet organized for batch of 2015-2019' },
-        { id: 'a11', day: '05th', month: 'MAY', year: '2026', text: 'Research paper presentation by faculty members' },
-
-      ],
-    },
-  ]
+  // Dynamic structure from API
+  const [campusNewsCards, setCampusNewsCards] = useState([
+    { id: 'news', title: 'NEWS & ANNOUNCEMENTS', titleColor: 'text-[#d0a622]', items: [] },
+    { id: 'events', title: 'EVENTS UPCOMING', titleColor: 'text-[#d0a622]', items: [] },
+    { id: 'achievements', title: 'ACHIEVEMENTS', titleColor: 'text-[#111827]', items: [] },
+  ]);
 
   const renderCardItems = (items, prefix = 'item') =>
     items.map((item, index) => (
@@ -192,29 +156,7 @@ const Home = ({ showHero = false }) => {
     }
   ]
 
-  const extraCurricularActivities = [
-    {
-      id: 'dance-music',
-      image: Courseug,
-      title: 'Dance and Music',
-      description: 'Dance and music programs offer opportunities for creative expression, social interaction, and physical fitness.',
-      link: '#'
-    },
-    {
-      id: 'clubs-societies',
-      image: Coursepg,
-      title: 'Clubs and Societies',
-      description: 'Clubs and societies provide opportunities for social interaction, leadership, and creative expression.',
-      link: '#'
-    },
-    {
-      id: 'sports',
-      image: CourseResearch,
-      title: 'Sports and Physical Education',
-      description: 'Sports and physical education programs provide opportunities for physical fitness, leadership, and social interaction.',
-      link: '#'
-    }
-  ]
+  const [extraCurricularActivities, setExtraCurricularActivities] = useState([]);
 
   const alumniTestimonials = [
     {
@@ -274,50 +216,7 @@ const Home = ({ showHero = false }) => {
     { id: 12, name: 'Cisco', image: CourseResearch }
   ]
 
-  const events = [
-    {
-      id: 1,
-      title: 'Tech Symposium 2024',
-      date: 'March 15, 2024',
-      image: Courseug,
-      description: 'Annual technical symposium featuring workshops, competitions, and guest lectures from industry experts.'
-    },
-    {
-      id: 2,
-      title: 'Cultural Festival',
-      date: 'April 20-22, 2024',
-      image: Coursepg,
-      description: 'Three-day cultural extravaganza showcasing music, dance, drama, and various artistic performances.'
-    },
-    {
-      id: 3,
-      title: 'Sports Meet 2024',
-      date: 'May 10-12, 2024',
-      image: CourseResearch,
-      description: 'Inter-college sports competition with various athletic events and team sports.'
-    },
-    {
-      id: 4,
-      title: 'Hackathon 2024',
-      date: 'June 5-6, 2024',
-      image: Courseug,
-      description: '48-hour coding challenge to develop innovative solutions for real-world problems.'
-    },
-    {
-      id: 5,
-      title: 'Alumni Meet',
-      date: 'July 15, 2024',
-      image: Coursepg,
-      description: 'Annual alumni reunion bringing together graduates from across the years.'
-    },
-    {
-      id: 6,
-      title: 'Convocation Ceremony',
-      date: 'August 25, 2024',
-      image: CourseResearch,
-      description: 'Graduation ceremony celebrating the achievements of our graduating students.'
-    }
-  ]
+  const [events, setEvents] = useState([]);
 
   const accreditations = [
     { id: 'naac1', image: Courseug, alt: 'NAAC A Grade' },
@@ -331,8 +230,70 @@ const Home = ({ showHero = false }) => {
   ]
 
   useEffect(() => {
-    // Initialize GSAP animations
-    initAnimations()
+    const fetchData = async () => {
+      try {
+        await Promise.all([
+          fetchNews(),
+          fetchOurEvents(),
+          fetchExtraCurricular()
+        ]);
+        // Initialize animations after data is fetched and rendered
+        // We use a small timeout to ensure React has finished rendering the new elements
+        setTimeout(() => {
+          initAnimations();
+        }, 100);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        // Still init animations even if some fetch fails
+        initAnimations();
+      }
+    };
+
+    const fetchNews = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/news');
+        const data = await res.json();
+        if (data.success) {
+          const news = data.data.filter(item => item.category === 'news');
+          const eventsData = data.data.filter(item => item.category === 'events');
+          const achievements = data.data.filter(item => item.category === 'achievements');
+          
+          setCampusNewsCards([
+            { id: 'news', title: 'NEWS & ANNOUNCEMENTS', titleColor: 'text-[#d0a622]', items: news },
+            { id: 'events', title: 'EVENTS UPCOMING', titleColor: 'text-[#d0a622]', items: eventsData },
+            { id: 'achievements', title: 'ACHIEVEMENTS', titleColor: 'text-[#111827]', items: achievements },
+          ]);
+        }
+      } catch (err) {
+        console.error('Failed to fetch news:', err);
+      }
+    };
+
+    const fetchOurEvents = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/our-events');
+        const data = await res.json();
+        if (data.success) {
+          setEvents(data.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch our events:', err);
+      }
+    };
+
+    const fetchExtraCurricular = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/extra-curricular');
+        const data = await res.json();
+        if (data.success) {
+          setExtraCurricularActivities(data.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch extra-curricular activities:', err);
+      }
+    };
+
+    fetchData();
 
     // Cleanup on unmount
     return () => {

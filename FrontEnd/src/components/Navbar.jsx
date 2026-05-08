@@ -109,14 +109,14 @@ const DropdownItem = ({ item, pathname, closeParent }) => {
   const hasChildren = item.children && item.children.length > 0
 
   return (
-    <div 
+    <div
       className="relative"
-      onMouseEnter={() => setOpen(true)} 
+      onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
       <a
         href={item.path}
-        onClick={e => { if(!hasChildren) { go(item.path, e); closeParent() } else { e.preventDefault() } }}
+        onClick={e => { if (!hasChildren) { go(item.path, e); closeParent() } else { e.preventDefault() } }}
         className="flex items-center justify-between px-5 py-3 text-[13px] font-bold uppercase tracking-wider text-white hover:bg-[#f7932f] hover:text-white transition-colors cursor-pointer"
       >
         {item.label}

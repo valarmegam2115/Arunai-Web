@@ -8,9 +8,17 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Initialize Database
+const initDb = require('./models/initDb');
+initDb();
+
 // Middlewares
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from uploads folder
+const path = require('path');
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 const indexRoutes = require('./routes/index');

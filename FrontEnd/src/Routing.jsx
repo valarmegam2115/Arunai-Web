@@ -23,6 +23,11 @@ import OrgStructure from './pages/inner/about/OrgStructure'
 import AboutResearch from './pages/inner/AboutResearch'
 import DeptCSE from './pages/inner/DeptCSE'
 
+// Admin pages
+import AdminLogin from './pages/AdminLogin'
+import AdminDashboard from './pages/AdminDashboard'
+import DocumentsPage from './pages/DocumentsPage'
+import { IICPage, NIRFPage } from './pages/DocumentPages'
 // ── Route table ────────────────────────────────────────────────────────────────
 // Add new pages here. The router picks the first matching path.
 const routes = [
@@ -47,6 +52,13 @@ const routes = [
 
   // Academics – departments
   { path: '/academics/dept/cse',  component: <DeptCSE /> },
+
+  // Admin routes
+  { path: '/admin-login',         component: <AdminLogin /> },
+  { path: '/admin/dashboard',     component: <AdminDashboard /> },
+  { path: '/documents',           component: <DocumentsPage /> },
+  { path: '/iic',                 component: <IICPage /> },
+  { path: '/nirf',                component: <NIRFPage /> },
 ]
 
 // ── Helper ─────────────────────────────────────────────────────────────────────
@@ -62,9 +74,23 @@ const Routing = () => {
   const isHome = pathname === '/'
   const matched = matchRoute(pathname)
 
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.altKey && e.shiftKey && e.key.toLowerCase() === 'x') {
+        e.preventDefault();
+        window.history.pushState({}, '', '/admin-login');
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const isAdminPage = pathname.startsWith('/admin')
+
   return (
     <div className="min-h-screen bg-white text-slate-900">
-      <Navbar />
+      {!isAdminPage && <Navbar />}
 
       {/* ── Page content ── */}
       {matched ? (
@@ -87,7 +113,8 @@ const Routing = () => {
       )}
 
       {/* ── Floating social buttons ── */}
-      <aside className="fixed right-0 top-[50%] z-40 hidden -translate-y-1/2 flex-col gap-2 pr-2 sm:flex">
+      {!isAdminPage && (
+        <aside className="fixed right-0 top-[50%] z-40 hidden -translate-y-1/2 flex-col gap-2 pr-2 sm:flex">
         <a href="#" aria-label="Facebook"
           className="flex h-7 w-7 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-[#043ea4] text-white transition-transform hover:scale-110">
           <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.378 14.192 5 15.115 5H18V0h-3.89C10.059 0 9 1.583 9 4.389V8z"/></svg>
@@ -101,15 +128,16 @@ const Routing = () => {
           <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
         </a>
       </aside>
+      )}
 
       {/* ── Admissions badge ── */}
-      {isHome && (
+      {isHome && !isAdminPage && (
         <span className="fixed bottom-0 left-0 right-0 z-40 bg-orange-500 px-4 py-3 text-sm font-bold text-white shadow-[0_-4px_10px_rgba(0,0,0,0.1)] text-center sm:bottom-4 sm:left-4 sm:right-auto sm:w-auto sm:rounded-3xl sm:px-6 sm:py-3 sm:text-md">
           Admissions Open 2026 - 2027
         </span>
       )}
 
-      <Footer />
+      {!isAdminPage && <Footer />}
     </div>
   )
 }
