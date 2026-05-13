@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
+const helmet = require('helmet');
 
 // Load environment variables
 dotenv.config();
@@ -13,11 +15,13 @@ const initDb = require('./models/initDb');
 initDb();
 
 // Middlewares
+app.use(helmet({
+    crossOriginResourcePolicy: false, // Allow images to be loaded from this server
+}));
 app.use(cors());
 app.use(express.json());
 
 // Serve static files from uploads folder
-const path = require('path');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
@@ -29,7 +33,11 @@ app.get('/', (req, res) => {
     res.send('Backend Server is running.');
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Start server (only if not running as a serverless function)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
+
+module.exports = app;

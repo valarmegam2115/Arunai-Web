@@ -29,7 +29,8 @@ router.post('/', verifyToken, upload.single('file'), (req, res) => {
         }
         
         // Return the public URL for the file
-        const fileUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+        const baseUrl = process.env.BASE_URL || `${req.protocol}://${req.get('host')}`;
+        const fileUrl = `${baseUrl}/uploads/${req.file.filename}`;
         
         res.status(200).json({ 
             success: true, 

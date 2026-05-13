@@ -55,12 +55,15 @@ const initDb = async () => {
         await db.query(createAdminsTableQuery);
 
         // Check if admin user exists
-        const { rows: adminRows } = await db.query(`SELECT * FROM admins WHERE username = $1`, ['admin']);
+        const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+        const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+
+        const { rows: adminRows } = await db.query(`SELECT * FROM admins WHERE username = $1`, [adminUsername]);
         if (adminRows.length === 0) {
             const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash('admin123', salt);
-            await db.query(`INSERT INTO admins (username, password) VALUES ($1, $2)`, ['admin', hashedPassword]);
-            console.log('Default admin created successfully.');
+            const hashedPassword = await bcrypt.hash(adminPassword, salt);
+            await db.query(`INSERT INTO admins (username, password) VALUES ($1, $2)`, [adminUsername, hashedPassword]);
+            console.log(`Default admin (${adminUsername}) created successfully.`);
         }
 
         // Create campus_news table
