@@ -1,5 +1,7 @@
 import React from 'react'
-
+import { PageHeader} from "../components/blocks";
+import Aecisp from "../assets/pdfs/nisp_pdf/AEC_innovation_and_startup_policy.pdf"
+import SP2019 from "../assets/pdfs/nisp_pdf/startup_policy_2019.pdf"
 const NISP = () => {
   const visionMissionData = {
     vision: [
@@ -31,11 +33,12 @@ const NISP = () => {
   const policyDocuments = [
     {
       title: 'AEC Innovation and Startup Policy',
-      link: '#'
+      link: Aecisp,
+     
     },
     {
       title: 'Startup Policy 2019',
-      link: '#'
+      link: SP2019,
     }
   ]
 
@@ -43,6 +46,7 @@ const NISP = () => {
     <div className="mx-auto max-w-5xl px-4 py-8">
       <div className="rounded-2xl bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.05)] sm:p-12 border border-gray-100">
         {/* Header */}
+        <PageHeader title="AEC Innovation and Startup Policy" />
         <div className="mb-16 text-center">
           <h1 className="text-2xl font-extrabold tracking-tight text-[#1a202c] sm:text-3xl">
             AEC Innovation and Startup Policies
@@ -64,8 +68,8 @@ const NISP = () => {
           <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-[#feb2b2] text-[#1a202c]">
-                  <th className="w-24 px-6 py-4 text-[13px] font-black uppercase tracking-widest border-r border-white/20">Sl.No.</th>
+                <tr className="bg-[#7393B3] text-[#1a202c]">
+                  <th className="w-28 px-6 py-4 text-[13px] font-black uppercase tracking-widest border-r border-white/20">S. No.</th>
                   <th className="px-6 py-4 text-[13px] font-black uppercase tracking-widest text-center">Policy Statement</th>
                 </tr>
               </thead>
@@ -94,7 +98,7 @@ const NISP = () => {
           <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-[#feb2b2] text-[#1a202c]">
+                <tr className="bg-[#7393B3] text-[#1a202c]">
                   <th className="w-24 px-6 py-4 text-[13px] font-black uppercase tracking-widest border-r border-white/20">Sl.No.</th>
                   <th className="px-6 py-4 text-[13px] font-black uppercase tracking-widest text-center">Policy Statement</th>
                 </tr>
@@ -127,10 +131,12 @@ const NISP = () => {
           <div className="space-y-4">
             {policyDocuments.map((doc, index) => (
               <a
-                key={index}
-                href={doc.link}
-                className="group flex items-center justify-between rounded-lg border border-gray-200 bg-white px-6 py-4 transition-all hover:border-blue-300 hover:shadow-sm"
-              >
+  key={index}
+  href={doc.link}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="group flex items-center justify-between rounded-lg border border-gray-200 bg-white px-6 py-4 transition-all hover:border-blue-300 hover:shadow-sm"
+>
                 <span className="text-[17px] font-bold text-[#001a66] group-hover:text-blue-700 transition-colors">
                   {doc.title}
                 </span>

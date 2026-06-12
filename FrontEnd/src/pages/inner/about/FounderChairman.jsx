@@ -2,6 +2,7 @@ import React from 'react'
 import InnerPageLayout from '../../../components/InnerPageLayout'
 import { PageHeader, SectionBlock, BodyText, ProfileCard } from '../../../components/blocks'
 import { aboutSidebar } from '../../../utils/sidebarConfig'
+import Founder from '../../../assets/about_images/Founder-Chairman.jpg'
 
 const FounderChairman = () => (
   <InnerPageLayout sidebarTitle={aboutSidebar.title} sidebarLinks={aboutSidebar.links}>
@@ -12,7 +13,7 @@ const FounderChairman = () => (
         {/* Left: Image Card */}
         <div className="flex-shrink-0 w-full md:w-[280px] rounded-2xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] overflow-hidden flex flex-col">
           <img 
-            src="/founder.jpg" 
+            src={Founder}
             alt="Thiru. E.V. VELU" 
             className="w-full h-64 object-cover object-top"
             onError={(e) => { e.target.src = 'https://ui-avatars.com/api/?name=EV+Velu&size=300&background=random' }}
@@ -25,12 +26,23 @@ const FounderChairman = () => (
 
         {/* Right: Message Box */}
         <div className="flex-1 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex items-center py-8">
-          <div className="w-[6px] h-3/4 bg-red-600 rounded-r-md flex-shrink-0"></div>
-          <div className="px-8 sm:px-12 py-4">
-            <p className="text-[15.5px] leading-[2.4] text-gray-700 text-justify tracking-wide font-medium">
-              It gives me immense pleasure to present Arunai Engineering College for the society. The purpose of establishing Arunai Engineering College is to train students in the field of Engineering and Technology within a human relations approach framework.
-            </p>
-          </div>
+          <div className="relative bg-[#ffffff] rounded-[25px] py-8 px-10 overflow-hidden">  
+          <div
+            className="absolute left-2 top-0 h-full w-5"
+            style={{
+              borderLeft: "5px solid #dc2626",
+              borderRadius: "30px 0 0 30px",
+            }}
+          />
+
+          <p className="pl-8 text-[15.5px] leading-[2.4] text-gray-700 text-justify tracking-wide font-medium">
+            It gives me immense pleasure to present Arunai Engineering College for the
+            society. The purpose of establishing Arunai Engineering College is to train
+            students in the field of Engineering and Technology within a human
+            relations approach framework.
+          </p>
+
+        </div>
         </div>
       </div>
     </SectionBlock>
