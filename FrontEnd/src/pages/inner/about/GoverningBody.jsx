@@ -91,19 +91,19 @@ const GoverningBody = () => {
 
         {/* Table */}
         <div className="overflow-x-auto rounded-2xl shadow-sm">
-          <table className="w-full min-w-[700px] table-fixed border-collapse">
+          <table className="w-full min-w-[740px] table-fixed border-collapse">
             <thead>
               <tr className="bg-[#7393B3] text-black">
-                <th className="w-[8%] px-4 py-5 text-center font-semibold rounded-tl-2xl">
+                <th className="w-[60px] sm:w-[8%] px-4 py-5 text-center font-semibold rounded-tl-2xl">
                   S.No
                 </th>
-                <th className="w-[20%] px-4 py-5 text-left font-semibold">
+                <th className="w-[180px] sm:w-[20%] px-4 py-5 text-left font-semibold">
                   Name
                 </th>
-                <th className="w-[42%] px-4 py-5 text-left font-semibold">
+                <th className="w-[320px] sm:w-[42%] px-4 py-5 text-left font-semibold">
                   Designation / Role
                 </th>
-                <th className="w-[25%] px-4 py-5 text-left font-semibold rounded-tr-2xl">
+                <th className="w-[180px] sm:w-[25%] px-4 py-5 text-left font-semibold rounded-tr-2xl">
                   Category
                 </th>
               </tr>
