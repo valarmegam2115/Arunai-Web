@@ -6,6 +6,8 @@ import { usePathname } from './utils/router'
 // Pages
 import Home from './pages/Home'
 import NISP from './pages/NISP'
+import NIRF from './pages/NIRF'
+import IIC from './pages/IIC'
 
 // Inner pages
 import AboutAEC from './pages/inner/about/AboutAEC'
@@ -57,8 +59,8 @@ const routes = [
   { path: '/admin-login',         component: <AdminLogin /> },
   { path: '/admin/dashboard',     component: <AdminDashboard /> },
   { path: '/documents',           component: <DocumentsPage /> },
-  { path: '/iic',                 component: <IICPage /> },
-  { path: '/nirf',                component: <NIRFPage /> },
+  { path: '/iic',                 component: <IIC /> },
+  { path: '/nirf',                component: <NIRF /> },
 ]
 
 // ── Helper ─────────────────────────────────────────────────────────────────────
