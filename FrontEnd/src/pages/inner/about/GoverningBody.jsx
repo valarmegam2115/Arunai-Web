@@ -84,14 +84,14 @@ const GoverningBody = () => {
         {/* Section Heading */}
         <div className="flex items-center gap-3 mb-8">
           <span className="w-1 h-7 bg-red-600 rounded-full"></span>
-          <h2 className="text-3xl font-bold text-gray-800">
+          <h2 className="text-xl sm:text-3xl font-bold text-gray-800">
             Governing Body Members (2024–2026)
           </h2>
         </div>
 
         {/* Table */}
         <div className="overflow-x-auto rounded-2xl shadow-sm">
-          <table className="w-full table-fixed border-collapse">
+          <table className="w-full min-w-[700px] table-fixed border-collapse">
             <thead>
               <tr className="bg-[#7393B3] text-black">
                 <th className="w-[8%] px-4 py-5 text-center font-semibold rounded-tl-2xl">

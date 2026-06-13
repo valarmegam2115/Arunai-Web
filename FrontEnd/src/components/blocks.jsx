@@ -39,8 +39,8 @@ export const BodyText = ({ children, className = '' }) => (
 // ── PolicyTable ───────────────────────────────────────────────────
 // Sl.No + Statement table (used in NISP, Vision/Mission, etc.)
 export const PolicyTable = ({ rows = [] }) => (
-  <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
-    <table className="w-full border-collapse text-left">
+  <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+    <table className="w-full min-w-[600px] border-collapse text-left">
       <thead>
         <tr className="bg-[#feb2b2] text-[#1a202c]">
           <th className="w-20 border-r border-white/20 px-5 py-3 text-[13px] font-black uppercase tracking-widest">
@@ -74,7 +74,7 @@ export const PolicyTable = ({ rows = [] }) => (
 // Generic table with arbitrary columns
 export const DataTable = ({ columns = [], rows = [], headerBg = 'bg-[#001a66]' }) => (
   <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
-    <table className="w-full border-collapse text-left text-sm">
+    <table className="w-full min-w-[600px] border-collapse text-left text-sm">
       <thead>
         <tr className={`${headerBg} text-white`}>
           {columns.map((col, i) => (
@@ -151,7 +151,7 @@ export const ProfileCard = ({ name, title, qualification, image, bio }) => (
 // Full-width image at the top of a page (like college gate, dept lab)
 export const BannerImage = ({ src, alt = '' }) => (
   <div className="mb-8 overflow-hidden rounded-xl shadow-md">
-    <img src={src} alt={alt} className="h-94 w-full object-cover hover:scale-110 transition-transform duration-1000 ease-in-out" />
+    <img src={src} alt={alt} className="h-48 sm:h-64 md:h-80 lg:h-96 w-full object-cover hover:scale-110 transition-transform duration-1000 ease-in-out" />
   </div>
 )
 

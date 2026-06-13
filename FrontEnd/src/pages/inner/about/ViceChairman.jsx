@@ -25,21 +25,15 @@ const ViceChairman = () => (
         </div>
 
         {/* Right: Message Box */}
-        <div className="flex-1 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex items-center py-8">
-          <div className="relative bg-[#ffffff] rounded-[25px] py-8 px-10 overflow-hidden">  
-          <div
-            className="absolute left-2 top-0 h-full w-5"
-            style={{
-              borderLeft: "5px solid #dc2626",
-              borderRadius: "30px 0 0 30px",
-            }}
-          />
+        <div className="flex-1 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex items-center p-6 sm:p-8">
+          <div className="relative w-full bg-[#ffffff] rounded-[25px] py-6 px-5 sm:py-8 sm:px-10 overflow-hidden">  
+            <div className="absolute left-0 top-0 h-full w-1.5 bg-[#dc2626] rounded-l-[25px]" />
 
-          <p className="pl-8 text-[15.5px] leading-[2.4] text-gray-700 text-justify tracking-wide font-medium">
-            Education is a very important contributing element to both society mobility and economic developments, we reflect quality education and links between educational system and technical skill demanded by growing economics.
-          </p>
+            <p className="pl-4 sm:pl-8 text-[15px] sm:text-[16px] leading-relaxed sm:leading-[2.2] text-gray-700 text-left sm:text-justify tracking-wide font-medium">
+              Education is a very important contributing element to both society mobility and economic developments, we reflect quality education and links between educational system and technical skill demanded by growing economics.
+            </p>
 
-        </div>
+          </div>
         </div>
       </div>
     </SectionBlock>
