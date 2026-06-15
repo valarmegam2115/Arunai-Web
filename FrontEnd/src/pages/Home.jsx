@@ -8,6 +8,24 @@ const Img = '/hero-image.png'
 const Coursepg = '/course/course-pg.png'
 const Courseug = '/course/course-ug.png'
 const CourseResearch = '/course/course-research.png'
+const nbalogo = '/logos/nba-logo.jpg'
+const naaclogo = '/logos/naac-logo.jpg'
+const iiclogo = '/logos/iic-logo.jpg'
+const csilogo = '/logos/csi-logo.jpg'
+const isologo = '/logos/iso-logo.jpg'
+const ieeelogo = '/logos/ieee-logo.jpg'
+const mrf = '/rec_logos/mrf-logo.png'
+const cognizant = '/rec_logos/cognizant-logo.png'
+const pegatron = '/rec_logos/pegatron_logo.png'
+const tcs = '/rec_logos/tcs_logo.png'
+const al = '/rec_logos/al_logo.png'
+const reliance = '/rec_logos/reliance_logo.png'
+const foxconn = '/rec_logos/foxconn_logo.png'
+const icici = '/rec_logos/icici_logo.png' 
+const pengaton = '/rec_logos/pengaton_logo.png'
+const hexaware = '/rec_logos/hexaware_logo.png'
+const focus = '/rec_logos/focus_logo.png'
+const techmahindra = '/rec_logos/techmahindra_logo.png'
 import { initAnimations, cleanupAnimations } from '../utils/animations'
 
 
@@ -202,31 +220,29 @@ const Home = ({ showHero = false }) => {
   ]
 
   const recruiters = [
-    { id: 1, name: 'TCS', image: Courseug },
-    { id: 2, name: 'Infosys', image: Coursepg },
-    { id: 3, name: 'Wipro', image: CourseResearch },
-    { id: 4, name: 'HCL', image: Courseug },
-    { id: 5, name: 'Tech Mahindra', image: Coursepg },
-    { id: 6, name: 'Capgemini', image: CourseResearch },
-    { id: 7, name: 'IBM', image: Courseug },
-    { id: 8, name: 'Microsoft', image: Coursepg },
-    { id: 9, name: 'Google', image: CourseResearch },
-    { id: 10, name: 'Amazon', image: Courseug },
-    { id: 11, name: 'Intel', image: Coursepg },
-    { id: 12, name: 'Cisco', image: CourseResearch }
+    { id: 1, name: 'MRF', image: mrf },
+    { id: 2, name: 'Cognizant', image: cognizant },
+    { id: 3, name: 'Pegatron', image: pegatron },
+    { id: 4, name: 'TCS', image: tcs },
+    { id: 5, name: 'Ashok Leyland', image: al },
+    { id: 6, name: 'Reliance', image: reliance },
+    { id: 7, name: 'Foxconn', image: foxconn },
+    { id: 8, name: 'ICICI Bank', image: icici },
+    { id: 9, name: 'Hexaware', image: hexaware },
+    { id: 10, name: 'Pengaton Space', image: pengaton },
+    { id: 11, name: 'Focus Edumatics', image: focus },
+    { id: 12, name: 'Tech Mahindra', image: techmahindra }
   ]
 
   const [events, setEvents] = useState([]);
 
   const accreditations = [
-    { id: 'naac1', image: Courseug, alt: 'NAAC A Grade' },
-    { id: 'dnv', image: Coursepg, alt: 'DNV ISO 9001' },
-    { id: 'iic', image: CourseResearch, alt: 'IIC' },
-    { id: 'csi', image: Courseug, alt: 'CSI' },
-    { id: 'ieee', image: Coursepg, alt: 'IEEE' },
-    { id: 'nba', image: CourseResearch, alt: 'NBA' },
-    { id: 'naac2', image: Courseug, alt: 'NAAC A Grade' },
-    { id: 'dnv2', image: Coursepg, alt: 'DNV ISO 9001' },
+    { id: 'nba', image: nbalogo, alt: 'NAAC A Grade' },
+    { id: 'naac', image: naaclogo, alt: 'DNV ISO 9001' },
+    { id: 'iic', image: iiclogo, alt: 'IIC' },
+    { id: 'csi', image: csilogo, alt: 'CSI' },
+    { id: 'iso', image: isologo, alt: 'IEEE' },
+    { id: 'ieee', image: ieeelogo, alt: 'DNV ISO 9001' },
   ]
 
   useEffect(() => {
