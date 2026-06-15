@@ -27,6 +27,13 @@ const hexaware = '/rec_logos/hexaware_logo.png'
 const focus = '/rec_logos/focus_logo.png'
 const techmahindra = '/rec_logos/techmahindra_logo.png'
 const Placement = '/course/home-placement.jpg'
+
+const SmartClass = '/facilities/smart-class.png'
+const Library = '/facilities/library.png'
+const Transport = '/facilities/transport.png'
+const Hostel = '/facilities/hostel.png'
+const Campus = '/facilities/campus.png'
+const Sports = '/facilities/sports.png'
 import { initAnimations, cleanupAnimations } from '../utils/animations'
 
 
@@ -100,37 +107,37 @@ const Home = ({ showHero = false }) => {
   const facilitiesOffered = [
     {
       id: 'infrastructure',
-      image: DigitalClassrooms,
+      image: SmartClass,
       category: 'INFRASTRUCTURE',
       title: 'Digital Classrooms',
     },
     {
       id: 'library',
-      image: DigitalLibrary,
+      image: Library,
       category: 'LIBRARY',
       title: 'Digital Library with eresources',
     },
     {
       id: 'transportation',
-      image: Transportation,
+      image: Transport,
       category: 'TRANSPORTATION',
       title: 'Transportation Facilities',
     },
     {
       id: 'hostels',
-      image: Hostels,
+      image: Hostel,
       category: 'HOSTEL',
       title: 'Separated Hostels',
     },
     {
       id: 'campus',
-      image: WifiCampus,
-      category: 'CAMPUS',
+      image: Campus,
+      category: 'WIFI CAMPUS',
       title: 'Wi-Fi campus with High speed Internet',
     },
     {
       id: 'sports',
-      image: SportsFacilities,
+      image: Sports,
       category: 'SPORTS',
       title: 'Sports Facilities',
     },
