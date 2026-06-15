@@ -26,6 +26,7 @@ const pengaton = '/rec_logos/pengaton_logo.png'
 const hexaware = '/rec_logos/hexaware_logo.png'
 const focus = '/rec_logos/focus_logo.png'
 const techmahindra = '/rec_logos/techmahindra_logo.png'
+const Placement = '/course/home-placement.jpg'
 import { initAnimations, cleanupAnimations } from '../utils/animations'
 
 
@@ -653,7 +654,7 @@ const Home = ({ showHero = false }) => {
                   {/* The Image Box */}
                   <div className="relative z-10 overflow-hidden rounded-2xl shadow-2xl ">
                     <img
-                      src={Coursepg}
+                      src={Placement}
                       alt="Placement Cell"
                       className="w-full h-full object-cover"
                     />
