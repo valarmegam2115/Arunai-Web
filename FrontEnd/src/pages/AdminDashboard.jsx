@@ -7,6 +7,10 @@ const AdminDashboard = () => {
     const [carouselEventsData, setCarouselEventsData] = useState([]);
     const [extraCurricularData, setExtraCurricularData] = useState([]);
     const [documentsData, setDocumentsData] = useState([]);
+    const [academicCalendarData, setAcademicCalendarData] = useState([]);
+    const [councilMembersData, setCouncilMembersData] = useState([]);
+    const [councilMeetingsData, setCouncilMeetingsData] = useState([]);
+    const [codeOfConductData, setCodeOfConductData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const [isEditing, setIsEditing] = useState(false);
@@ -14,6 +18,10 @@ const AdminDashboard = () => {
     const [showCarouselModal, setShowCarouselModal] = useState(false);
     const [showExtraModal, setShowExtraModal] = useState(false);
     const [showDocModal, setShowDocModal] = useState(false);
+    const [showCalendarModal, setShowCalendarModal] = useState(false);
+    const [showCouncilMemberModal, setShowCouncilMemberModal] = useState(false);
+    const [showCouncilMeetingModal, setShowCouncilMeetingModal] = useState(false);
+    const [showConductModal, setShowConductModal] = useState(false);
 
     const [newsFormData, setNewsFormData] = useState({
         id: null, category: 'news', day: '', month: '', year: '2026', text: ''
@@ -34,6 +42,25 @@ const AdminDashboard = () => {
     });
     const [docFile, setDocFile] = useState(null);
 
+    const [calendarFormData, setCalendarFormData] = useState({
+        id: null, title: '', file_url: '#', display_order: 0
+    });
+    const [calendarFile, setCalendarFile] = useState(null);
+
+    const [councilMemberFormData, setCouncilMemberFormData] = useState({
+        id: null, sno: 0, name: '', designation: '', category: ''
+    });
+
+    const [councilMeetingFormData, setCouncilMeetingFormData] = useState({
+        id: null, title: '', file_url: '#', display_order: 0
+    });
+    const [councilMeetingFile, setCouncilMeetingFile] = useState(null);
+
+    const [conductFormData, setConductFormData] = useState({
+        id: null, title: '', file_url: '#', display_order: 0
+    });
+    const [conductFile, setConductFile] = useState(null);
+
     useEffect(() => {
         const token = localStorage.getItem('adminToken');
         if (!token) {
@@ -46,20 +73,28 @@ const AdminDashboard = () => {
     const fetchAllData = async () => {
         setLoading(true);
         try {
-            const [resNews, resCarousel, resExtra, resDocs] = await Promise.all([
+            const [resNews, resCarousel, resExtra, resDocs, resCal, resMembers, resMeetings, resConduct] = await Promise.all([
                 fetch('http://localhost:5000/api/news'),
                 fetch('http://localhost:5000/api/our-events'),
                 fetch('http://localhost:5000/api/extra-curricular'),
-                fetch('http://localhost:5000/api/documents')
+                fetch('http://localhost:5000/api/documents'),
+                fetch('http://localhost:5000/api/academic-calendars'),
+                fetch('http://localhost:5000/api/academic-council/members'),
+                fetch('http://localhost:5000/api/academic-council/meetings'),
+                fetch('http://localhost:5000/api/code-of-conduct')
             ]);
-            const [dataNews, dataCarousel, dataExtra, dataDocs] = await Promise.all([
-                resNews.json(), resCarousel.json(), resExtra.json(), resDocs.json()
+            const [dataNews, dataCarousel, dataExtra, dataDocs, dataCal, dataMembers, dataMeetings, dataConduct] = await Promise.all([
+                resNews.json(), resCarousel.json(), resExtra.json(), resDocs.json(), resCal.json(), resMembers.json(), resMeetings.json(), resConduct.json()
             ]);
 
             if (dataNews.success) setNewsData(dataNews.data);
             if (dataCarousel.success) setCarouselEventsData(dataCarousel.data);
             if (dataExtra.success) setExtraCurricularData(dataExtra.data);
             if (dataDocs.success) setDocumentsData(dataDocs.data);
+            if (dataCal.success) setAcademicCalendarData(dataCal.data);
+            if (dataMembers.success) setCouncilMembersData(dataMembers.data);
+            if (dataMeetings.success) setCouncilMeetingsData(dataMeetings.data);
+            if (dataConduct.success) setCodeOfConductData(dataConduct.data);
         } catch (err) {
             console.error('Failed to fetch data:', err);
         } finally {
@@ -98,6 +133,37 @@ const AdminDashboard = () => {
             }
             setDocFile(null);
             setShowDocModal(true);
+        } else if (activeTab === 'academic_calendar') {
+            if (item) {
+                setCalendarFormData(item);
+            } else {
+                setCalendarFormData({ id: null, title: '', file_url: '#', display_order: 0 });
+            }
+            setCalendarFile(null);
+            setShowCalendarModal(true);
+        } else if (activeTab === 'council_members') {
+            if (item) {
+                setCouncilMemberFormData(item);
+            } else {
+                setCouncilMemberFormData({ id: null, sno: councilMembersData.length + 1, name: '', designation: '', category: '' });
+            }
+            setShowCouncilMemberModal(true);
+        } else if (activeTab === 'council_meetings') {
+            if (item) {
+                setCouncilMeetingFormData(item);
+            } else {
+                setCouncilMeetingFormData({ id: null, title: '', file_url: '#', display_order: 0 });
+            }
+            setCouncilMeetingFile(null);
+            setShowCouncilMeetingModal(true);
+        } else if (activeTab === 'code_of_conduct') {
+            if (item) {
+                setConductFormData(item);
+            } else {
+                setConductFormData({ id: null, title: '', file_url: '#', display_order: 0 });
+            }
+            setConductFile(null);
+            setShowConductModal(true);
         } else {
             if (item) {
                 setNewsFormData(item);
@@ -113,6 +179,10 @@ const AdminDashboard = () => {
         setShowCarouselModal(false);
         setShowExtraModal(false);
         setShowDocModal(false);
+        setShowCalendarModal(false);
+        setShowCouncilMemberModal(false);
+        setShowCouncilMeetingModal(false);
+        setShowConductModal(false);
     };
 
     const handleSaveNews = async (e) => {
@@ -289,6 +359,181 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleSaveCalendar = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('adminToken');
+        let fileUrl = calendarFormData.file_url;
+
+        try {
+            if (calendarFile) {
+                const uploadData = new FormData();
+                uploadData.append('file', calendarFile);
+
+                const uploadRes = await fetch('http://localhost:5000/api/upload', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: uploadData
+                });
+
+                const uploadJson = await uploadRes.json();
+                if (uploadJson.success) {
+                    fileUrl = uploadJson.data.url;
+                } else {
+                    alert(uploadJson.message || 'Error uploading PDF');
+                    return;
+                }
+            } else if (!fileUrl && !isEditing) {
+                alert('Please select a PDF file to upload.');
+                return;
+            }
+
+            const url = isEditing ? `http://localhost:5000/api/academic-calendars/${calendarFormData.id}` : 'http://localhost:5000/api/academic-calendars';
+            const method = isEditing ? 'PUT' : 'POST';
+            const payload = { ...calendarFormData, file_url: fileUrl };
+
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchAllData();
+                handleCloseModal();
+            } else {
+                alert(data.message || 'Error saving academic calendar');
+            }
+        } catch (err) {
+            console.error('Error saving academic calendar:', err);
+            alert('Failed to connect to the server.');
+        }
+    };
+
+    const handleSaveCouncilMember = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('adminToken');
+        const url = isEditing ? `http://localhost:5000/api/academic-council/members/${councilMemberFormData.id}` : 'http://localhost:5000/api/academic-council/members';
+        const method = isEditing ? 'PUT' : 'POST';
+
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(councilMemberFormData)
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchAllData();
+                handleCloseModal();
+            } else {
+                alert(data.message || 'Error saving member');
+            }
+        } catch (err) {
+            console.error('Error saving member:', err);
+            alert('Failed to connect to the server.');
+        }
+    };
+
+    const handleSaveCouncilMeeting = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('adminToken');
+        let fileUrl = councilMeetingFormData.file_url;
+
+        try {
+            if (councilMeetingFile) {
+                const uploadData = new FormData();
+                uploadData.append('file', councilMeetingFile);
+
+                const uploadRes = await fetch('http://localhost:5000/api/upload', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: uploadData
+                });
+
+                const uploadJson = await uploadRes.json();
+                if (uploadJson.success) {
+                    fileUrl = uploadJson.data.url;
+                } else {
+                    alert(uploadJson.message || 'Error uploading PDF');
+                    return;
+                }
+            } else if (!fileUrl && !isEditing) {
+                alert('Please select a PDF file to upload.');
+                return;
+            }
+
+            const url = isEditing ? `http://localhost:5000/api/academic-council/meetings/${councilMeetingFormData.id}` : 'http://localhost:5000/api/academic-council/meetings';
+            const method = isEditing ? 'PUT' : 'POST';
+            const payload = { ...councilMeetingFormData, file_url: fileUrl };
+
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchAllData();
+                handleCloseModal();
+            } else {
+                alert(data.message || 'Error saving meeting');
+            }
+        } catch (err) {
+            console.error('Error saving meeting:', err);
+            alert('Failed to connect to the server.');
+        }
+    };
+
+    const handleSaveConduct = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('adminToken');
+        let fileUrl = conductFormData.file_url;
+
+        try {
+            if (conductFile) {
+                const uploadData = new FormData();
+                uploadData.append('file', conductFile);
+
+                const uploadRes = await fetch('http://localhost:5000/api/upload', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: uploadData
+                });
+
+                const uploadJson = await uploadRes.json();
+                if (uploadJson.success) {
+                    fileUrl = uploadJson.data.url;
+                } else {
+                    alert(uploadJson.message || 'Error uploading PDF');
+                    return;
+                }
+            } else if (!fileUrl && !isEditing) {
+                alert('Please select a PDF file to upload.');
+                return;
+            }
+
+            const url = isEditing ? `http://localhost:5000/api/code-of-conduct/${conductFormData.id}` : 'http://localhost:5000/api/code-of-conduct';
+            const method = isEditing ? 'PUT' : 'POST';
+            const payload = { ...conductFormData, file_url: fileUrl };
+
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchAllData();
+                handleCloseModal();
+            } else {
+                alert(data.message || 'Error saving entry');
+            }
+        } catch (err) {
+            console.error('Error saving entry:', err);
+            alert('Failed to connect to the server.');
+        }
+    };
+
     const handleDelete = async (id, type) => {
         if (!window.confirm('Are you sure you want to delete this item?')) return;
         const token = localStorage.getItem('adminToken');
@@ -296,6 +541,10 @@ const AdminDashboard = () => {
         if (type === 'carousel_events') endpoint = 'our-events';
         else if (type === 'extra_curricular') endpoint = 'extra-curricular';
         else if (type === 'documents') endpoint = 'documents';
+        else if (type === 'academic_calendar') endpoint = 'academic-calendars';
+        else if (type === 'council_members') endpoint = 'academic-council/members';
+        else if (type === 'council_meetings') endpoint = 'academic-council/meetings';
+        else if (type === 'code_of_conduct') endpoint = 'code-of-conduct';
 
         try {
             const res = await fetch(`http://localhost:5000/api/${endpoint}/${id}`, {
@@ -318,6 +567,10 @@ const AdminDashboard = () => {
         if (activeTab === 'carousel_events') return carouselEventsData;
         if (activeTab === 'extra_curricular') return extraCurricularData;
         if (activeTab === 'documents') return documentsData;
+        if (activeTab === 'academic_calendar') return academicCalendarData;
+        if (activeTab === 'council_members') return councilMembersData;
+        if (activeTab === 'council_meetings') return councilMeetingsData;
+        if (activeTab === 'code_of_conduct') return codeOfConductData;
         return newsData.filter(item => item.category === activeTab);
     };
 
@@ -329,7 +582,11 @@ const AdminDashboard = () => {
         { id: 'achievements', label: 'Achievements', icon: '🏆' },
         { id: 'carousel_events', label: 'Carousel', icon: '🎢' },
         { id: 'extra_curricular', label: 'Extra-Curricular', icon: '🎨' },
-        { id: 'documents', label: 'Documents', icon: '📄' }
+        { id: 'documents', label: 'Documents', icon: '📄' },
+        { id: 'academic_calendar', label: 'Academic Calendar', icon: '📅' },
+        { id: 'council_members', label: 'Council Members', icon: '👥' },
+        { id: 'council_meetings', label: 'Council Meetings', icon: '🗓️' },
+        { id: 'code_of_conduct', label: 'Code of Conduct', icon: '📜' }
     ];
 
     const activeMenu = menuItems.find(i => i.id === activeTab) || menuItems[0];
@@ -437,9 +694,17 @@ const AdminDashboard = () => {
                                 <table className="w-full text-left border-collapse">
                                     <thead>
                                         <tr className="bg-slate-50 text-slate-400 text-[11px] font-black uppercase tracking-[0.2em] border-b border-slate-100">
-                                            {activeTab === 'carousel_events' || activeTab === 'extra_curricular' || activeTab === 'documents' ? (
+                                            {activeTab === 'council_members' ? (
                                                 <>
-                                                    <th className="p-8">{activeTab === 'documents' ? 'Category' : 'Preview'}</th>
+                                                    <th className="p-8 w-20">S.No</th>
+                                                    <th className="p-8">Name</th>
+                                                    <th className="p-8">Designation</th>
+                                                    <th className="p-8">Category</th>
+                                                    <th className="p-8 text-right">Actions</th>
+                                                </>
+                                            ) : activeTab === 'carousel_events' || activeTab === 'extra_curricular' || activeTab === 'documents' || activeTab === 'academic_calendar' || activeTab === 'council_meetings' || activeTab === 'code_of_conduct' ? (
+                                                <>
+                                                    <th className="p-8">{activeTab === 'documents' ? 'Category' : activeTab === 'academic_calendar' || activeTab === 'council_meetings' || activeTab === 'code_of_conduct' ? 'Order' : 'Preview'}</th>
                                                     <th className="p-8">Information</th>
                                                     <th className="p-8 text-right">Actions</th>
                                                 </>
@@ -455,10 +720,29 @@ const AdminDashboard = () => {
                                     <tbody className="divide-y divide-slate-50">
                                         {activeData.map((item) => (
                                             <tr key={item.id} className="hover:bg-slate-50/50 transition-colors group">
-                                                {activeTab === 'carousel_events' || activeTab === 'extra_curricular' || activeTab === 'documents' ? (
+                                                {activeTab === 'council_members' ? (
+                                                    <>
+                                                        <td className="p-8 w-20 text-center font-black text-slate-700">{item.sno}</td>
+                                                        <td className="p-8">
+                                                            <h5 className="font-black text-lg text-slate-900 group-hover:text-blue-700 transition-colors">{item.name}</h5>
+                                                        </td>
+                                                        <td className="p-8">
+                                                            <p className="text-slate-600 text-sm font-medium leading-relaxed">{item.designation}</p>
+                                                        </td>
+                                                        <td className="p-8">
+                                                            <span className="bg-purple-50 text-purple-700 px-3 py-1.5 rounded-lg font-bold text-[10px] uppercase tracking-widest border border-purple-200">
+                                                                {item.category}
+                                                            </span>
+                                                        </td>
+                                                    </>
+                                                ) : activeTab === 'carousel_events' || activeTab === 'extra_curricular' || activeTab === 'documents' || activeTab === 'academic_calendar' || activeTab === 'council_meetings' || activeTab === 'code_of_conduct' ? (
                                                     <>
                                                         <td className="p-8 w-56">
-                                                            {activeTab === 'documents' ? (
+                                                            {activeTab === 'academic_calendar' || activeTab === 'council_meetings' || activeTab === 'code_of_conduct' ? (
+                                                                <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-black text-[10px] uppercase tracking-widest border border-blue-200">
+                                                                    #{item.display_order}
+                                                                </span>
+                                                            ) : activeTab === 'documents' ? (
                                                                 <span className="bg-slate-100 text-slate-600 px-4 py-2 rounded-lg font-black text-[10px] uppercase tracking-widest border border-slate-200">
                                                                     {item.category}
                                                                 </span>
@@ -706,6 +990,177 @@ const AdminDashboard = () => {
                                     <div className="border-2 border-dashed border-slate-200 rounded-2xl p-4 bg-slate-50 group-hover/file:border-blue-400 group-hover/file:bg-blue-50 transition-all flex items-center justify-center gap-3">
                                         <span className="text-2xl">📄</span>
                                         <span className="text-xs font-black text-slate-400 uppercase tracking-widest">{docFile ? docFile.name : 'Choose PDF File'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex gap-4 pt-4">
+                                <button type="button" onClick={handleCloseModal} className="flex-1 px-6 py-4 text-slate-500 hover:bg-slate-100 font-black rounded-2xl transition-all uppercase tracking-widest text-xs">Cancel</button>
+                                <button type="submit" className="flex-[2] bg-[#001a66] hover:bg-[#0b2a8a] text-white px-8 py-4 font-black rounded-2xl shadow-xl shadow-blue-900/20 transition-all uppercase tracking-widest text-xs">Save Document</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+            {/* Academic Calendar Modal */}
+            {showCalendarModal && (
+                <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+                    <div className="bg-white rounded-[32px] shadow-2xl w-full max-w-lg overflow-hidden border border-white/20 animate-in fade-in zoom-in duration-200">
+                        <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                            <div>
+                                <h3 className="text-2xl font-black text-slate-900">{isEditing ? 'Edit Calendar' : 'New Calendar Entry'}</h3>
+                                <p className="text-slate-500 text-sm font-medium mt-1">Upload academic calendar PDFs.</p>
+                            </div>
+                            <button onClick={handleCloseModal} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-400 text-2xl transition-colors">&times;</button>
+                        </div>
+                        <form onSubmit={handleSaveCalendar} className="p-8 space-y-6">
+                            <div>
+                                <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Calendar Title</label>
+                                <input type="text" required placeholder="e.g. Even Semester Academic Calendar 2025 – 2026" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+                                    value={calendarFormData.title} onChange={(e) => setCalendarFormData({ ...calendarFormData, title: e.target.value })} />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Display Order</label>
+                                    <input type="number" min="0" placeholder="0" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+                                        value={calendarFormData.display_order} onChange={(e) => setCalendarFormData({ ...calendarFormData, display_order: parseInt(e.target.value) || 0 })} />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">PDF Upload</label>
+                                    <div className="relative group/file">
+                                        <input type="file" accept=".pdf" className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                            onChange={(e) => setCalendarFile(e.target.files[0])} />
+                                        <div className="border-2 border-dashed border-slate-200 rounded-2xl p-3 bg-slate-50 group-hover/file:border-blue-400 group-hover/file:bg-blue-50 transition-all flex items-center justify-center gap-2">
+                                            <span className="text-xl">📄</span>
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{calendarFile ? calendarFile.name : 'Choose PDF'}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex gap-4 pt-4">
+                                <button type="button" onClick={handleCloseModal} className="flex-1 px-6 py-4 text-slate-500 hover:bg-slate-100 font-black rounded-2xl transition-all uppercase tracking-widest text-xs">Cancel</button>
+                                <button type="submit" className="flex-[2] bg-[#001a66] hover:bg-[#0b2a8a] text-white px-8 py-4 font-black rounded-2xl shadow-xl shadow-blue-900/20 transition-all uppercase tracking-widest text-xs">Save Calendar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+            {/* Council Member Modal */}
+            {showCouncilMemberModal && (
+                <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+                    <div className="bg-white rounded-[32px] shadow-2xl w-full max-w-lg overflow-hidden border border-white/20 animate-in fade-in zoom-in duration-200">
+                        <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                            <div>
+                                <h3 className="text-2xl font-black text-slate-900">{isEditing ? 'Edit Member' : 'New Member'}</h3>
+                                <p className="text-slate-500 text-sm font-medium mt-1">Academic council member details.</p>
+                            </div>
+                            <button onClick={handleCloseModal} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-400 text-2xl transition-colors">&times;</button>
+                        </div>
+                        <form onSubmit={handleSaveCouncilMember} className="p-8 space-y-6">
+                            <div className="grid grid-cols-4 gap-4">
+                                <div>
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">S.No</label>
+                                    <input type="number" min="1" required className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+                                        value={councilMemberFormData.sno} onChange={(e) => setCouncilMemberFormData({ ...councilMemberFormData, sno: parseInt(e.target.value) || 0 })} />
+                                </div>
+                                <div className="col-span-3">
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Name</label>
+                                    <input type="text" required placeholder="e.g. Dr. C. Elanchezhian" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+                                        value={councilMemberFormData.name} onChange={(e) => setCouncilMemberFormData({ ...councilMemberFormData, name: e.target.value })} />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Designation / Details</label>
+                                <textarea required rows="3" placeholder="e.g. Professor, Dept. of CSE" className="w-full border-2 border-slate-100 rounded-2xl p-4 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold text-slate-700 resize-none"
+                                    value={councilMemberFormData.designation} onChange={(e) => setCouncilMemberFormData({ ...councilMemberFormData, designation: e.target.value })}></textarea>
+                            </div>
+                            <div>
+                                <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Category</label>
+                                <input type="text" required placeholder="e.g. University Nominee, Head of the Department" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+                                    value={councilMemberFormData.category} onChange={(e) => setCouncilMemberFormData({ ...councilMemberFormData, category: e.target.value })} />
+                            </div>
+                            <div className="flex gap-4 pt-4">
+                                <button type="button" onClick={handleCloseModal} className="flex-1 px-6 py-4 text-slate-500 hover:bg-slate-100 font-black rounded-2xl transition-all uppercase tracking-widest text-xs">Cancel</button>
+                                <button type="submit" className="flex-[2] bg-[#001a66] hover:bg-[#0b2a8a] text-white px-8 py-4 font-black rounded-2xl shadow-xl shadow-blue-900/20 transition-all uppercase tracking-widest text-xs">Save Member</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+            {/* Council Meeting Modal */}
+            {showCouncilMeetingModal && (
+                <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+                    <div className="bg-white rounded-[32px] shadow-2xl w-full max-w-lg overflow-hidden border border-white/20 animate-in fade-in zoom-in duration-200">
+                        <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                            <div>
+                                <h3 className="text-2xl font-black text-slate-900">{isEditing ? 'Edit Meeting' : 'New Meeting'}</h3>
+                                <p className="text-slate-500 text-sm font-medium mt-1">Upload council meeting minutes PDF.</p>
+                            </div>
+                            <button onClick={handleCloseModal} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-400 text-2xl transition-colors">&times;</button>
+                        </div>
+                        <form onSubmit={handleSaveCouncilMeeting} className="p-8 space-y-6">
+                            <div>
+                                <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Meeting Title</label>
+                                <input type="text" required placeholder="e.g. Academic Council Meeting – 1" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+                                    value={councilMeetingFormData.title} onChange={(e) => setCouncilMeetingFormData({ ...councilMeetingFormData, title: e.target.value })} />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Display Order</label>
+                                    <input type="number" min="0" placeholder="0" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+                                        value={councilMeetingFormData.display_order} onChange={(e) => setCouncilMeetingFormData({ ...councilMeetingFormData, display_order: parseInt(e.target.value) || 0 })} />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">PDF Upload</label>
+                                    <div className="relative group/file">
+                                        <input type="file" accept=".pdf" className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                            onChange={(e) => setCouncilMeetingFile(e.target.files[0])} />
+                                        <div className="border-2 border-dashed border-slate-200 rounded-2xl p-3 bg-slate-50 group-hover/file:border-blue-400 group-hover/file:bg-blue-50 transition-all flex items-center justify-center gap-2">
+                                            <span className="text-xl">📄</span>
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{councilMeetingFile ? councilMeetingFile.name : 'Choose PDF'}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex gap-4 pt-4">
+                                <button type="button" onClick={handleCloseModal} className="flex-1 px-6 py-4 text-slate-500 hover:bg-slate-100 font-black rounded-2xl transition-all uppercase tracking-widest text-xs">Cancel</button>
+                                <button type="submit" className="flex-[2] bg-[#001a66] hover:bg-[#0b2a8a] text-white px-8 py-4 font-black rounded-2xl shadow-xl shadow-blue-900/20 transition-all uppercase tracking-widest text-xs">Save Meeting</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+            {/* Code of Conduct Modal */}
+            {showConductModal && (
+                <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+                    <div className="bg-white rounded-[32px] shadow-2xl w-full max-w-lg overflow-hidden border border-white/20 animate-in fade-in zoom-in duration-200">
+                        <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                            <div>
+                                <h3 className="text-2xl font-black text-slate-900">{isEditing ? 'Edit Conduct' : 'New Conduct Document'}</h3>
+                                <p className="text-slate-500 text-sm font-medium mt-1">Upload Code of Conduct PDF.</p>
+                            </div>
+                            <button onClick={handleCloseModal} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-400 text-2xl transition-colors">&times;</button>
+                        </div>
+                        <form onSubmit={handleSaveConduct} className="p-8 space-y-6">
+                            <div>
+                                <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Title</label>
+                                <input type="text" required placeholder="e.g. Student Code Book" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+                                    value={conductFormData.title} onChange={(e) => setConductFormData({ ...conductFormData, title: e.target.value })} />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Display Order</label>
+                                    <input type="number" min="0" placeholder="0" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+                                        value={conductFormData.display_order} onChange={(e) => setConductFormData({ ...conductFormData, display_order: parseInt(e.target.value) || 0 })} />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">PDF Upload</label>
+                                    <div className="relative group/file">
+                                        <input type="file" accept=".pdf" className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                            onChange={(e) => setConductFile(e.target.files[0])} />
+                                        <div className="border-2 border-dashed border-slate-200 rounded-2xl p-3 bg-slate-50 group-hover/file:border-blue-400 group-hover/file:bg-blue-50 transition-all flex items-center justify-center gap-2">
+                                            <span className="text-xl">📄</span>
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{conductFile ? conductFile.name : 'Choose PDF'}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

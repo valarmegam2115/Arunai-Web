@@ -41,6 +41,57 @@ const initialDocumentsData = [
   { category: 'NIRF', title: 'Engineering 2026', file_url: '#' }
 ];
 
+const initialAcademicCalendarsData = [
+  { title: 'Even Semester Academic Calendar 2025 \u2013 2026', file_url: '#', display_order: 1 },
+  { title: 'Odd Semester Academic Calendar PG 1st Year 2025 \u2013 2026', file_url: '#', display_order: 2 },
+  { title: 'Odd Semester Academic Calendar UG 1st Year 2025 \u2013 2026', file_url: '#', display_order: 3 },
+  { title: 'Odd Semester Academic Calendar 2025 \u2013 2026', file_url: '#', display_order: 4 },
+  { title: 'Academic Calendar 2024 \u2013 2025', file_url: '#', display_order: 5 },
+  { title: 'Academic Calendar 2023 \u2013 2024', file_url: '#', display_order: 6 }
+];
+
+const initialAcademicCouncilMembers = [
+  { sno: 1, name: 'Dr. C. Elanchezhian', designation: 'Principal', category: 'Chairman \u2013 Principal' },
+  { sno: 2, name: 'Dr. Ganapathi Malarvizhi', designation: 'Professor, Dept. of Civil Engineering, CEG Campus, Anna University, Chennai \u2013 600 025', category: 'University Nominee' },
+  { sno: 3, name: 'Dr. S. Hosimin Thilagar', designation: 'Professor, Dept. of Electrical & Electronics Engineering, Anna University, Chennai \u2013 600 025', category: 'University Nominee' },
+  { sno: 4, name: 'Dr. V. Vijayalakshmi', designation: 'Professor, Dept. of ECE, Puducherry Technological University, Puducherry', category: 'University Nominee' },
+  { sno: 5, name: 'Dr. S. Prabhu', designation: 'Professor & Head, Dept. of Mechanical Engineering', category: 'Head of the Department' },
+  { sno: 6, name: 'Dr. C. Jeyamala', designation: 'Professor & Head, Dept. of CSE', category: 'Head of the Department' },
+  { sno: 7, name: 'Dr. K. Rajalakshmi', designation: 'Professor & Head, Dept. of ECE', category: 'Head of the Department' },
+  { sno: 8, name: 'Dr. N. Nagarajan', designation: 'Professor & Head, Dept. of EEE', category: 'Head of the Department' },
+  { sno: 9, name: 'Dr. K. Valarmathi', designation: 'Professor & Head, Dept. of IT', category: 'Head of the Department' },
+  { sno: 10, name: 'Dr. G. Amirthavalli', designation: 'Professor & Head, Dept. of Civil Engineering', category: 'Head of the Department' },
+  { sno: 11, name: 'Dr. T. Rajkumar', designation: 'Professor & Head, Dept. of Mathematics', category: 'Head of the Department' },
+  { sno: 12, name: 'Dr. R. Punithavalli', designation: 'Professor & Head, Dept. of English', category: 'Head of the Department' },
+  { sno: 13, name: 'Dr. B. Karthikeyan', designation: 'Professor & Head, Dept. of Physics', category: 'Head of the Department' },
+  { sno: 14, name: 'Dr. S. Selvaraj', designation: 'Professor & Head, Dept. of Chemistry', category: 'Head of the Department' },
+  { sno: 15, name: 'Dr. V. Radhika', designation: 'Professor & Head, Dept. of AI & DS', category: 'Head of the Department' },
+  { sno: 16, name: 'Dr. N. Sivakumar', designation: 'Associate Professor, Dept. of Biotechnology', category: 'Head of the Department' },
+  { sno: 17, name: 'Dr. S. Jayanthi', designation: 'Professor, Dept. of CSE', category: 'Professors Nominated by the Principal' },
+  { sno: 18, name: 'Dr. N. Kumaresan', designation: 'Professor, Dept. of Mathematics', category: 'Professors Nominated by the Principal' },
+  { sno: 19, name: 'Dr. G. Maragatham', designation: 'Professor, Dept. of IT', category: 'Professors Nominated by the Principal' },
+  { sno: 20, name: 'Dr. S. Priya', designation: 'Professor, Dept. of EEE', category: 'Professors Nominated by the Principal' },
+  { sno: 21, name: 'Dr. K. Sathiyasekar', designation: 'Professor, Dept. of EEE', category: 'Professors Nominated by the Principal' },
+  { sno: 22, name: 'Dr. C. Nalini', designation: 'Professor, Dept. of CSE', category: 'Professors Nominated by the Principal' },
+  { sno: 23, name: 'Dr. R. Kavitha', designation: 'Professor, Dept. of ECE', category: 'Professors Nominated by the Principal' },
+  { sno: 24, name: 'Dr. S. Vasuki', designation: 'Associate Professor, Dept. of Mechanical Engineering', category: 'Professors Nominated by the Principal' },
+  { sno: 25, name: 'HoD \u2013 Management Studies', designation: 'Head of Department', category: 'All the Heads of Departments' },
+  { sno: 26, name: 'Dr. S. Thirumalvalavan', designation: 'Controller of Examinations', category: 'CoE' },
+  { sno: 27, name: 'Dr. J. Vinoth Arulraj', designation: 'Assistant Professor, Biotechnology', category: 'Member Secretary \u2013 Nominated by the Principal' }
+];
+
+const initialAcademicCouncilMeetings = [
+  { title: 'Academic Council Meeting \u2013 1', file_url: '#', display_order: 1 },
+  { title: 'Academic Council Meeting \u2013 2', file_url: '#', display_order: 2 },
+  { title: 'Academic Council Meeting \u2013 3', file_url: '#', display_order: 3 }
+];
+
+const initialCodeOfConductData = [
+  { title: 'HR Manual', file_url: '#', display_order: 1 },
+  { title: 'Faculty Code Book', file_url: '#', display_order: 2 },
+  { title: 'Student Code Book', file_url: '#', display_order: 3 }
+];
+
 const initDb = async () => {
     try {
         // Create admins table
@@ -170,6 +221,107 @@ const initDb = async () => {
                 );
             }
             console.log('documents seeded successfully.');
+        }
+
+        // Create academic_calendars table
+        const createAcademicCalendarsTableQuery = `
+            CREATE TABLE IF NOT EXISTS academic_calendars (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                file_url VARCHAR(255) NOT NULL,
+                display_order INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+        await db.query(createAcademicCalendarsTableQuery);
+
+        // Seed academic_calendars if empty
+        const { rows: calRows } = await db.query(`SELECT COUNT(*) FROM academic_calendars`);
+        if (parseInt(calRows[0].count) === 0) {
+            console.log('Seeding academic_calendars table...');
+            for (const item of initialAcademicCalendarsData) {
+                await db.query(
+                    `INSERT INTO academic_calendars (title, file_url, display_order) VALUES ($1, $2, $3)`,
+                    [item.title, item.file_url, item.display_order]
+                );
+            }
+            console.log('academic_calendars seeded successfully.');
+        }
+
+        // Create academic_council_members table
+        const createCouncilMembersTableQuery = `
+            CREATE TABLE IF NOT EXISTS academic_council_members (
+                id SERIAL PRIMARY KEY,
+                sno INTEGER NOT NULL,
+                name VARCHAR(255) NOT NULL,
+                designation TEXT NOT NULL,
+                category VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+        await db.query(createCouncilMembersTableQuery);
+
+        // Seed academic_council_members if empty
+        const { rows: memberRows } = await db.query(`SELECT COUNT(*) FROM academic_council_members`);
+        if (parseInt(memberRows[0].count) === 0) {
+            console.log('Seeding academic_council_members table...');
+            for (const item of initialAcademicCouncilMembers) {
+                await db.query(
+                    `INSERT INTO academic_council_members (sno, name, designation, category) VALUES ($1, $2, $3, $4)`,
+                    [item.sno, item.name, item.designation, item.category]
+                );
+            }
+            console.log('academic_council_members seeded successfully.');
+        }
+
+        // Create academic_council_meetings table
+        const createCouncilMeetingsTableQuery = `
+            CREATE TABLE IF NOT EXISTS academic_council_meetings (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                file_url VARCHAR(255) NOT NULL,
+                display_order INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+        await db.query(createCouncilMeetingsTableQuery);
+
+        // Seed academic_council_meetings if empty
+        const { rows: meetingRows } = await db.query(`SELECT COUNT(*) FROM academic_council_meetings`);
+        if (parseInt(meetingRows[0].count) === 0) {
+            console.log('Seeding academic_council_meetings table...');
+            for (const item of initialAcademicCouncilMeetings) {
+                await db.query(
+                    `INSERT INTO academic_council_meetings (title, file_url, display_order) VALUES ($1, $2, $3)`,
+                    [item.title, item.file_url, item.display_order]
+                );
+            }
+            console.log('academic_council_meetings seeded successfully.');
+        }
+
+        // Create code_of_conduct table
+        const createCodeOfConductTableQuery = `
+            CREATE TABLE IF NOT EXISTS code_of_conduct (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                file_url VARCHAR(255) NOT NULL,
+                display_order INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+        await db.query(createCodeOfConductTableQuery);
+
+        // Seed code_of_conduct if empty
+        const { rows: cocRows } = await db.query(`SELECT COUNT(*) FROM code_of_conduct`);
+        if (parseInt(cocRows[0].count) === 0) {
+            console.log('Seeding code_of_conduct table...');
+            for (const item of initialCodeOfConductData) {
+                await db.query(
+                    `INSERT INTO code_of_conduct (title, file_url, display_order) VALUES ($1, $2, $3)`,
+                    [item.title, item.file_url, item.display_order]
+                );
+            }
+            console.log('code_of_conduct seeded successfully.');
         }
 
     } catch (err) {
