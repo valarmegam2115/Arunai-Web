@@ -8,6 +8,7 @@ import Home from './pages/Home'
 import NISP from './pages/NISP'
 import NIRF from './pages/NIRF'
 import IIC from './pages/IIC'
+import ContactUs from './pages/ContactUs'
 
 // Inner pages
 import AboutAEC from './pages/inner/about/AboutAEC'
@@ -21,6 +22,7 @@ import AcademicCouncil from './pages/inner/about/AcademicCouncil'
 import AcademicCalendar from './pages/inner/about/AcademicCalendar'
 import CodeOfConduct from './pages/inner/about/CodeOfConduct'
 import OrgStructure from './pages/inner/about/OrgStructure'
+
 
 import AboutResearch from './pages/inner/AboutResearch'
 import DeptCSE from './pages/inner/DeptCSE'
@@ -61,6 +63,7 @@ const routes = [
   { path: '/documents',           component: <DocumentsPage /> },
   { path: '/iic',                 component: <IIC /> },
   { path: '/nirf',                component: <NIRF /> },
+  { path: '/contactus', component: <ContactUs /> },
 ]
 
 // ── Helper ─────────────────────────────────────────────────────────────────────

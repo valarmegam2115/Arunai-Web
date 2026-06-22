@@ -16,7 +16,7 @@ const topNavConfig = [
   { label: 'NIRF', path: '/nirf' },
   { label: 'IQAC', path: '/iqac' },
   { label: 'GALLERY', path: '/gallery' },
-  { label: 'CONTACT', path: '/contact' },
+  { label: 'CONTACT', path: '/contactus' },
 ]
 
 const mainNavConfig = [
