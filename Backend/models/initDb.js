@@ -324,6 +324,229 @@ const initDb = async () => {
             console.log('code_of_conduct seeded successfully.');
         }
 
+        // Create departments table
+        const createDepartmentsTableQuery = `
+            CREATE TABLE IF NOT EXISTS departments (
+                id SERIAL PRIMARY KEY,
+                dept_slug VARCHAR(50) UNIQUE NOT NULL,
+                dept_name VARCHAR(255) NOT NULL,
+                banner_image VARCHAR(255) DEFAULT '',
+                courses TEXT DEFAULT '[]',
+                introduction TEXT DEFAULT '',
+                vision TEXT DEFAULT '',
+                mission TEXT DEFAULT '[]',
+                highlights TEXT DEFAULT '[]',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+        await db.query(createDepartmentsTableQuery);
+        await db.query(`
+            ALTER TABLE departments 
+            ADD COLUMN IF NOT EXISTS curriculum TEXT DEFAULT '[]',
+            ADD COLUMN IF NOT EXISTS peo_pso_po TEXT DEFAULT '[]',
+            ADD COLUMN IF NOT EXISTS faculty TEXT DEFAULT '[]',
+            ADD COLUMN IF NOT EXISTS infrastructure TEXT DEFAULT '[]',
+            ADD COLUMN IF NOT EXISTS advisory TEXT DEFAULT '[]',
+            ADD COLUMN IF NOT EXISTS activities TEXT DEFAULT '[]',
+            ADD COLUMN IF NOT EXISTS achievements TEXT DEFAULT '[]',
+            ADD COLUMN IF NOT EXISTS placements TEXT DEFAULT '[]',
+            ADD COLUMN IF NOT EXISTS alumni TEXT DEFAULT '[]';
+        `);
+
+        // Seed departments if empty
+        const { rows: deptRows } = await db.query(`SELECT COUNT(*) FROM departments`);
+        if (parseInt(deptRows[0].count) === 0) {
+            console.log('Seeding departments table...');
+            const initialDepartments = [
+                {
+                    dept_slug: 'cse',
+                    dept_name: 'Computer Science & Engineering',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['UG – B.E. Computer Science & Engineering', 'PG – M.E. Computer Science & Engineering']),
+                    introduction: 'The Department of Computer Science & Engineering was established in 1993. The department offers B.E. and M.E. programs affiliated to Anna University, Chennai. The department has well-equipped laboratories with the latest hardware and software tools to provide hands-on training to the students.\n\nThe department has a team of highly qualified, dedicated and experienced faculty members committed to achieving the highest standards of academic excellence. The faculty actively engage in research and development activities and regularly publish papers in national and international journals and conferences.',
+                    vision: 'To be a centre of excellence in Computer Science & Engineering education and research, producing globally competent professionals with ethical values.',
+                    mission: JSON.stringify([
+                        'To impart quality education in Computer Science & Engineering through updated curriculum and pedagogy.',
+                        'To enhance research, innovation and problem-solving skills among students and faculty.',
+                        'To develop professionals with strong ethical values, communication skills and social responsibility.',
+                        'To collaborate with industries and research organizations for mutual benefit.',
+                    ]),
+                    highlights: JSON.stringify([
+                        { label: 'Established', value: '1993' },
+                        { label: 'UG Intake', value: '240' },
+                        { label: 'PG Intake', value: '18' },
+                        { label: 'Faculty', value: '30+' },
+                        { label: 'Publications', value: '100+' },
+                        { label: 'Placement %', value: '92%' },
+                    ]),
+                },
+                {
+                    dept_slug: 'civil',
+                    dept_name: 'Civil Engineering',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['UG – B.E. Civil Engineering']),
+                    introduction: 'The department of Civil Engineering started in the year 2008. It offers B. E programme in Civil Engineering affiliated to Anna University, Chennai. The department is certified to ISO 9001:2015 from DNV Netherlands. The department has well qualified and experienced faculty members and equipped with excellent laboratory infrastructure.\n\nWe consistently produce University ranks in undergraduate stream. We do R & D and consultancy activities in collaboration with L & T, Chennai and other leading organisations. We have received National Awards from industrial organisations and associations like Indian Society for Technical Education, New Delhi for carrying academic projects. The department has been producing quality technical manpower needed by industry, R&D organization and Academic Institution.',
+                    vision: 'To produce engineers having professional and leadership qualities with capacity to take up professional and research assignments in civil engineering and allied fields with focus on inter-disciplinary and innovative approach and to compete at the global level.',
+                    mission: JSON.stringify([
+                        'To impart quality and real time education to contribute to the field of Civil Engineering',
+                        'To impart soft skills, leadership qualities and professional ethics among the graduates to handle projects independently.',
+                        'To develop graduates to compete at the global level',
+                        'To deal with the contemporary issues and to cater to the societal needs.',
+                    ]),
+                    highlights: JSON.stringify([
+                        { label: 'Established', value: '2008' },
+                        { label: 'UG Intake', value: '60' },
+                        { label: 'Faculty', value: '10+' },
+                        { label: 'Placement %', value: '85%' },
+                    ]),
+                    curriculum: JSON.stringify([
+                        { name: 'Regulation-2024', file_url: '#' },
+                        { name: 'Regulation-2021', file_url: '#' }
+                    ]),
+                },
+                {
+                    dept_slug: 'cse-cs',
+                    dept_name: 'CSE – Cyber Security',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['UG – B.E. CSE (Cyber Security)']),
+                    introduction: '',
+                    vision: '',
+                    mission: JSON.stringify([]),
+                    highlights: JSON.stringify([]),
+                },
+                {
+                    dept_slug: 'cse-aiml',
+                    dept_name: 'CSE – AI & Machine Learning',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['UG – B.E. CSE (AI & ML)']),
+                    introduction: '',
+                    vision: '',
+                    mission: JSON.stringify([]),
+                    highlights: JSON.stringify([]),
+                },
+                {
+                    dept_slug: 'ece',
+                    dept_name: 'Electronics & Communication Engineering',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['UG – B.E. Electronics & Communication Engineering']),
+                    introduction: '',
+                    vision: '',
+                    mission: JSON.stringify([]),
+                    highlights: JSON.stringify([]),
+                },
+                {
+                    dept_slug: 'eee',
+                    dept_name: 'Electrical & Electronics Engineering',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['UG – B.E. Electrical & Electronics Engineering']),
+                    introduction: '',
+                    vision: '',
+                    mission: JSON.stringify([]),
+                    highlights: JSON.stringify([]),
+                },
+                {
+                    dept_slug: 'mech',
+                    dept_name: 'Mechanical Engineering',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['UG – B.E. Mechanical Engineering']),
+                    introduction: '',
+                    vision: '',
+                    mission: JSON.stringify([]),
+                    highlights: JSON.stringify([]),
+                },
+                {
+                    dept_slug: 'agri',
+                    dept_name: 'Agricultural Engineering',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['UG – B.E. Agricultural Engineering']),
+                    introduction: '',
+                    vision: '',
+                    mission: JSON.stringify([]),
+                    highlights: JSON.stringify([]),
+                },
+                {
+                    dept_slug: 'aids',
+                    dept_name: 'AI & Data Science',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['UG – B.E. Artificial Intelligence & Data Science']),
+                    introduction: '',
+                    vision: '',
+                    mission: JSON.stringify([]),
+                    highlights: JSON.stringify([]),
+                },
+                {
+                    dept_slug: 'biotech',
+                    dept_name: 'Bio Technology',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['UG – B.E. Bio Technology']),
+                    introduction: '',
+                    vision: '',
+                    mission: JSON.stringify([]),
+                    highlights: JSON.stringify([]),
+                },
+                {
+                    dept_slug: 'chemical',
+                    dept_name: 'Chemical Engineering',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['UG – B.E. Chemical Engineering']),
+                    introduction: '',
+                    vision: '',
+                    mission: JSON.stringify([]),
+                    highlights: JSON.stringify([]),
+                },
+                {
+                    dept_slug: 'it',
+                    dept_name: 'Information Technology',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['UG – B.E. Information Technology']),
+                    introduction: '',
+                    vision: '',
+                    mission: JSON.stringify([]),
+                    highlights: JSON.stringify([]),
+                },
+                {
+                    dept_slug: 'mba',
+                    dept_name: 'Master of Business Administration',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['PG – MBA']),
+                    introduction: '',
+                    vision: '',
+                    mission: JSON.stringify([]),
+                    highlights: JSON.stringify([]),
+                },
+            ];
+
+            for (const dept of initialDepartments) {
+                await db.query(
+                    `INSERT INTO departments (
+                        dept_slug, dept_name, banner_image, courses, introduction, vision, mission, highlights, 
+                        curriculum, peo_pso_po, faculty, infrastructure, advisory, activities, achievements, placements, alumni
+                    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)`,
+                    [
+                        dept.dept_slug, 
+                        dept.dept_name, 
+                        dept.banner_image, 
+                        dept.courses, 
+                        dept.introduction, 
+                        dept.vision, 
+                        dept.mission, 
+                        dept.highlights, 
+                        dept.curriculum || '[]',
+                        dept.peo_pso_po || '[]',
+                        dept.faculty || '[]',
+                        dept.infrastructure || '[]',
+                        dept.advisory || '[]',
+                        dept.activities || '[]',
+                        dept.achievements || '[]',
+                        dept.placements || '[]',
+                        dept.alumni || '[]'
+                    ]
+                );
+            }
+            console.log('departments seeded successfully.');
+        }
+
     } catch (err) {
         console.error('Error initializing database:', err);
     }

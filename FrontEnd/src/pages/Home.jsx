@@ -4,6 +4,7 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
+
 const Img = '/hero-image.png'
 const Coursepg = '/course/course-pg.png'
 const Courseug = '/course/course-ug.png'
@@ -35,7 +36,6 @@ const Hostel = '/facilities/hostel.png'
 const Campus = '/facilities/campus.png'
 const Sports = '/facilities/sports.png'
 import { initAnimations, cleanupAnimations } from '../utils/animations'
-
 
 // Using existing course images as placeholders until facility images are added
 const DigitalClassrooms = Courseug

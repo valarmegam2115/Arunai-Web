@@ -11,6 +11,8 @@ const AdminDashboard = () => {
     const [councilMembersData, setCouncilMembersData] = useState([]);
     const [councilMeetingsData, setCouncilMeetingsData] = useState([]);
     const [codeOfConductData, setCodeOfConductData] = useState([]);
+    const [departmentsData, setDepartmentsData] = useState([]);
+    const [selectedDeptSlug, setSelectedDeptSlug] = useState('');
     const [loading, setLoading] = useState(true);
 
     const [isEditing, setIsEditing] = useState(false);
@@ -61,6 +63,26 @@ const AdminDashboard = () => {
     });
     const [conductFile, setConductFile] = useState(null);
 
+    const [showDeptModal, setShowDeptModal] = useState(false);
+    const [deptFormData, setDeptFormData] = useState({
+        id: null, dept_slug: '', dept_name: '', banner_image: '', courses: [], introduction: '', vision: '', mission: [], highlights: [], curriculum: [],
+        peo_pso_po: [], faculty: [], infrastructure: [], advisory: [], activities: [], achievements: [], placements: [], alumni: []
+    });
+    const [deptBannerFile, setDeptBannerFile] = useState(null);
+    const [newCourse, setNewCourse] = useState('');
+    const [newMission, setNewMission] = useState('');
+    const [newHighlight, setNewHighlight] = useState({ label: '', value: '' });
+    const [newCurriculum, setNewCurriculum] = useState({ name: '', file_url: '#' });
+    const [deptModalTab, setDeptModalTab] = useState('general');
+    const [newPeo, setNewPeo] = useState({ type: 'PEO', code: '', statement: '' });
+    const [newFaculty, setNewFaculty] = useState({ name: '', designation: '', qualification: '', specialization: '', image_url: '/default-avatar.png' });
+    const [newInfra, setNewInfra] = useState({ name: '', description: '', image_url: '' });
+    const [newAdvisory, setNewAdvisory] = useState({ name: '', designation: '', organization: '' });
+    const [newActivity, setNewActivity] = useState({ title: '', date: '', description: '', image_url: '' });
+    const [newAchievement, setNewAchievement] = useState({ title: '', description: '', image_url: '' });
+    const [newPlacement, setNewPlacement] = useState({ academic_year: '', students_placed: '', average_salary: '', image_or_file: '' });
+    const [newAlumni, setNewAlumni] = useState({ name: '', batch: '', designation: '', company: '', feedback: '' });
+
     useEffect(() => {
         const token = localStorage.getItem('adminToken');
         if (!token) {
@@ -73,7 +95,7 @@ const AdminDashboard = () => {
     const fetchAllData = async () => {
         setLoading(true);
         try {
-            const [resNews, resCarousel, resExtra, resDocs, resCal, resMembers, resMeetings, resConduct] = await Promise.all([
+            const [resNews, resCarousel, resExtra, resDocs, resCal, resMembers, resMeetings, resConduct, resDepts] = await Promise.all([
                 fetch('http://localhost:5000/api/news'),
                 fetch('http://localhost:5000/api/our-events'),
                 fetch('http://localhost:5000/api/extra-curricular'),
@@ -81,10 +103,11 @@ const AdminDashboard = () => {
                 fetch('http://localhost:5000/api/academic-calendars'),
                 fetch('http://localhost:5000/api/academic-council/members'),
                 fetch('http://localhost:5000/api/academic-council/meetings'),
-                fetch('http://localhost:5000/api/code-of-conduct')
+                fetch('http://localhost:5000/api/code-of-conduct'),
+                fetch('http://localhost:5000/api/departments')
             ]);
-            const [dataNews, dataCarousel, dataExtra, dataDocs, dataCal, dataMembers, dataMeetings, dataConduct] = await Promise.all([
-                resNews.json(), resCarousel.json(), resExtra.json(), resDocs.json(), resCal.json(), resMembers.json(), resMeetings.json(), resConduct.json()
+            const [dataNews, dataCarousel, dataExtra, dataDocs, dataCal, dataMembers, dataMeetings, dataConduct, dataDepts] = await Promise.all([
+                resNews.json(), resCarousel.json(), resExtra.json(), resDocs.json(), resCal.json(), resMembers.json(), resMeetings.json(), resConduct.json(), resDepts.json()
             ]);
 
             if (dataNews.success) setNewsData(dataNews.data);
@@ -95,6 +118,12 @@ const AdminDashboard = () => {
             if (dataMembers.success) setCouncilMembersData(dataMembers.data);
             if (dataMeetings.success) setCouncilMeetingsData(dataMeetings.data);
             if (dataConduct.success) setCodeOfConductData(dataConduct.data);
+            if (dataDepts.success) {
+                setDepartmentsData(dataDepts.data);
+                if (!selectedDeptSlug && dataDepts.data.length > 0) {
+                    setSelectedDeptSlug(dataDepts.data[0].dept_slug);
+                }
+            }
         } catch (err) {
             console.error('Failed to fetch data:', err);
         } finally {
@@ -164,6 +193,44 @@ const AdminDashboard = () => {
             }
             setConductFile(null);
             setShowConductModal(true);
+        } else if (activeTab === 'departments') {
+            if (item) {
+                setDeptFormData({ 
+                    ...item, 
+                    courses: item.courses || [], 
+                    mission: item.mission || [], 
+                    highlights: item.highlights || [], 
+                    curriculum: item.curriculum || [],
+                    peo_pso_po: item.peo_pso_po || [],
+                    faculty: item.faculty || [],
+                    infrastructure: item.infrastructure || [],
+                    advisory: item.advisory || [],
+                    activities: item.activities || [],
+                    achievements: item.achievements || [],
+                    placements: item.placements || [],
+                    alumni: item.alumni || []
+                });
+            } else {
+                setDeptFormData({ 
+                    id: null, dept_slug: '', dept_name: '', banner_image: '', courses: [], introduction: '', vision: '', mission: [], highlights: [], curriculum: [],
+                    peo_pso_po: [], faculty: [], infrastructure: [], advisory: [], activities: [], achievements: [], placements: [], alumni: []
+                });
+            }
+            setDeptBannerFile(null);
+            setNewCourse('');
+            setNewMission('');
+            setNewHighlight({ label: '', value: '' });
+            setNewCurriculum({ name: '', file_url: '#' });
+            setNewPeo({ type: 'PEO', code: '', statement: '' });
+            setNewFaculty({ name: '', designation: '', qualification: '', specialization: '', image_url: '/default-avatar.png' });
+            setNewInfra({ name: '', description: '', image_url: '' });
+            setNewAdvisory({ name: '', designation: '', organization: '' });
+            setNewActivity({ title: '', date: '', description: '', image_url: '' });
+            setNewAchievement({ title: '', description: '', image_url: '' });
+            setNewPlacement({ academic_year: '', students_placed: '', average_salary: '', image_or_file: '' });
+            setNewAlumni({ name: '', batch: '', designation: '', company: '', feedback: '' });
+            setDeptModalTab('general');
+            setShowDeptModal(true);
         } else {
             if (item) {
                 setNewsFormData(item);
@@ -183,6 +250,7 @@ const AdminDashboard = () => {
         setShowCouncilMemberModal(false);
         setShowCouncilMeetingModal(false);
         setShowConductModal(false);
+        setShowDeptModal(false);
     };
 
     const handleSaveNews = async (e) => {
@@ -534,6 +602,51 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleSaveDept = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('adminToken');
+        let bannerUrl = deptFormData.banner_image;
+
+        try {
+            if (deptBannerFile) {
+                const uploadData = new FormData();
+                uploadData.append('file', deptBannerFile);
+                const uploadRes = await fetch('http://localhost:5000/api/upload', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: uploadData
+                });
+                const uploadJson = await uploadRes.json();
+                if (uploadJson.success) {
+                    bannerUrl = uploadJson.data.url;
+                } else {
+                    alert(uploadJson.message || 'Error uploading banner image');
+                    return;
+                }
+            }
+
+            const url = isEditing ? `http://localhost:5000/api/departments/${deptFormData.id}` : 'http://localhost:5000/api/departments';
+            const method = isEditing ? 'PUT' : 'POST';
+            const payload = { ...deptFormData, banner_image: bannerUrl };
+
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchAllData();
+                handleCloseModal();
+            } else {
+                alert(data.message || 'Error saving department');
+            }
+        } catch (err) {
+            console.error('Error saving department:', err);
+            alert('Failed to connect to the server.');
+        }
+    };
+
     const handleDelete = async (id, type) => {
         if (!window.confirm('Are you sure you want to delete this item?')) return;
         const token = localStorage.getItem('adminToken');
@@ -545,6 +658,7 @@ const AdminDashboard = () => {
         else if (type === 'council_members') endpoint = 'academic-council/members';
         else if (type === 'council_meetings') endpoint = 'academic-council/meetings';
         else if (type === 'code_of_conduct') endpoint = 'code-of-conduct';
+        else if (type === 'departments') endpoint = 'departments';
 
         try {
             const res = await fetch(`http://localhost:5000/api/${endpoint}/${id}`, {
@@ -571,6 +685,7 @@ const AdminDashboard = () => {
         if (activeTab === 'council_members') return councilMembersData;
         if (activeTab === 'council_meetings') return councilMeetingsData;
         if (activeTab === 'code_of_conduct') return codeOfConductData;
+        if (activeTab === 'departments') return departmentsData;
         return newsData.filter(item => item.category === activeTab);
     };
 
@@ -586,7 +701,8 @@ const AdminDashboard = () => {
         { id: 'academic_calendar', label: 'Academic Calendar', icon: '📅' },
         { id: 'council_members', label: 'Council Members', icon: '👥' },
         { id: 'council_meetings', label: 'Council Meetings', icon: '🗓️' },
-        { id: 'code_of_conduct', label: 'Code of Conduct', icon: '📜' }
+        { id: 'code_of_conduct', label: 'Code of Conduct', icon: '📜' },
+        { id: 'departments', label: 'Departments', icon: '🏛️' }
     ];
 
     const activeMenu = menuItems.find(i => i.id === activeTab) || menuItems[0];
@@ -671,8 +787,124 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
+                    {/* Department Inline Editor */}
+                    {activeTab === 'departments' && (() => {
+                        const selectedDept = departmentsData.find(d => d.dept_slug === selectedDeptSlug);
+                        return (
+                            <div className="space-y-8 mb-10">
+                                {/* Department Dropdown */}
+                                <div className="bg-white rounded-[24px] border border-slate-200 shadow-sm p-8">
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-3">Select Department</label>
+                                    <select
+                                        className="w-full border-2 border-slate-100 rounded-2xl p-4 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold text-slate-700 text-lg appearance-none cursor-pointer"
+                                        value={selectedDeptSlug}
+                                        onChange={(e) => setSelectedDeptSlug(e.target.value)}
+                                    >
+                                        {departmentsData.map(d => (
+                                            <option key={d.dept_slug} value={d.dept_slug}>{d.dept_name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                {selectedDept && (
+                                    <div className="bg-white rounded-[24px] border border-slate-200 shadow-sm p-8 space-y-6">
+                                        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                                            <h3 className="text-xl font-black text-slate-900">📝 Edit: {selectedDept.dept_name}</h3>
+                                            <div className="flex gap-3">
+                                                <button onClick={() => handleOpenModal(selectedDept)} className="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-6 py-2.5 rounded-xl font-black text-[11px] uppercase tracking-widest transition-all">Edit Full Details</button>
+                                                <button onClick={() => handleDelete(selectedDept.id, 'departments')} className="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-6 py-2.5 rounded-xl font-black text-[11px] uppercase tracking-widest transition-all">Delete</button>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-6">
+                                            <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Slug</p><p className="font-bold text-slate-700">{selectedDept.dept_slug}</p></div>
+                                            <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Banner</p><p className="font-bold text-slate-700 truncate">{selectedDept.banner_image || '—'}</p></div>
+                                        </div>
+
+                                        <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Courses ({(selectedDept.courses || []).length})</p>
+                                            <div className="flex flex-wrap gap-2">{(selectedDept.courses || []).map((c, i) => (
+                                                <span key={i} className="bg-[#0d2060] text-white px-4 py-2 rounded-lg text-sm font-semibold">{c}</span>
+                                            ))}{(selectedDept.courses || []).length === 0 && <span className="text-slate-400 text-sm italic">No courses added</span>}</div>
+                                        </div>
+
+                                        <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Introduction</p>
+                                            <p className="text-slate-600 text-sm leading-relaxed line-clamp-4">{selectedDept.introduction || <span className="italic text-slate-400">Not set</span>}</p>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-6">
+                                            <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Vision</p>
+                                                <p className="text-slate-600 text-sm leading-relaxed line-clamp-3">{selectedDept.vision || <span className="italic text-slate-400">Not set</span>}</p>
+                                            </div>
+                                            <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Mission ({(selectedDept.mission || []).length} items)</p>
+                                                <ul className="space-y-1">{(selectedDept.mission || []).map((m, i) => (
+                                                    <li key={i} className="text-slate-600 text-sm flex items-start gap-2"><span className="mt-1.5 w-1.5 h-1.5 bg-blue-500 rounded-full flex-shrink-0"></span>{m}</li>
+                                                ))}</ul>
+                                            </div>
+                                        </div>
+
+                                        {(selectedDept.highlights || []).length > 0 && (
+                                            <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Highlights</p>
+                                                <div className="grid grid-cols-3 gap-3">{selectedDept.highlights.map((h, i) => (
+                                                    <div key={i} className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                                                        <p className="text-[10px] font-bold text-slate-400 uppercase">{h.label}</p>
+                                                        <p className="text-lg font-black text-slate-800">{h.value}</p>
+                                                    </div>
+                                                ))}</div>
+                                            </div>
+                                        )}
+
+                                        <div className="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-slate-100">
+                                            <div>
+                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Academic Sections</p>
+                                                <div className="space-y-2">
+                                                    <div className="flex justify-between items-center bg-slate-50 p-2 rounded-lg text-xs font-bold">
+                                                        <span className="text-slate-500">Curriculum & Syllabus</span>
+                                                        <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">{(selectedDept.curriculum || []).length} items</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center bg-slate-50 p-2 rounded-lg text-xs font-bold">
+                                                        <span className="text-slate-500">PEO's, PSO's & PO's</span>
+                                                        <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">{(selectedDept.peo_pso_po || []).length} items</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center bg-slate-50 p-2 rounded-lg text-xs font-bold">
+                                                        <span className="text-slate-500">Faculty Members</span>
+                                                        <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">{(selectedDept.faculty || []).length} profiles</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center bg-slate-50 p-2 rounded-lg text-xs font-bold">
+                                                        <span className="text-slate-500">Infrastructure & Labs</span>
+                                                        <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">{(selectedDept.infrastructure || []).length} labs</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Department Life & Outcomes</p>
+                                                <div className="space-y-2">
+                                                    <div className="flex justify-between items-center bg-slate-50 p-2 rounded-lg text-xs font-bold">
+                                                        <span className="text-slate-500">Advisory Committee</span>
+                                                        <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">{(selectedDept.advisory || []).length} members</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center bg-slate-50 p-2 rounded-lg text-xs font-bold">
+                                                        <span className="text-slate-500">Activities & Events</span>
+                                                        <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">{(selectedDept.activities || []).length} events</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center bg-slate-50 p-2 rounded-lg text-xs font-bold">
+                                                        <span className="text-slate-500">Student Achievements</span>
+                                                        <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">{(selectedDept.achievements || []).length} items</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center bg-slate-50 p-2 rounded-lg text-xs font-bold">
+                                                        <span className="text-slate-500">Placements / Alumni</span>
+                                                        <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded">{(selectedDept.placements || []).length} yrs / {(selectedDept.alumni || []).length} feedback</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })()}
+
                     {/* Data List Container */}
-                    <div className="bg-white rounded-[32px] shadow-sm border border-slate-200 overflow-hidden">
+                    {activeTab !== 'departments' && <div className="bg-white rounded-[32px] shadow-sm border border-slate-200 overflow-hidden">
                         {loading ? (
                             <div className="p-24 text-center flex flex-col items-center gap-4">
                                 <div className="w-12 h-12 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin"></div>
@@ -800,7 +1032,7 @@ const AdminDashboard = () => {
                                 </table>
                             </div>
                         )}
-                    </div>
+                    </div>}
                 </main>
             </div>
 
@@ -1167,6 +1399,399 @@ const AdminDashboard = () => {
                             <div className="flex gap-4 pt-4">
                                 <button type="button" onClick={handleCloseModal} className="flex-1 px-6 py-4 text-slate-500 hover:bg-slate-100 font-black rounded-2xl transition-all uppercase tracking-widest text-xs">Cancel</button>
                                 <button type="submit" className="flex-[2] bg-[#001a66] hover:bg-[#0b2a8a] text-white px-8 py-4 font-black rounded-2xl shadow-xl shadow-blue-900/20 transition-all uppercase tracking-widest text-xs">Save Document</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+            {/* Department Modal */}
+            {showDeptModal && (
+                <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+                    <div className="bg-white rounded-[32px] shadow-2xl w-full max-w-2xl overflow-hidden border border-white/20 animate-in fade-in zoom-in duration-200 max-h-[90vh] flex flex-col">
+                        <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50 flex-shrink-0">
+                            <div>
+                                <h3 className="text-2xl font-black text-slate-900">{isEditing ? 'Edit Department' : 'New Department'}</h3>
+                                <p className="text-slate-500 text-sm font-medium mt-1">Configure department page content.</p>
+                            </div>
+                            <button onClick={handleCloseModal} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-400 text-2xl transition-colors">&times;</button>
+                        </div>
+                        {/* Tab Selector */}
+                        <div className="flex bg-slate-50 border-b border-slate-100 p-2 overflow-x-auto gap-2 flex-shrink-0 no-scrollbar">
+                            {[
+                                { id: 'general', label: 'General' },
+                                { id: 'curriculum', label: 'Curriculum' },
+                                { id: 'peos', label: "PEOs/PSOs/POs" },
+                                { id: 'faculty', label: 'Faculty' },
+                                { id: 'infrastructure', label: 'Infrastructure' },
+                                { id: 'advisory', label: 'Advisory' },
+                                { id: 'activities_achievements', label: 'Activities/Achievements' },
+                                { id: 'placements_alumni', label: 'Placements/Alumni' }
+                            ].map(tab => (
+                                <button
+                                    key={tab.id}
+                                    type="button"
+                                    onClick={() => setDeptModalTab(tab.id)}
+                                    className={`px-4 py-2 text-xs font-black uppercase tracking-wider rounded-xl transition-all flex-shrink-0 ${
+                                        deptModalTab === tab.id
+                                            ? 'bg-[#001a66] text-white shadow-md'
+                                            : 'text-slate-500 hover:bg-slate-200'
+                                    }`}
+                                >
+                                    {tab.label}
+                                </button>
+                            ))}
+                        </div>
+                        <form onSubmit={handleSaveDept} className="p-8 space-y-5 overflow-y-auto flex-1">
+                            {deptModalTab === 'general' && (
+                                <div className="space-y-5 animate-in fade-in duration-200">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Slug</label>
+                                            <input type="text" required placeholder="e.g. cse" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+                                                value={deptFormData.dept_slug} onChange={(e) => setDeptFormData({ ...deptFormData, dept_slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') })} />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Department Name</label>
+                                            <input type="text" required placeholder="e.g. Computer Science & Engineering" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+                                                value={deptFormData.dept_name} onChange={(e) => setDeptFormData({ ...deptFormData, dept_name: e.target.value })} />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Banner Image</label>
+                                        <div className="relative group/file">
+                                            <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                                onChange={(e) => setDeptBannerFile(e.target.files[0])} />
+                                            <div className="border-2 border-dashed border-slate-200 rounded-2xl p-3 bg-slate-50 group-hover/file:border-blue-400 group-hover/file:bg-blue-50 transition-all flex items-center justify-center gap-2">
+                                                <span className="text-xl">🖼️</span>
+                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{deptBannerFile ? deptBannerFile.name : (deptFormData.banner_image || 'Choose Image')}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* Courses */}
+                                    <div>
+                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Courses Offered</label>
+                                        <div className="flex flex-wrap gap-2 mb-2">
+                                            {(deptFormData.courses || []).map((c, i) => (
+                                                <span key={i} className="bg-[#0d2060] text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2">
+                                                    {c}
+                                                    <button type="button" onClick={() => setDeptFormData({ ...deptFormData, courses: deptFormData.courses.filter((_, idx) => idx !== i) })} className="text-white/60 hover:text-white">&times;</button>
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <input type="text" placeholder="e.g. UG – B.E. CSE" className="flex-1 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 focus:border-blue-500 outline-none text-sm font-bold"
+                                                value={newCourse} onChange={(e) => setNewCourse(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (newCourse.trim()) { setDeptFormData({ ...deptFormData, courses: [...(deptFormData.courses || []), newCourse.trim()] }); setNewCourse(''); } } }} />
+                                            <button type="button" onClick={() => { if (newCourse.trim()) { setDeptFormData({ ...deptFormData, courses: [...(deptFormData.courses || []), newCourse.trim()] }); setNewCourse(''); } }} className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl font-black text-xs hover:bg-blue-100">Add</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Introduction</label>
+                                        <textarea rows="3" placeholder="Department introduction..." className="w-full border-2 border-slate-100 rounded-2xl p-4 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold text-slate-700 resize-none text-sm"
+                                            value={deptFormData.introduction || ''} onChange={(e) => setDeptFormData({ ...deptFormData, introduction: e.target.value })}></textarea>
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Vision</label>
+                                        <textarea rows="2" placeholder="Department vision..." className="w-full border-2 border-slate-100 rounded-2xl p-4 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold text-slate-700 resize-none text-sm"
+                                            value={deptFormData.vision || ''} onChange={(e) => setDeptFormData({ ...deptFormData, vision: e.target.value })}></textarea>
+                                    </div>
+                                    {/* Mission */}
+                                    <div>
+                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Mission Points</label>
+                                        <ul className="space-y-1 mb-2">
+                                            {(deptFormData.mission || []).map((m, i) => (
+                                                <li key={i} className="flex items-center gap-2 bg-slate-50 rounded-lg px-3 py-2 text-sm">
+                                                    <span className="flex-1 font-medium text-slate-700">{m}</span>
+                                                    <button type="button" onClick={() => setDeptFormData({ ...deptFormData, mission: deptFormData.mission.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold">&times;</button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        <div className="flex gap-2">
+                                            <input type="text" placeholder="Add mission point" className="flex-1 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 focus:border-blue-500 outline-none text-sm font-bold"
+                                                value={newMission} onChange={(e) => setNewMission(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (newMission.trim()) { setDeptFormData({ ...deptFormData, mission: [...(deptFormData.mission || []), newMission.trim()] }); setNewMission(''); } } }} />
+                                            <button type="button" onClick={() => { if (newMission.trim()) { setDeptFormData({ ...deptFormData, mission: [...(deptFormData.mission || []), newMission.trim()] }); setNewMission(''); } }} className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl font-black text-xs hover:bg-blue-100">Add</button>
+                                        </div>
+                                    </div>
+                                    {/* Highlights */}
+                                    <div>
+                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Highlights</label>
+                                        <div className="grid grid-cols-3 gap-2 mb-2">
+                                            {(deptFormData.highlights || []).map((h, i) => (
+                                                <div key={i} className="bg-slate-50 rounded-lg p-2 text-sm border border-slate-100 flex items-center justify-between">
+                                                    <div><p className="text-[9px] font-bold text-slate-400 uppercase">{h.label}</p><p className="font-black text-slate-700">{h.value}</p></div>
+                                                    <button type="button" onClick={() => setDeptFormData({ ...deptFormData, highlights: deptFormData.highlights.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-lg">&times;</button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <input type="text" placeholder="Label" className="w-1/3 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 focus:border-blue-500 outline-none text-sm font-bold"
+                                                value={newHighlight.label} onChange={(e) => setNewHighlight({ ...newHighlight, label: e.target.value })} />
+                                            <input type="text" placeholder="Value" className="w-1/3 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 focus:border-blue-500 outline-none text-sm font-bold"
+                                                value={newHighlight.value} onChange={(e) => setNewHighlight({ ...newHighlight, value: e.target.value })} />
+                                            <button type="button" onClick={() => { if (newHighlight.label.trim() && newHighlight.value.trim()) { setDeptFormData({ ...deptFormData, highlights: [...(deptFormData.highlights || []), { ...newHighlight }] }); setNewHighlight({ label: '', value: '' }); } }} className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl font-black text-xs hover:bg-blue-100">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {deptModalTab === 'curriculum' && (
+                                <div className="space-y-5 animate-in fade-in duration-200">
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest">Curriculum & Syllabus Regulations</label>
+                                    <div className="grid grid-cols-2 gap-2 mb-2">
+                                        {(deptFormData.curriculum || []).map((c, i) => (
+                                            <div key={i} className="bg-slate-50 rounded-lg p-3 text-sm border border-slate-100 flex items-center justify-between">
+                                                <div className="min-w-0 flex-1 pr-2">
+                                                    <p className="font-black text-slate-700 truncate">{c.name}</p>
+                                                    <p className="text-[9px] font-bold text-slate-400 truncate">{c.file_url}</p>
+                                                </div>
+                                                <button type="button" onClick={() => setDeptFormData({ ...deptFormData, curriculum: deptFormData.curriculum.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-lg flex-shrink-0">&times;</button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <input type="text" placeholder="Regulation Name (e.g. Regulation-2024)" className="w-1/2 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 focus:border-blue-500 outline-none text-sm font-bold"
+                                            value={newCurriculum.name} onChange={(e) => setNewCurriculum({ ...newCurriculum, name: e.target.value })} />
+                                        <input type="text" placeholder="PDF Link (e.g. #)" className="w-1/2 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 focus:border-blue-500 outline-none text-sm font-bold"
+                                            value={newCurriculum.file_url} onChange={(e) => setNewCurriculum({ ...newCurriculum, file_url: e.target.value })} />
+                                        <button type="button" onClick={() => { if (newCurriculum.name.trim()) { setDeptFormData({ ...deptFormData, curriculum: [...(deptFormData.curriculum || []), { name: newCurriculum.name.trim(), file_url: newCurriculum.file_url.trim() || '#' }] }); setNewCurriculum({ name: '', file_url: '#' }); } }} className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl font-black text-xs hover:bg-blue-100 flex-shrink-0 font-bold">Add</button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {deptModalTab === 'peos' && (
+                                <div className="space-y-5 animate-in fade-in duration-200">
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest">PEO's, PSO's & PO's</label>
+                                    <div className="space-y-2 mb-2 max-h-[250px] overflow-y-auto">
+                                        {(deptFormData.peo_pso_po || []).map((p, i) => (
+                                            <div key={i} className="bg-slate-50 rounded-lg p-3 text-sm border border-slate-100 flex items-start justify-between">
+                                                <div className="flex-1 pr-2">
+                                                    <span className="inline-block bg-blue-100 text-blue-800 text-[10px] font-black uppercase px-2 py-0.5 rounded mr-2">{p.type}</span>
+                                                    <span className="font-extrabold text-[#001a66]">{p.code}</span>
+                                                    <p className="mt-1 text-slate-600 font-medium text-xs">{p.statement}</p>
+                                                </div>
+                                                <button type="button" onClick={() => setDeptFormData({ ...deptFormData, peo_pso_po: deptFormData.peo_pso_po.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-lg flex-shrink-0">&times;</button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="flex flex-col gap-2 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                        <div className="flex gap-2">
+                                            <select className="w-1/3 border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold outline-none"
+                                                value={newPeo.type} onChange={(e) => setNewPeo({ ...newPeo, type: e.target.value })}>
+                                                <option value="PEO">PEO</option>
+                                                <option value="PSO">PSO</option>
+                                                <option value="PO">PO</option>
+                                            </select>
+                                            <input type="text" placeholder="Code (e.g. PEO-1)" className="w-2/3 border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold outline-none"
+                                                value={newPeo.code} onChange={(e) => setNewPeo({ ...newPeo, code: e.target.value })} />
+                                        </div>
+                                        <textarea placeholder="Statement description..." className="w-full border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold resize-none outline-none" rows="2"
+                                            value={newPeo.statement} onChange={(e) => setNewPeo({ ...newPeo, statement: e.target.value })} />
+                                        <button type="button" onClick={() => { if (newPeo.code.trim() && newPeo.statement.trim()) { setDeptFormData({ ...deptFormData, peo_pso_po: [...(deptFormData.peo_pso_po || []), { ...newPeo }] }); setNewPeo({ type: newPeo.type, code: '', statement: '' }); } }} className="bg-[#001a66] text-white py-2.5 rounded-xl font-black text-xs hover:bg-[#0b2a8a] mt-1">Add PEO/PSO/PO</button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {deptModalTab === 'faculty' && (
+                                <div className="space-y-5 animate-in fade-in duration-200">
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest">Faculty Members</label>
+                                    <div className="grid grid-cols-2 gap-2 mb-2 max-h-[250px] overflow-y-auto">
+                                        {(deptFormData.faculty || []).map((f, i) => (
+                                            <div key={i} className="bg-slate-50 rounded-lg p-3 text-sm border border-slate-100 flex items-center justify-between">
+                                                <div className="flex items-center gap-2 min-w-0">
+                                                    <span className="text-xl flex-shrink-0">🧑‍🏫</span>
+                                                    <div className="min-w-0">
+                                                        <p className="font-black text-slate-700 truncate">{f.name}</p>
+                                                        <p className="text-[9px] font-bold text-slate-400 truncate">{f.designation}</p>
+                                                    </div>
+                                                </div>
+                                                <button type="button" onClick={() => setDeptFormData({ ...deptFormData, faculty: deptFormData.faculty.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-lg flex-shrink-0">&times;</button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="flex flex-col gap-2 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <input type="text" placeholder="Name (e.g. Dr. A. Kumar)" className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold outline-none"
+                                                value={newFaculty.name} onChange={(e) => setNewFaculty({ ...newFaculty, name: e.target.value })} />
+                                            <input type="text" placeholder="Designation (e.g. Professor)" className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold outline-none"
+                                                value={newFaculty.designation} onChange={(e) => setNewFaculty({ ...newFaculty, designation: e.target.value })} />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <input type="text" placeholder="Qualification (e.g. M.E., Ph.D.)" className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold outline-none"
+                                                value={newFaculty.qualification} onChange={(e) => setNewFaculty({ ...newFaculty, qualification: e.target.value })} />
+                                            <input type="text" placeholder="Specialization (e.g. AI)" className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold outline-none"
+                                                value={newFaculty.specialization} onChange={(e) => setNewFaculty({ ...newFaculty, specialization: e.target.value })} />
+                                        </div>
+                                        <input type="text" placeholder="Image URL (leave empty for default)" className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-xs font-bold outline-none"
+                                            value={newFaculty.image_url === '/default-avatar.png' ? '' : newFaculty.image_url} onChange={(e) => setNewFaculty({ ...newFaculty, image_url: e.target.value || '/default-avatar.png' })} />
+                                        <button type="button" onClick={() => { if (newFaculty.name.trim() && newFaculty.designation.trim()) { setDeptFormData({ ...deptFormData, faculty: [...(deptFormData.faculty || []), { ...newFaculty }] }); setNewFaculty({ name: '', designation: '', qualification: '', specialization: '', image_url: '/default-avatar.png' }); } }} className="bg-[#001a66] text-white py-2.5 rounded-xl font-black text-xs hover:bg-[#0b2a8a] mt-1">Add Faculty Member</button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {deptModalTab === 'infrastructure' && (
+                                <div className="space-y-5 animate-in fade-in duration-200">
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest">Infrastructure & Lab Facilities</label>
+                                    <div className="space-y-2 mb-2 max-h-[250px] overflow-y-auto">
+                                        {(deptFormData.infrastructure || []).map((inf, i) => (
+                                            <div key={i} className="bg-slate-50 rounded-lg p-3 text-sm border border-slate-100 flex items-start justify-between">
+                                                <div className="min-w-0 pr-2">
+                                                    <p className="font-black text-slate-700">{inf.name}</p>
+                                                    <p className="text-[10px] font-bold text-slate-500 mt-0.5">{inf.description}</p>
+                                                </div>
+                                                <button type="button" onClick={() => setDeptFormData({ ...deptFormData, infrastructure: deptFormData.infrastructure.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-lg flex-shrink-0">&times;</button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="flex flex-col gap-2 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                        <input type="text" placeholder="Lab Name (e.g. Advanced Computing Lab)" className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold outline-none"
+                                            value={newInfra.name} onChange={(e) => setNewInfra({ ...newInfra, name: e.target.value })} />
+                                        <textarea placeholder="Lab Description / Major Equipment / Configuration..." className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-xs font-bold resize-none outline-none" rows="2"
+                                            value={newInfra.description} onChange={(e) => setNewInfra({ ...newInfra, description: e.target.value })} />
+                                        <input type="text" placeholder="Photo URL (optional)" className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-xs font-bold outline-none"
+                                            value={newInfra.image_url} onChange={(e) => setNewInfra({ ...newInfra, image_url: e.target.value })} />
+                                        <button type="button" onClick={() => { if (newInfra.name.trim()) { setDeptFormData({ ...deptFormData, infrastructure: [...(deptFormData.infrastructure || []), { ...newInfra }] }); setNewInfra({ name: '', description: '', image_url: '' }); } }} className="bg-[#001a66] text-white py-2.5 rounded-xl font-black text-xs hover:bg-[#0b2a8a] mt-1">Add Facility</button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {deptModalTab === 'advisory' && (
+                                <div className="space-y-5 animate-in fade-in duration-200">
+                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest">Advisory Committee</label>
+                                    <div className="grid grid-cols-2 gap-2 mb-2 max-h-[250px] overflow-y-auto">
+                                        {(deptFormData.advisory || []).map((a, i) => (
+                                            <div key={i} className="bg-slate-50 rounded-lg p-3 text-sm border border-slate-100 flex items-center justify-between">
+                                                <div className="min-w-0 pr-2">
+                                                    <p className="font-black text-slate-700 truncate">{a.name}</p>
+                                                    <p className="text-[9px] font-bold text-slate-400 truncate">{a.designation} at {a.organization}</p>
+                                                </div>
+                                                <button type="button" onClick={() => setDeptFormData({ ...deptFormData, advisory: deptFormData.advisory.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-lg flex-shrink-0">&times;</button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="flex flex-col gap-2 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                        <input type="text" placeholder="Member Name" className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold outline-none"
+                                            value={newAdvisory.name} onChange={(e) => setNewAdvisory({ ...newAdvisory, name: e.target.value })} />
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <input type="text" placeholder="Designation" className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold outline-none"
+                                                value={newAdvisory.designation} onChange={(e) => setNewAdvisory({ ...newAdvisory, designation: e.target.value })} />
+                                            <input type="text" placeholder="Organization / Affiliation" className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold outline-none"
+                                                value={newAdvisory.organization} onChange={(e) => setNewAdvisory({ ...newAdvisory, organization: e.target.value })} />
+                                        </div>
+                                        <button type="button" onClick={() => { if (newAdvisory.name.trim()) { setDeptFormData({ ...deptFormData, advisory: [...(deptFormData.advisory || []), { ...newAdvisory }] }); setNewAdvisory({ name: '', designation: '', organization: '' }); } }} className="bg-[#001a66] text-white py-2.5 rounded-xl font-black text-xs hover:bg-[#0b2a8a] mt-1">Add Member</button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {deptModalTab === 'activities_achievements' && (
+                                <div className="space-y-5 animate-in fade-in duration-200">
+                                    <div>
+                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Department Activities</label>
+                                        <div className="space-y-2 mb-2 max-h-[150px] overflow-y-auto">
+                                            {(deptFormData.activities || []).map((act, i) => (
+                                                <div key={i} className="bg-slate-50 rounded-lg p-2.5 text-xs border border-slate-100 flex items-center justify-between">
+                                                    <div className="min-w-0 pr-2">
+                                                        <span className="font-extrabold text-slate-700 truncate block">{act.title}</span>
+                                                        <span className="text-[9px] text-slate-400 font-bold">{act.date}</span>
+                                                    </div>
+                                                    <button type="button" onClick={() => setDeptFormData({ ...deptFormData, activities: deptFormData.activities.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-base flex-shrink-0">&times;</button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="flex flex-col gap-2 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <input type="text" placeholder="Activity Title" className="border-2 border-slate-100 rounded-xl p-2 bg-white text-xs font-bold outline-none"
+                                                    value={newActivity.title} onChange={(e) => setNewActivity({ ...newActivity, title: e.target.value })} />
+                                                <input type="text" placeholder="Date (e.g. 15th March 2026)" className="border-2 border-slate-100 rounded-xl p-2 bg-white text-xs font-bold outline-none"
+                                                    value={newActivity.date} onChange={(e) => setNewActivity({ ...newActivity, date: e.target.value })} />
+                                            </div>
+                                            <textarea placeholder="Description..." className="border-2 border-slate-100 rounded-xl p-2 bg-white text-xs font-bold resize-none outline-none" rows="1"
+                                                value={newActivity.description} onChange={(e) => setNewActivity({ ...newActivity, description: e.target.value })} />
+                                            <button type="button" onClick={() => { if (newActivity.title.trim()) { setDeptFormData({ ...deptFormData, activities: [...(deptFormData.activities || []), { ...newActivity }] }); setNewActivity({ title: '', date: '', description: '', image_url: '' }); } }} className="bg-[#001a66] text-white py-1.5 rounded-lg font-black text-[10px] hover:bg-[#0b2a8a]">Add Activity</button>
+                                        </div>
+                                    </div>
+
+                                    <div className="pt-2 border-t border-slate-100">
+                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Student Achievements</label>
+                                        <div className="space-y-2 mb-2 max-h-[150px] overflow-y-auto">
+                                            {(deptFormData.achievements || []).map((ach, i) => (
+                                                <div key={i} className="bg-slate-50 rounded-lg p-2.5 text-xs border border-slate-100 flex items-center justify-between">
+                                                    <p className="font-extrabold text-slate-700 truncate flex-1 pr-2">{ach.title} - <span className="font-medium text-slate-500 text-[10px]">{ach.description}</span></p>
+                                                    <button type="button" onClick={() => setDeptFormData({ ...deptFormData, achievements: deptFormData.achievements.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-base flex-shrink-0">&times;</button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <input type="text" placeholder="Achievement (e.g. First Prize)" className="w-1/2 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 text-xs font-bold outline-none"
+                                                value={newAchievement.title} onChange={(e) => setNewAchievement({ ...newAchievement, title: e.target.value })} />
+                                            <input type="text" placeholder="Details/Student Name" className="w-1/2 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 text-xs font-bold outline-none"
+                                                value={newAchievement.description} onChange={(e) => setNewAchievement({ ...newAchievement, description: e.target.value })} />
+                                            <button type="button" onClick={() => { if (newAchievement.title.trim()) { setDeptFormData({ ...deptFormData, achievements: [...(deptFormData.achievements || []), { ...newAchievement }] }); setNewAchievement({ title: '', description: '', image_url: '' }); } }} className="bg-blue-50 text-blue-600 px-3 py-2 rounded-xl font-black text-xs hover:bg-blue-100 flex-shrink-0">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {deptModalTab === 'placements_alumni' && (
+                                <div className="space-y-5 animate-in fade-in duration-200">
+                                    <div>
+                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Placement Records</label>
+                                        <div className="grid grid-cols-2 gap-2 mb-2">
+                                            {(deptFormData.placements || []).map((pl, i) => (
+                                                <div key={i} className="bg-slate-50 rounded-lg p-2.5 text-xs border border-slate-100 flex items-center justify-between">
+                                                    <div>
+                                                        <span className="font-extrabold text-slate-700">{pl.academic_year}</span>
+                                                        <p className="text-[9px] font-bold text-slate-400">{pl.students_placed} Placed | Avg: {pl.average_salary}</p>
+                                                    </div>
+                                                    <button type="button" onClick={() => setDeptFormData({ ...deptFormData, placements: deptFormData.placements.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-base flex-shrink-0">&times;</button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <input type="text" placeholder="Year (e.g. 2024-25)" className="w-1/4 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 text-xs font-bold outline-none"
+                                                value={newPlacement.academic_year} onChange={(e) => setNewPlacement({ ...newPlacement, academic_year: e.target.value })} />
+                                            <input type="text" placeholder="No. Placed" className="w-1/4 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 text-xs font-bold outline-none"
+                                                value={newPlacement.students_placed} onChange={(e) => setNewPlacement({ ...newPlacement, students_placed: e.target.value })} />
+                                            <input type="text" placeholder="Avg Salary" className="w-1/4 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 text-xs font-bold outline-none"
+                                                value={newPlacement.average_salary} onChange={(e) => setNewPlacement({ ...newPlacement, average_salary: e.target.value })} />
+                                            <button type="button" onClick={() => { if (newPlacement.academic_year.trim()) { setDeptFormData({ ...deptFormData, placements: [...(deptFormData.placements || []), { ...newPlacement }] }); setNewPlacement({ academic_year: '', students_placed: '', average_salary: '', image_or_file: '' }); } }} className="bg-blue-50 text-blue-600 px-3 py-2 rounded-xl font-black text-xs hover:bg-blue-100 flex-shrink-0">Add</button>
+                                        </div>
+                                    </div>
+
+                                    <div className="pt-2 border-t border-slate-100">
+                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Alumni Registry & Feedback</label>
+                                        <div className="space-y-2 mb-2 max-h-[150px] overflow-y-auto">
+                                            {(deptFormData.alumni || []).map((al, i) => (
+                                                <div key={i} className="bg-slate-50 rounded-lg p-2.5 text-xs border border-slate-100 flex items-center justify-between">
+                                                    <div className="min-w-0 pr-2">
+                                                        <span className="font-extrabold text-slate-700 truncate block">{al.name} (Batch {al.batch})</span>
+                                                        <span className="text-[9px] text-slate-400 block truncate">{al.designation} at {al.company}</span>
+                                                    </div>
+                                                    <button type="button" onClick={() => setDeptFormData({ ...deptFormData, alumni: deptFormData.alumni.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-base flex-shrink-0">&times;</button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="flex flex-col gap-2 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <input type="text" placeholder="Alumni Name" className="border-2 border-slate-100 rounded-xl p-2 bg-white text-xs font-bold outline-none"
+                                                    value={newAlumni.name} onChange={(e) => setNewAlumni({ ...newAlumni, name: e.target.value })} />
+                                                <input type="text" placeholder="Batch (e.g. 2018-2022)" className="border-2 border-slate-100 rounded-xl p-2 bg-white text-xs font-bold outline-none"
+                                                    value={newAlumni.batch} onChange={(e) => setNewAlumni({ ...newAlumni, batch: e.target.value })} />
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <input type="text" placeholder="Designation" className="border-2 border-slate-100 rounded-xl p-2 bg-white text-xs font-bold outline-none"
+                                                    value={newAlumni.designation} onChange={(e) => setNewAlumni({ ...newAlumni, designation: e.target.value })} />
+                                                <input type="text" placeholder="Company" className="border-2 border-slate-100 rounded-xl p-2 bg-white text-xs font-bold outline-none"
+                                                    value={newAlumni.company} onChange={(e) => setNewAlumni({ ...newAlumni, company: e.target.value })} />
+                                            </div>
+                                            <textarea placeholder="Alumni Feedback/Testimonial..." className="border-2 border-slate-100 rounded-xl p-2 bg-white text-xs font-bold resize-none outline-none" rows="1"
+                                                value={newAlumni.feedback} onChange={(e) => setNewAlumni({ ...newAlumni, feedback: e.target.value })} />
+                                            <button type="button" onClick={() => { if (newAlumni.name.trim()) { setDeptFormData({ ...deptFormData, alumni: [...(deptFormData.alumni || []), { ...newAlumni }] }); setNewAlumni({ name: '', batch: '', designation: '', company: '', feedback: '' }); } }} className="bg-[#001a66] text-white py-1.5 rounded-lg font-black text-[10px] hover:bg-[#0b2a8a]">Add Alumni</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            <div className="flex gap-4 pt-4 border-t border-slate-100">
+                                <button type="button" onClick={handleCloseModal} className="flex-1 px-6 py-4 text-slate-500 hover:bg-slate-100 font-black rounded-2xl transition-all uppercase tracking-widest text-xs">Cancel</button>
+                                <button type="submit" className="flex-[2] bg-[#001a66] hover:bg-[#0b2a8a] text-white px-8 py-4 font-black rounded-2xl shadow-xl shadow-blue-900/20 transition-all uppercase tracking-widest text-xs">Save Department</button>
                             </div>
                         </form>
                     </div>

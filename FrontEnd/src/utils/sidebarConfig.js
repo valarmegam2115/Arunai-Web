@@ -96,12 +96,7 @@ export const deptSidebar = (deptName, prefix) => ({
   title: `Department of ${deptName}`,
   links: [
     { label: 'Courses',             path: `${prefix}`,                  icon: 'courses' },
-    { label: 'Curriculum & Syllabus',path: `${prefix}/curriculum`,      icon: 'book',
-      children: [
-        { label: `B.E – ${deptName}`,  path: `${prefix}/curriculum/ug` },
-        { label: `M.E – ${deptName}`,  path: `${prefix}/curriculum/pg` },
-      ]
-    },
+    { label: 'Curriculum & Syllabus',path: `${prefix}/curriculum`,      icon: 'book' },
     { label: "PEO's, PSO's & PO's", path: `${prefix}/peo-pso-po`,     icon: 'list' },
     { label: 'Faculty',             path: `${prefix}/faculty`,          icon: 'people' },
     { label: 'Facilities',          path: `${prefix}/facilities`,       icon: 'building' },

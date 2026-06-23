@@ -25,13 +25,20 @@ import OrgStructure from './pages/inner/about/OrgStructure'
 
 
 import AboutResearch from './pages/inner/AboutResearch'
-import DeptCSE from './pages/inner/DeptCSE'
+import DeptPage from './pages/inner/DeptPage'
 
 // Admin pages
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 import DocumentsPage from './pages/DocumentsPage'
 import { IICPage, NIRFPage } from './pages/DocumentPages'
+
+// Department slugs from sidebarConfig
+const deptSlugs = [
+  'civil', 'cse', 'cse-cs', 'cse-aiml', 'ece', 'eee',
+  'mech', 'agri', 'aids', 'biotech', 'chemical', 'it', 'mba',
+]
+
 // ── Route table ────────────────────────────────────────────────────────────────
 // Add new pages here. The router picks the first matching path.
 const routes = [
@@ -54,8 +61,15 @@ const routes = [
   // Research section
   { path: '/research',            component: <AboutResearch /> },
 
-  // Academics – departments
-  { path: '/academics/dept/cse',  component: <DeptCSE /> },
+  // Academics – departments (dynamically generated)
+  ...deptSlugs.map(slug => ({
+    path: `/academics/dept/${slug}`,
+    component: <DeptPage slug={slug} subpage="courses" />,
+  })),
+  ...deptSlugs.map(slug => ({
+    path: `/academics/dept/${slug}/curriculum`,
+    component: <DeptPage slug={slug} subpage="curriculum" />,
+  })),
 
   // Admin routes
   { path: '/admin-login',         component: <AdminLogin /> },
