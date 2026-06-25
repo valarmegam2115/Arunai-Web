@@ -91,7 +91,7 @@ const mainNavConfig = [
       { label: 'Memorandum of Understanding', path: '/research/mou' },
     ],
   },
-  { label: 'PLACEMENT', path: '/placement' },
+  { label: 'PLACEMENT', path: '/placement/Overview' },
 
   { label: 'MANDATORY DISCLOSURE', path: '/approvals/MandatoryDisclosure' },
 

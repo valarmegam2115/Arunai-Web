@@ -40,6 +40,12 @@ import AboutCOE from './pages/inner/coe/aboutCOE'
 //Approval Pages
 import MandatoryDisclosure from './pages/inner/approvals/MandatoryDisclosure'
 
+// Placement Pages
+import Overview from './pages/inner/placement/Overview'
+import Rules from './pages/inner/placement/Rules'
+import PlacementCodeOfConduct from './pages/inner/placement/PlacementCodeOfConduct'
+
+
 // Department slugs from sidebarConfig
 const deptSlugs = [
   'civil', 'cse', 'cse-cs', 'cse-aiml', 'ece', 'eee',
@@ -76,6 +82,10 @@ const routes = [
   // Approval Section
   { path: '/approvals/MandatoryDisclosure',      component: <MandatoryDisclosure /> },
 
+  // Placement Section
+    { path: '/placement/Overview',      component: <Overview /> },
+    { path: '/placement/Rules',      component: <Rules /> },
+    { path: '/placement/PlacementCodeOfConduct',      component: <PlacementCodeOfConduct /> },
 
   // Academics – departments (dynamically generated)
   ...deptSlugs.map(slug => ({

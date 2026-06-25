@@ -84,10 +84,12 @@ export const facilitiesSidebar = {
 export const placementSidebar = {
   title: 'Placement',
   links: [
-    { label: 'About Placement',    path: '/placement',                  icon: 'info' },
-    { label: 'Placed Students',    path: '/placement/placed-students',  icon: 'people' },
-    { label: 'Our Recruiters',     path: '/placement/recruiters',       icon: 'building' },
-    { label: 'Training Programs',  path: '/placement/training',         icon: 'courses' },
+    { label: 'Overview',    path: '/placement/Overview',                  icon: 'info' },
+    { label: 'Rules & Regulations',    path: '/placement/Rules',          icon: 'people' },
+    { label: 'Code of Conduct',     path: '/placement/PlacementCodeOfConduct',       icon: 'building' },
+    { label: 'List of Students Placed',  path: '/placement/StudentsPlaced',         icon: 'courses' },
+    { label: 'List of Recruiters',  path: '/placement/Recruiters',         icon: 'award' },
+    { label: 'Contact Us',  path: '/placement/ContactUs',         icon: 'gear' },
   ],
 }
 export const approvalSidebar = {
