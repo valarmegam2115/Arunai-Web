@@ -33,6 +33,11 @@ import AdminDashboard from './pages/AdminDashboard'
 import DocumentsPage from './pages/DocumentsPage'
 import { IICPage, NIRFPage } from './pages/DocumentPages'
 
+
+//COE Pages
+import AboutCOE from './pages/inner/coe/aboutCOE'
+
+
 // Department slugs from sidebarConfig
 const deptSlugs = [
   'civil', 'cse', 'cse-cs', 'cse-aiml', 'ece', 'eee',
@@ -60,6 +65,13 @@ const routes = [
 
   // Research section
   { path: '/research',            component: <AboutResearch /> },
+
+
+
+  // COE Section
+  { path: '/coe/aboutCOE',                       component: <AboutCOE /> },
+
+
 
   // Academics – departments (dynamically generated)
   ...deptSlugs.map(slug => ({

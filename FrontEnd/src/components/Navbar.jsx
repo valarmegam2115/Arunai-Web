@@ -93,7 +93,11 @@ const mainNavConfig = [
   },
   { label: 'PLACEMENT', path: '/placement' },
   { label: 'MANDATORY DISCLOSURE', path: '/mandatory-disclosure' },
-  { label: 'COE', path: '/coe' },
+
+
+  { label: 'COE', path: '/coe/aboutCOE' },
+  
+  
 ]
 
 const go = (path, e) => {

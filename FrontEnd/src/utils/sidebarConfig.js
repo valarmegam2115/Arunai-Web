@@ -91,6 +91,22 @@ export const placementSidebar = {
   ],
 }
 
+
+export const coeSidebar = {
+  title: 'COE',
+  links: [
+    { label: 'About COE',              path: '/coe/aboutCOE',                     icon: 'star' },
+    { label: 'COE Officials',              path: '/coe/coeOfficials',                     icon: 'star' },
+    { label: 'Circulars & Notifications',              path: '/coe/coeCircular',          icon: 'star' },
+    { label: 'Malpractice Punishment',              path: '/coe/coePunishment',          icon: 'star' },
+    { label: 'Exam Timetable',              path: '/coe/coeTimetable',          icon: 'star' },
+    { label: 'Download Forms',              path: '/coe/coeForms',          icon: 'star' },
+    { label: 'Faculty Login',              path: 'https://arunaicoe.org/stafflogin/login.php?done=/stafflogin/',          icon: 'star' },
+    { label: 'Student Login',              path: '/coe/coeForms',          icon: 'star' },
+  ],
+}
+   
+                              
 // Dept page sidebar factory — takes dept name & path prefix
 export const deptSidebar = (deptName, prefix) => ({
   title: `Department of ${deptName}`,
