@@ -103,12 +103,12 @@ const InnerPageLayout = ({
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-28 pb-16">
+    <div className="min-h-screen bg-slate-50 pt-24 lg:pt-[176px] pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-6 items-start">
 
           {/* ── Sidebar ──────────────────────────── */}
-          <aside className="hidden lg:block w-[280px] flex-shrink-0 sticky top-40 ">
+          <aside className="hidden lg:block w-[280px] flex-shrink-0 sticky top-[160px] ">
             {/* Header */}
             <div className={`${headerColor} px-4 py-3 rounded-t`}>
               <h2 className="text-[16px] font-extrabold uppercase tracking-wider text-[#001a66] text-center">
@@ -148,7 +148,7 @@ const InnerPageLayout = ({
           </div>
 
           {/* ── Main Content ─────────────────────── */}
-          <main className="flex-1 min-w-0 w-full rounded-xl bg-white shadow-sm border border-gray-100 p-4 sm:p-6 lg:p-8 mt-4 lg:mt-11">
+          <main className="flex-1 min-w-0 w-full rounded-xl bg-white shadow-sm border border-gray-100 p-4 sm:p-6 lg:p-8 mt-4 lg:mt-0">
             {children}
           </main>
 
