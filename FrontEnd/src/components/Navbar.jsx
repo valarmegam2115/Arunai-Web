@@ -92,7 +92,8 @@ const mainNavConfig = [
     ],
   },
   { label: 'PLACEMENT', path: '/placement' },
-  { label: 'MANDATORY DISCLOSURE', path: '/mandatory-disclosure' },
+
+  { label: 'MANDATORY DISCLOSURE', path: '/approvals/MandatoryDisclosure' },
 
 
   { label: 'COE', path: '/coe/aboutCOE' },

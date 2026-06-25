@@ -90,19 +90,30 @@ export const placementSidebar = {
     { label: 'Training Programs',  path: '/placement/training',         icon: 'courses' },
   ],
 }
-
+export const approvalSidebar = {
+  title: 'Institutional Approvals',
+  links: [
+    { label: 'Mandatory Disclosure', path: '/approvals/MandatoryDisclosure', icon: 'star' },
+    { label: 'AICTE Approvals', path: '/approvals/AICTE', icon: 'star' },
+    { label: 'Anna University Affiiations', path: '/approvals/AUC', icon: 'star' },
+    { label: 'NBA Approvals', path: '/approvals/NBA', icon: 'star' },
+    { label: 'NAAC Approvals', path: '/approvals/NAAC', icon: 'star' },
+    { label: 'Autonomous Approvals', path: '/approvals/Autonomous', icon: 'star' },
+    { label: 'ISO Approvals', path: '/approvals/ISO', icon: 'star' },
+  ],
+}
 
 export const coeSidebar = {
   title: 'COE',
   links: [
-    { label: 'About COE',              path: '/coe/aboutCOE',                     icon: 'star' },
-    { label: 'COE Officials',              path: '/coe/coeOfficials',                     icon: 'star' },
-    { label: 'Circulars & Notifications',              path: '/coe/coeCircular',          icon: 'star' },
-    { label: 'Malpractice Punishment',              path: '/coe/coePunishment',          icon: 'star' },
-    { label: 'Exam Timetable',              path: '/coe/coeTimetable',          icon: 'star' },
-    { label: 'Download Forms',              path: '/coe/coeForms',          icon: 'star' },
+    { label: 'About COE',                  path: '/coe/aboutCOE',             icon: 'star' },
+    { label: 'COE Officials',              path: '/coe/coeOfficials',         icon: 'star' },
+    { label: 'Circulars & Notifications',  path: '/coe/coeCircular',          icon: 'star' },
+    { label: 'Malpractice Punishment',     path: '/coe/coePunishment',        icon: 'star' },
+    { label: 'Exam Timetable',             path: '/coe/coeTimetable',         icon: 'star' },
+    { label: 'Download Forms',             path: '/coe/coeForms',             icon: 'star' },
     { label: 'Faculty Login',              path: 'https://arunaicoe.org/stafflogin/login.php?done=/stafflogin/',          icon: 'star' },
-    { label: 'Student Login',              path: '/coe/coeForms',          icon: 'star' },
+    { label: 'Student Login',              path: '/coe/coeForms',             icon: 'star' },
   ],
 }
    

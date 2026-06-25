@@ -37,6 +37,8 @@ import { IICPage, NIRFPage } from './pages/DocumentPages'
 //COE Pages
 import AboutCOE from './pages/inner/coe/aboutCOE'
 
+//Approval Pages
+import MandatoryDisclosure from './pages/inner/approvals/MandatoryDisclosure'
 
 // Department slugs from sidebarConfig
 const deptSlugs = [
@@ -71,6 +73,8 @@ const routes = [
   // COE Section
   { path: '/coe/aboutCOE',                       component: <AboutCOE /> },
 
+  // Approval Section
+  { path: '/approvals/MandatoryDisclosure',      component: <MandatoryDisclosure /> },
 
 
   // Academics – departments (dynamically generated)
