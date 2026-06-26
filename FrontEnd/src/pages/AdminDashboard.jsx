@@ -79,9 +79,11 @@ const AdminDashboard = () => {
     const [newPeo, setNewPeo] = useState({ type: 'PEO', code: '', statement: '' });
     const [newFaculty, setNewFaculty] = useState({ name: '', designation: '', qualification: '', specialization: '', image_url: '/default-avatar.png' });
     const [newInfra, setNewInfra] = useState({ name: '', description: '', image_url: '' });
-    const [newAdvisory, setNewAdvisory] = useState({ name: '', designation: '', organization: '' });
+
     const [newActivity, setNewActivity] = useState({ title: '', date: '', description: '', image_url: '' });
+    const [activityImageFile, setActivityImageFile] = useState(null);
     const [newAchievement, setNewAchievement] = useState({ title: '', description: '', image_url: '' });
+    const [achievementImageFile, setAchievementImageFile] = useState(null);
     const [newPlacement, setNewPlacement] = useState({ academic_year: '', students_placed: '', average_salary: '', image_or_file: '' });
     const [newAlumni, setNewAlumni] = useState({ name: '', batch: '', designation: '', company: '', feedback: '' });
 
@@ -228,9 +230,11 @@ const AdminDashboard = () => {
             setNewPeo({ type: 'PEO', code: '', statement: '' });
             setNewFaculty({ name: '', designation: '', qualification: '', specialization: '', image_url: '/default-avatar.png' });
             setNewInfra({ name: '', description: '', image_url: '' });
-            setNewAdvisory({ name: '', designation: '', organization: '' });
+
             setNewActivity({ title: '', date: '', description: '', image_url: '' });
+            setActivityImageFile(null);
             setNewAchievement({ title: '', description: '', image_url: '' });
+            setAchievementImageFile(null);
             setNewPlacement({ academic_year: '', students_placed: '', average_salary: '', image_or_file: '' });
             setNewAlumni({ name: '', batch: '', designation: '', company: '', feedback: '' });
             setDeptModalTab('curriculum');
@@ -1422,13 +1426,14 @@ const AdminDashboard = () => {
                         {/* Tab Selector */}
                         <div className="flex bg-slate-50 border-b border-slate-100 p-2 overflow-x-auto gap-2 flex-shrink-0 no-scrollbar">
                             {[
-                                { id: 'curriculum', label: 'Curriculum' },
-                                { id: 'peos', label: "PEOs/PSOs/POs" },
+                                { id: 'curriculum', label: 'Curriculum & Syllabus' },
+                                { id: 'peos', label: "PEO's, PSO's & PO's" },
                                 { id: 'faculty', label: 'Faculty' },
-                                { id: 'infrastructure', label: 'Infrastructure' },
-                                { id: 'advisory', label: 'Advisory' },
-                                { id: 'activities_achievements', label: 'Activities/Achievements' },
-                                { id: 'placements_alumni', label: 'Placements/Alumni' }
+                                { id: 'infrastructure', label: 'Facilities' },
+                                { id: 'activities', label: 'Events' },
+                                { id: 'placements', label: 'Placement' },
+                                { id: 'achievements', label: 'Gallery' },
+                                { id: 'alumni', label: "Alumni's Feedback" }
                             ].map(tab => (
                                 <button
                                     key={tab.id}
@@ -1629,38 +1634,12 @@ const AdminDashboard = () => {
                                 </div>
                             )}
 
-                            {deptModalTab === 'advisory' && (
-                                <div className="space-y-5 animate-in fade-in duration-200">
-                                    <label className="block text-xs font-black text-slate-500 uppercase tracking-widest">Advisory Committee</label>
-                                    <div className="grid grid-cols-2 gap-2 mb-2 max-h-[250px] overflow-y-auto">
-                                        {(deptFormData.advisory || []).map((a, i) => (
-                                            <div key={i} className="bg-slate-50 rounded-lg p-3 text-sm border border-slate-100 flex items-center justify-between">
-                                                <div className="min-w-0 pr-2">
-                                                    <p className="font-black text-slate-700 truncate">{a.name}</p>
-                                                    <p className="text-[9px] font-bold text-slate-400 truncate">{a.designation} at {a.organization}</p>
-                                                </div>
-                                                <button type="button" onClick={() => setDeptFormData({ ...deptFormData, advisory: deptFormData.advisory.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-lg flex-shrink-0">&times;</button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="flex flex-col gap-2 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                        <input type="text" placeholder="Member Name" className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold outline-none"
-                                            value={newAdvisory.name} onChange={(e) => setNewAdvisory({ ...newAdvisory, name: e.target.value })} />
-                                        <div className="grid grid-cols-2 gap-2">
-                                            <input type="text" placeholder="Designation" className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold outline-none"
-                                                value={newAdvisory.designation} onChange={(e) => setNewAdvisory({ ...newAdvisory, designation: e.target.value })} />
-                                            <input type="text" placeholder="Organization / Affiliation" className="border-2 border-slate-100 rounded-xl p-2.5 bg-white text-sm font-bold outline-none"
-                                                value={newAdvisory.organization} onChange={(e) => setNewAdvisory({ ...newAdvisory, organization: e.target.value })} />
-                                        </div>
-                                        <button type="button" onClick={() => { if (newAdvisory.name.trim()) { setDeptFormData({ ...deptFormData, advisory: [...(deptFormData.advisory || []), { ...newAdvisory }] }); setNewAdvisory({ name: '', designation: '', organization: '' }); } }} className="bg-[#001a66] text-white py-2.5 rounded-xl font-black text-xs hover:bg-[#0b2a8a] mt-1">Add Member</button>
-                                    </div>
-                                </div>
-                            )}
 
-                            {deptModalTab === 'activities_achievements' && (
+
+                            {deptModalTab === 'activities' && (
                                 <div className="space-y-5 animate-in fade-in duration-200">
                                     <div>
-                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Department Activities</label>
+                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Department Activities & Events</label>
                                         <div className="space-y-2 mb-2 max-h-[150px] overflow-y-auto">
                                             {(deptFormData.activities || []).map((act, i) => (
                                                 <div key={i} className="bg-slate-50 rounded-lg p-2.5 text-xs border border-slate-100 flex items-center justify-between">
@@ -1681,12 +1660,53 @@ const AdminDashboard = () => {
                                             </div>
                                             <textarea placeholder="Description..." className="border-2 border-slate-100 rounded-xl p-2 bg-white text-xs font-bold resize-none outline-none" rows="1"
                                                 value={newActivity.description} onChange={(e) => setNewActivity({ ...newActivity, description: e.target.value })} />
-                                            <button type="button" onClick={() => { if (newActivity.title.trim()) { setDeptFormData({ ...deptFormData, activities: [...(deptFormData.activities || []), { ...newActivity }] }); setNewActivity({ title: '', date: '', description: '', image_url: '' }); } }} className="bg-[#001a66] text-white py-1.5 rounded-lg font-black text-[10px] hover:bg-[#0b2a8a]">Add Activity</button>
+                                            {/* Image Upload */}
+                                            <div className="relative group/file">
+                                                <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                                    onChange={(e) => setActivityImageFile(e.target.files[0])} />
+                                                <div className="border-2 border-dashed border-slate-200 rounded-xl p-2.5 bg-white group-hover/file:border-blue-400 group-hover/file:bg-blue-50 transition-all flex items-center justify-center gap-2">
+                                                    <span className="text-base">🖼️</span>
+                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{activityImageFile ? activityImageFile.name : 'Upload Event Photo (optional)'}</span>
+                                                </div>
+                                            </div>
+                                            <button type="button" onClick={async () => {
+                                                if (!newActivity.title.trim()) return;
+                                                let imageUrl = newActivity.image_url;
+                                                if (activityImageFile) {
+                                                    try {
+                                                        const token = localStorage.getItem('adminToken');
+                                                        const uploadData = new FormData();
+                                                        uploadData.append('file', activityImageFile);
+                                                        const uploadRes = await fetch('http://localhost:5000/api/upload', {
+                                                            method: 'POST',
+                                                            headers: { 'Authorization': `Bearer ${token}` },
+                                                            body: uploadData
+                                                        });
+                                                        const uploadJson = await uploadRes.json();
+                                                        if (uploadJson.success) {
+                                                            imageUrl = uploadJson.data.url;
+                                                        } else {
+                                                            alert(uploadJson.message || 'Error uploading image');
+                                                            return;
+                                                        }
+                                                    } catch (err) {
+                                                        alert('Failed to upload image.');
+                                                        return;
+                                                    }
+                                                }
+                                                setDeptFormData({ ...deptFormData, activities: [...(deptFormData.activities || []), { ...newActivity, image_url: imageUrl }] });
+                                                setNewActivity({ title: '', date: '', description: '', image_url: '' });
+                                                setActivityImageFile(null);
+                                            }} className="bg-[#001a66] text-white py-1.5 rounded-lg font-black text-[10px] hover:bg-[#0b2a8a]">Add Activity</button>
                                         </div>
                                     </div>
+                                </div>
+                            )}
 
-                                    <div className="pt-2 border-t border-slate-100">
-                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Student Achievements</label>
+                            {deptModalTab === 'achievements' && (
+                                <div className="space-y-5 animate-in fade-in duration-200">
+                                    <div>
+                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Student Achievements & Gallery</label>
                                         <div className="space-y-2 mb-2 max-h-[150px] overflow-y-auto">
                                             {(deptFormData.achievements || []).map((ach, i) => (
                                                 <div key={i} className="bg-slate-50 rounded-lg p-2.5 text-xs border border-slate-100 flex items-center justify-between">
@@ -1695,18 +1715,57 @@ const AdminDashboard = () => {
                                                 </div>
                                             ))}
                                         </div>
-                                        <div className="flex gap-2">
-                                            <input type="text" placeholder="Achievement (e.g. First Prize)" className="w-1/2 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 text-xs font-bold outline-none"
-                                                value={newAchievement.title} onChange={(e) => setNewAchievement({ ...newAchievement, title: e.target.value })} />
-                                            <input type="text" placeholder="Details/Student Name" className="w-1/2 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 text-xs font-bold outline-none"
-                                                value={newAchievement.description} onChange={(e) => setNewAchievement({ ...newAchievement, description: e.target.value })} />
-                                            <button type="button" onClick={() => { if (newAchievement.title.trim()) { setDeptFormData({ ...deptFormData, achievements: [...(deptFormData.achievements || []), { ...newAchievement }] }); setNewAchievement({ title: '', description: '', image_url: '' }); } }} className="bg-blue-50 text-blue-600 px-3 py-2 rounded-xl font-black text-xs hover:bg-blue-100 flex-shrink-0">Add</button>
+                                        <div className="flex flex-col gap-2 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <input type="text" placeholder="Achievement (e.g. First Prize)" className="border-2 border-slate-100 rounded-xl p-2 bg-white text-xs font-bold outline-none"
+                                                    value={newAchievement.title} onChange={(e) => setNewAchievement({ ...newAchievement, title: e.target.value })} />
+                                                <input type="text" placeholder="Details/Student Name" className="border-2 border-slate-100 rounded-xl p-2 bg-white text-xs font-bold outline-none"
+                                                    value={newAchievement.description} onChange={(e) => setNewAchievement({ ...newAchievement, description: e.target.value })} />
+                                            </div>
+                                            {/* Image Upload */}
+                                            <div className="relative group/file">
+                                                <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                                    onChange={(e) => setAchievementImageFile(e.target.files[0])} />
+                                                <div className="border-2 border-dashed border-slate-200 rounded-xl p-2.5 bg-white group-hover/file:border-blue-400 group-hover/file:bg-blue-50 transition-all flex items-center justify-center gap-2">
+                                                    <span className="text-base">🖼️</span>
+                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{achievementImageFile ? achievementImageFile.name : 'Upload Gallery Photo (optional)'}</span>
+                                                </div>
+                                            </div>
+                                            <button type="button" onClick={async () => {
+                                                if (!newAchievement.title.trim()) return;
+                                                let imageUrl = newAchievement.image_url;
+                                                if (achievementImageFile) {
+                                                    try {
+                                                        const token = localStorage.getItem('adminToken');
+                                                        const uploadData = new FormData();
+                                                        uploadData.append('file', achievementImageFile);
+                                                        const uploadRes = await fetch('http://localhost:5000/api/upload', {
+                                                            method: 'POST',
+                                                            headers: { 'Authorization': `Bearer ${token}` },
+                                                            body: uploadData
+                                                        });
+                                                        const uploadJson = await uploadRes.json();
+                                                        if (uploadJson.success) {
+                                                            imageUrl = uploadJson.data.url;
+                                                        } else {
+                                                            alert(uploadJson.message || 'Error uploading image');
+                                                            return;
+                                                        }
+                                                    } catch (err) {
+                                                        alert('Failed to upload image.');
+                                                        return;
+                                                    }
+                                                }
+                                                setDeptFormData({ ...deptFormData, achievements: [...(deptFormData.achievements || []), { ...newAchievement, image_url: imageUrl }] });
+                                                setNewAchievement({ title: '', description: '', image_url: '' });
+                                                setAchievementImageFile(null);
+                                            }} className="bg-[#001a66] text-white py-1.5 rounded-lg font-black text-[10px] hover:bg-[#0b2a8a]">Add to Gallery</button>
                                         </div>
                                     </div>
                                 </div>
                             )}
 
-                            {deptModalTab === 'placements_alumni' && (
+                            {deptModalTab === 'placements' && (
                                 <div className="space-y-5 animate-in fade-in duration-200">
                                     <div>
                                         <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Placement Records</label>
@@ -1731,17 +1790,30 @@ const AdminDashboard = () => {
                                             <button type="button" onClick={() => { if (newPlacement.academic_year.trim()) { setDeptFormData({ ...deptFormData, placements: [...(deptFormData.placements || []), { ...newPlacement }] }); setNewPlacement({ academic_year: '', students_placed: '', average_salary: '', image_or_file: '' }); } }} className="bg-blue-50 text-blue-600 px-3 py-2 rounded-xl font-black text-xs hover:bg-blue-100 flex-shrink-0">Add</button>
                                         </div>
                                     </div>
+                                </div>
+                            )}
 
-                                    <div className="pt-2 border-t border-slate-100">
+                            {deptModalTab === 'alumni' && (
+                                <div className="space-y-5 animate-in fade-in duration-200">
+                                    <div>
                                         <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Alumni Registry & Feedback</label>
                                         <div className="space-y-2 mb-2 max-h-[150px] overflow-y-auto">
                                             {(deptFormData.alumni || []).map((al, i) => (
                                                 <div key={i} className="bg-slate-50 rounded-lg p-2.5 text-xs border border-slate-100 flex items-center justify-between">
                                                     <div className="min-w-0 pr-2">
-                                                        <span className="font-extrabold text-slate-700 truncate block">{al.name} (Batch {al.batch})</span>
+                                                        <span className="font-extrabold text-slate-700 truncate block">
+                                                            {al.name} (Batch {al.batch})
+                                                            {al.is_notable && <span className="text-[9px] text-red-500 font-bold ml-1 bg-red-50 px-1 py-0.5 rounded">Notable</span>}
+                                                        </span>
                                                         <span className="text-[9px] text-slate-400 block truncate">{al.designation} at {al.company}</span>
                                                     </div>
-                                                    <button type="button" onClick={() => setDeptFormData({ ...deptFormData, alumni: deptFormData.alumni.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-base flex-shrink-0">&times;</button>
+                                                    <div className="flex items-center gap-2 flex-shrink-0">
+                                                        <button type="button" onClick={() => {
+                                                            setNewAlumni({ name: al.name, batch: al.batch, designation: al.designation, company: al.company, feedback: al.feedback || '', is_notable: al.is_notable || false });
+                                                            setDeptFormData({ ...deptFormData, alumni: deptFormData.alumni.filter((_, idx) => idx !== i) });
+                                                        }} className="text-blue-500 hover:text-blue-700 font-bold text-xs" title="Edit">✏️</button>
+                                                        <button type="button" onClick={() => setDeptFormData({ ...deptFormData, alumni: deptFormData.alumni.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-base flex-shrink-0">&times;</button>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
@@ -1760,7 +1832,11 @@ const AdminDashboard = () => {
                                             </div>
                                             <textarea placeholder="Alumni Feedback/Testimonial..." className="border-2 border-slate-100 rounded-xl p-2 bg-white text-xs font-bold resize-none outline-none" rows="1"
                                                 value={newAlumni.feedback} onChange={(e) => setNewAlumni({ ...newAlumni, feedback: e.target.value })} />
-                                            <button type="button" onClick={() => { if (newAlumni.name.trim()) { setDeptFormData({ ...deptFormData, alumni: [...(deptFormData.alumni || []), { ...newAlumni }] }); setNewAlumni({ name: '', batch: '', designation: '', company: '', feedback: '' }); } }} className="bg-[#001a66] text-white py-1.5 rounded-lg font-black text-[10px] hover:bg-[#0b2a8a]">Add Alumni</button>
+                                            <label className="flex items-center gap-2 text-[10px] font-bold text-slate-600 px-1 cursor-pointer">
+                                                <input type="checkbox" checked={newAlumni.is_notable || false} onChange={(e) => setNewAlumni({ ...newAlumni, is_notable: e.target.checked })} className="rounded border-slate-300 text-[#001a66] focus:ring-[#001a66]" />
+                                                Mark as Notable Alumni
+                                            </label>
+                                            <button type="button" onClick={() => { if (newAlumni.name.trim()) { setDeptFormData({ ...deptFormData, alumni: [...(deptFormData.alumni || []), { ...newAlumni }] }); setNewAlumni({ name: '', batch: '', designation: '', company: '', feedback: '', is_notable: false }); } }} className="bg-[#001a66] text-white py-1.5 rounded-lg font-black text-[10px] hover:bg-[#0b2a8a]">Add Alumni</button>
                                         </div>
                                     </div>
                                 </div>

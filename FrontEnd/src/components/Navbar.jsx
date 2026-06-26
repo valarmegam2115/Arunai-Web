@@ -97,8 +97,8 @@ const mainNavConfig = [
 
 
   { label: 'COE', path: '/coe/aboutCOE' },
-  
-  
+
+
 ]
 
 const go = (path, e) => {
@@ -376,6 +376,48 @@ const Navbar = () => {
               </div>
             )
           })}
+
+          {/* Top Nav Items for Mobile */}
+          <div className="bg-[#001a66]/5 pt-2 pb-4">
+            <p className="px-5 pt-2 pb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Quick Links</p>
+            {topNavConfig.map((item, i) => {
+              const hasChildren = !!item.dropdown
+              return (
+                <div key={`top-${i}`}>
+                  <div className="flex items-center justify-between px-5 py-3">
+                    <a
+                      href={item.path ?? '#'}
+                      onClick={e => { if (!hasChildren) { go(item.path, e); setMobileOpen(false) } else e.preventDefault() }}
+                      className="flex-1 text-[12px] font-bold uppercase tracking-widest text-[#061a66]"
+                    >
+                      {item.label}
+                    </a>
+                    {hasChildren && (
+                      <button onClick={() => toggleMobile(`top_${item.label}`)} className="p-1">
+                        <svg className={`h-4 w-4 transition-transform ${mobileExpanded[`top_${item.label}`] ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M7 10l5 5 5-5z" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                  {hasChildren && mobileExpanded[`top_${item.label}`] && (
+                    <div className="bg-gray-50 pl-6">
+                      {item.dropdown.map((d, di) => (
+                        <a
+                          key={di}
+                          href={d.path}
+                          onClick={e => { go(d.path, e); setMobileOpen(false) }}
+                          className="block py-3 text-[12px] font-semibold uppercase tracking-wide text-[#061a66] hover:text-[#f7932f] border-b border-gray-100"
+                        >
+                          {d.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
         </nav>
       </div>
     </>

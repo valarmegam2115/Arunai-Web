@@ -386,7 +386,7 @@ const initDb = async () => {
                     dept_name: 'Civil Engineering',
                     banner_image: '/course/course-pg.png',
                     courses: JSON.stringify(['UG – B.E. Civil Engineering']),
-                    introduction: 'The department of Civil Engineering started in the year 2008. It offers B. E programme in Civil Engineering affiliated to Anna University, Chennai. The department is certified to ISO 9001:2015 from DNV Netherlands. The department has well qualified and experienced faculty members and equipped with excellent laboratory infrastructure.\n\nWe consistently produce University ranks in undergraduate stream. We do R & D and consultancy activities in collaboration with L & T, Chennai and other leading organisations. We have received National Awards from industrial organisations and associations like Indian Society for Technical Education, New Delhi for carrying academic projects. The department has been producing quality technical manpower needed by industry, R&D organization and Academic Institution.',
+                    introduction: 'The department of Civil Engineering started in the year 2008. It offers B. E programme in Civil Engineering affiliated to Anna University, Chennai. The department is certified to ISO 9001:2015 from DNV Netherlands. The department has well qualified and experienced faculty members and equipped with excellent laboratory infrastructure.\n\nWe consistently produce University ranks in undergraduate stream. We do R & D and consultancy activities in collaboration with L & T, Chennai and other leading organisations. We have received National Awards from industrial organisations and associations like Indian Society for Technical education, New Delhi for carrying academic projects. The department has been producing quality technical manpower needed by industry, R&D organization and Academic Institution.',
                     vision: 'To produce engineers having professional and leadership qualities with capacity to take up professional and research assignments in civil engineering and allied fields with focus on inter-disciplinary and innovative approach and to compete at the global level.',
                     mission: JSON.stringify([
                         'To impart quality and real time education to contribute to the field of Civil Engineering',
@@ -403,6 +403,9 @@ const initDb = async () => {
                     curriculum: JSON.stringify([
                         { name: 'Regulation-2024', file_url: '#' },
                         { name: 'Regulation-2021', file_url: '#' }
+                    ]),
+                    infrastructure: JSON.stringify([
+                        { name: 'Total Number of Classrooms', description: '08' }
                     ]),
                 },
                 {
