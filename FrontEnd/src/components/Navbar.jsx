@@ -11,6 +11,7 @@ const topNavConfig = [
       { label: 'ARUNAI ERP', path: '#' },
     ],
   },
+  { label: 'UGC', path: '#' },
   { label: 'NISP', path: '/nisp' },
   { label: 'IIC', path: '/iic' },
   { label: 'NIRF', path: '/nirf' },
@@ -56,6 +57,7 @@ const mainNavConfig = [
           { label: 'Computer Science & Engineering', path: '/academics/dept/cse' },
           { label: 'CSE – Cyber Security', path: '/academics/dept/cse-cs' },
           { label: 'CSE – Artificial Intelligence & ML', path: '/academics/dept/cse-aiml' },
+          { label: 'Computer Science and Business Systems', path: '/academics/dept/csbs' },
           { label: 'Electronics & Communication Engineering', path: '/academics/dept/ece' },
           { label: 'Electrical & Electronics Engineering', path: '/academics/dept/eee' },
           { label: 'Mechanical Engineering', path: '/academics/dept/mech' },
@@ -109,7 +111,7 @@ const go = (path, e) => {
 const isActivePath = (pathname, path) =>
   path === '/' ? pathname === '/' : pathname === path || pathname.startsWith(path + '/')
 
-const DropdownItem = ({ item, pathname, closeParent }) => {
+const DropdownItem = ({ item, pathname, closeParent, isLast }) => {
   const [open, setOpen] = useState(false)
   const hasChildren = item.children && item.children.length > 0
 
@@ -122,7 +124,7 @@ const DropdownItem = ({ item, pathname, closeParent }) => {
       <a
         href={item.path}
         onClick={e => { if (!hasChildren) { go(item.path, e); closeParent() } else { e.preventDefault() } }}
-        className="flex items-center justify-between px-5 py-3 text-[13px] font-bold uppercase tracking-wider text-white hover:bg-[#f7932f] hover:text-white transition-colors cursor-pointer"
+        className={`flex items-center justify-between gap-4 px-5 py-3 text-[13px] font-bold uppercase tracking-wider text-white hover:bg-white hover:text-[#0d1f6e] transition-all duration-300 cursor-pointer whitespace-nowrap ${isLast ? 'rounded-b-lg' : ''}`}
       >
         {item.label}
         {hasChildren && (
@@ -130,13 +132,13 @@ const DropdownItem = ({ item, pathname, closeParent }) => {
         )}
       </a>
       {hasChildren && open && (
-        <div className="absolute left-full top-0 z-50 min-w-[260px] bg-[#0d1f6e] shadow-xl">
+        <div className="absolute left-full top-0 z-50 min-w-[260px] w-max max-h-[calc(100vh-180px)] overflow-y-auto bg-[#0d1f6e] shadow-xl custom-menu-scrollbar rounded-lg overflow-hidden animate-dropdown border border-white/10">
           {item.children.map((c, i) => (
             <a
               key={i}
               href={c.path}
               onClick={e => { go(c.path, e); setOpen(false); closeParent() }}
-              className="block px-5 py-3 text-[13px] font-bold uppercase tracking-wider text-white hover:bg-[#f7932f] hover:text-white transition-colors"
+              className={`block px-5 py-3 text-[13px] font-bold uppercase tracking-wider text-white hover:bg-white hover:text-[#0d1f6e] transition-all duration-300 whitespace-nowrap ${i === item.children.length - 1 ? 'rounded-b-lg' : ''} ${i === 0 ? 'rounded-t-lg' : ''}`}
             >
               {c.label}
             </a>
@@ -160,25 +162,25 @@ const SimpleDropdown = ({ item, pathname, scrolled }) => {
   const active = item.dropdown?.some(d => isActivePath(pathname, d.path) || d.children?.some(c => isActivePath(pathname, c.path)))
 
   return (
-    <div ref={ref} className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+    <div ref={ref} className="relative shrink-0" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
       <button
-        className={`flex items-center gap-1 text-[14px] font-bold tracking-wide transition-colors
+        className={`flex items-center gap-1 text-[14px] xl:text-[17px] min-[1350px]:text-[18px] font-bold tracking-wide transition-colors
           ${scrolled
             ? (active ? 'text-[#f7932f]' : 'text-[#061a66] hover:text-[#f7932f]')
             : (active ? 'text-[#f7932f]' : 'text-white/95 hover:text-[#f7932f]')
           }`}
         onClick={() => setOpen(o => !o)}
       >
-        {item.label}
+        <span className={`nav-underline-effect ${active ? 'active-underline' : ''}`}>{item.label}</span>
         <svg className={`h-3.5 w-3.5 transition-transform ${open ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 24 24">
           <path d="M7 10l5 5 5-5z" />
         </svg>
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full z-50 min-w-[220px] bg-[#0d1f6e] shadow-xl border-t-2 border-white">
+        <div className="absolute left-0 top-full z-50 min-w-[220px] w-max bg-[#0d1f6e] shadow-xl rounded-lg animate-dropdown border border-white/10">
           {item.dropdown.map((d, i) => (
-            <DropdownItem key={i} item={d} pathname={pathname} closeParent={() => setOpen(false)} />
+            <DropdownItem key={i} item={d} pathname={pathname} closeParent={() => setOpen(false)} isLast={i === item.dropdown.length - 1} />
           ))}
         </div>
       )}
@@ -197,25 +199,27 @@ const TopDropdown = ({ item, pathname }) => {
     return () => document.removeEventListener('mousedown', close)
   }, [])
 
+  const active = item.dropdown?.some(d => isActivePath(pathname, d.path))
+
   return (
     <div ref={ref} className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
       <button
         className="flex items-center gap-1 text-[15px] tracking-wide text-white/95 hover:text-[#f7932f] transition-colors"
         onClick={() => setOpen(o => !o)}
       >
-        {item.label}
+        <span className={`nav-underline-effect ${active ? 'active-underline' : ''}`}>{item.label}</span>
         <svg className={`h-3 w-3 transition-transform ${open ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 24 24">
           <path d="M7 10l5 5 5-5z" />
         </svg>
       </button>
       {open && (
-        <div className="absolute left-0 top-full z-50 min-w-[170px] bg-[#0d1f6e] shadow-xl">
+        <div className="absolute left-0 top-full z-50 min-w-[170px] bg-[#0d1f6e] shadow-xl rounded-b-lg overflow-hidden animate-dropdown border border-white/10">
           {item.dropdown.map((d, i) => (
             <a
               key={i}
               href={d.path}
               onClick={e => { go(d.path, e); setOpen(false) }}
-              className="block px-5 py-3 text-[13px] font-bold uppercase tracking-wider text-white hover:bg-[#f7932f] transition-colors"
+              className="block px-5 py-3 text-[13px] font-bold uppercase tracking-wider text-white hover:bg-white hover:text-[#0d1f6e] transition-all duration-300"
             >
               {d.label}
             </a>
@@ -274,7 +278,7 @@ const Navbar = () => {
                     className={`text-[15px] tracking-wide transition-colors
                       ${isActivePath(pathname, item.path) ? 'text-[#f7932f]' : 'text-white/95 hover:text-[#f7932f]'}`}
                   >
-                    {item.label}
+                    <span className={`nav-underline-effect ${isActivePath(pathname, item.path) ? 'active-underline' : ''}`}>{item.label}</span>
                   </a>
                 )
               )}
@@ -297,7 +301,7 @@ const Navbar = () => {
 
         {/* ── Main nav row (desktop) ── */}
         <div className={`hidden lg:block transition-all duration-300 ${scrolled ? 'bg-white py-1' : 'py-3'}`}>
-          <nav className="mx-auto flex w-[98%] max-w-[1400px] items-center justify-center gap-x-8 py-3 flex-wrap">
+          <nav className="mx-auto flex w-[98%] max-w-[1400px] items-center justify-center gap-x-5 xl:gap-x-7 min-[1350px]:gap-x-9 py-3">
             {mainNavConfig.map((item, i) => {
               if (item.dropdown) return <SimpleDropdown key={i} item={item} pathname={pathname} scrolled={scrolled} />
               return (
@@ -305,13 +309,13 @@ const Navbar = () => {
                   key={i}
                   href={item.path}
                   onClick={e => go(item.path, e)}
-                  className={`text-[14px] font-bold tracking-wide transition-colors whitespace-nowrap
+                  className={`text-[14px] xl:text-[17px] min-[1350px]:text-[18px] font-bold tracking-wide transition-colors whitespace-nowrap shrink-0
                     ${scrolled
                       ? (isActivePath(pathname, item.path) ? 'text-[#f7932f]' : 'text-[#061a66] hover:text-[#f7932f]')
                       : (isActivePath(pathname, item.path) ? 'text-[#f7932f]' : 'text-white/95 hover:text-[#f7932f]')
                     }`}
                 >
-                  {item.label}
+                  <span className={`nav-underline-effect ${isActivePath(pathname, item.path) ? 'active-underline' : ''}`}>{item.label}</span>
                 </a>
               )
             })}

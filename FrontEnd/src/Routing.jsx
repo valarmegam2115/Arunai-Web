@@ -48,7 +48,7 @@ import PlacementCodeOfConduct from './pages/inner/placement/PlacementCodeOfCondu
 
 // Department slugs from sidebarConfig
 const deptSlugs = [
-  'civil', 'cse', 'cse-cs', 'cse-aiml', 'ece', 'eee',
+  'civil', 'cse', 'cse-cs', 'cse-aiml', 'csbs', 'ece', 'eee',
   'mech', 'agri', 'aids', 'biotech', 'chemical', 'it', 'mba',
 ]
 

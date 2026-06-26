@@ -509,6 +509,16 @@ const initDb = async () => {
                     highlights: JSON.stringify([]),
                 },
                 {
+                    dept_slug: 'csbs',
+                    dept_name: 'Computer Science and Business Systems',
+                    banner_image: '/course/course-pg.png',
+                    courses: JSON.stringify(['UG – B.E. Computer Science and Business Systems']),
+                    introduction: '',
+                    vision: '',
+                    mission: JSON.stringify([]),
+                    highlights: JSON.stringify([]),
+                },
+                {
                     dept_slug: 'mba',
                     dept_name: 'Master of Business Administration',
                     banner_image: '/course/course-pg.png',
@@ -548,6 +558,38 @@ const initDb = async () => {
                 );
             }
             console.log('departments seeded successfully.');
+        }
+
+        // Ensure "Computer Science and Business Systems" exists in departments table
+        const { rows: csbsRows } = await db.query(`SELECT * FROM departments WHERE dept_slug = $1`, ['csbs']);
+        if (csbsRows.length === 0) {
+            console.log('Inserting Computer Science and Business Systems department...');
+            await db.query(
+                `INSERT INTO departments (
+                    dept_slug, dept_name, banner_image, courses, introduction, vision, mission, highlights, 
+                    curriculum, peo_pso_po, faculty, infrastructure, advisory, activities, achievements, placements, alumni
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)`,
+                [
+                    'csbs', 
+                    'Computer Science and Business Systems', 
+                    '/course/course-pg.png', 
+                    JSON.stringify(['UG – B.E. Computer Science and Business Systems']), 
+                    '', 
+                    '', 
+                    '[]', 
+                    '[]', 
+                    '[]',
+                    '[]',
+                    '[]',
+                    '[]',
+                    '[]',
+                    '[]',
+                    '[]',
+                    '[]',
+                    '[]'
+                ]
+            );
+            console.log('Computer Science and Business Systems department inserted successfully.');
         }
 
     } catch (err) {
