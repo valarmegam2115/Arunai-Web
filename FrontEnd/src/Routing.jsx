@@ -36,14 +36,18 @@ import { IICPage, NIRFPage } from './pages/DocumentPages'
 
 //COE Pages
 import AboutCOE from './pages/inner/coe/aboutCOE'
+import CoeAccordionLayout from './pages/inner/coe/CoeAccordionLayout'
 
 //Approval Pages
-import MandatoryDisclosure from './pages/inner/approvals/MandatoryDisclosure'
+import ApprovalLayout from './pages/inner/approvals/ApprovalLayout'
 
 // Placement Pages
 import Overview from './pages/inner/placement/Overview'
 import Rules from './pages/inner/placement/Rules'
 import PlacementCodeOfConduct from './pages/inner/placement/PlacementCodeOfConduct'
+import StudentsPlaced from './pages/inner/placement/StudentsPlaced'
+import Recruiters from './pages/inner/placement/Recruiters'
+import PlacementContactUs from './pages/inner/placement/ContactUs'
 
 // Courses Offered Pages
 import { UgCourses, PgCourses } from './pages/CoursesOffered'
@@ -85,14 +89,25 @@ const routes = [
 
   // COE Section
   { path: '/coe/aboutCOE',                       component: <AboutCOE /> },
+  { path: '/coe/coeCircular',                    component: <CoeAccordionLayout title="Circulars and Notifications" category="Circulars & Notifications" /> },
+  { path: '/coe/coeTimetable',                   component: <CoeAccordionLayout title="Exam Time Table" category="Exam Time Table" /> },
 
   // Approval Section
-  { path: '/approvals/MandatoryDisclosure',      component: <MandatoryDisclosure /> },
+  { path: '/approvals/MandatoryDisclosure',      component: <ApprovalLayout title="Mandatory Disclosure" category="Mandatory Disclosure" /> },
+  { path: '/approvals/AICTE',                    component: <ApprovalLayout title="AICTE Approvals" category="AICTE Approvals" /> },
+  { path: '/approvals/AUC',                      component: <ApprovalLayout title="Anna University Affiliations" category="Anna University Affiliations" /> },
+  { path: '/approvals/NBA',                      component: <ApprovalLayout title="NBA Approval Order" category="NBA Approval Order" /> },
+  { path: '/approvals/NAAC',                     component: <ApprovalLayout title="NAAC Approval Order" category="NAAC Approval Order" /> },
+  { path: '/approvals/Autonomous',               component: <ApprovalLayout title="Autonomous Approval Order" category="Autonomous Approval Order" /> },
+  { path: '/approvals/ISO',                      component: <ApprovalLayout title="ISO Approval Order" category="ISO Approval Order" /> },
 
   // Placement Section
     { path: '/placement/Overview',      component: <Overview /> },
     { path: '/placement/Rules',      component: <Rules /> },
     { path: '/placement/PlacementCodeOfConduct',      component: <PlacementCodeOfConduct /> },
+    { path: '/placement/StudentsPlaced',      component: <StudentsPlaced /> },
+    { path: '/placement/Recruiters',      component: <Recruiters /> },
+    { path: '/placement/ContactUs',      component: <PlacementContactUs /> },
 
   // Academics – departments (dynamically generated)
   ...deptSlugs.map(slug => ({

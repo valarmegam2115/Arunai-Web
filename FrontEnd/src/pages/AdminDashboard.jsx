@@ -11,7 +11,9 @@ const AdminDashboard = () => {
     const [councilMembersData, setCouncilMembersData] = useState([]);
     const [councilMeetingsData, setCouncilMeetingsData] = useState([]);
     const [codeOfConductData, setCodeOfConductData] = useState([]);
+    const [recruitersData, setRecruitersData] = useState([]);
     const [departmentsData, setDepartmentsData] = useState([]);
+    const [coeCircularsData, setCoeCircularsData] = useState([]);
     const [selectedDeptSlug, setSelectedDeptSlug] = useState('');
     const [loading, setLoading] = useState(true);
 
@@ -24,6 +26,8 @@ const AdminDashboard = () => {
     const [showCouncilMemberModal, setShowCouncilMemberModal] = useState(false);
     const [showCouncilMeetingModal, setShowCouncilMeetingModal] = useState(false);
     const [showConductModal, setShowConductModal] = useState(false);
+    const [showStudentsPlacedModal, setShowStudentsPlacedModal] = useState(false);
+    const [showRecruitersModal, setShowRecruitersModal] = useState(false);
 
     const [newsFormData, setNewsFormData] = useState({
         id: null, category: 'news', day: '', month: '', year: '2026', text: ''
@@ -43,6 +47,22 @@ const AdminDashboard = () => {
         id: null, category: 'IIC 2026', title: '', file_url: '#'
     });
     const [docFile, setDocFile] = useState(null);
+
+    const [studentsPlacedFormData, setStudentsPlacedFormData] = useState({
+        id: null, category: 'Placement', title: '', file_url: '#'
+    });
+    const [studentsPlacedFile, setStudentsPlacedFile] = useState(null);
+
+    const [recruitersFormData, setRecruitersFormData] = useState({
+        id: null, company_name: '', logo_url: ''
+    });
+    const [recruitersImageFile, setRecruitersImageFile] = useState(null);
+    const [isUploadingRecruiters, setIsUploadingRecruiters] = useState(false);
+
+    const [showCoeCircularsModal, setShowCoeCircularsModal] = useState(false);
+    const [coeCircularsFormData, setCoeCircularsFormData] = useState({ id: null, category: 'Circulars & Notifications', academic_term: '', title: '', file_url: '#' });
+    const [coeCircularsFile, setCoeCircularsFile] = useState(null);
+    const [isUploadingCoeCirculars, setIsUploadingCoeCirculars] = useState(false);
 
     const [calendarFormData, setCalendarFormData] = useState({
         id: null, title: '', file_url: '#', display_order: 0
@@ -99,7 +119,7 @@ const AdminDashboard = () => {
     const fetchAllData = async () => {
         setLoading(true);
         try {
-            const [resNews, resCarousel, resExtra, resDocs, resCal, resMembers, resMeetings, resConduct, resDepts] = await Promise.all([
+            const [resNews, resCarousel, resExtra, resDocs, resCal, resMembers, resMeetings, resConduct, resRecruiters, resDepts, resCoe] = await Promise.all([
                 fetch('http://localhost:5000/api/news'),
                 fetch('http://localhost:5000/api/our-events'),
                 fetch('http://localhost:5000/api/extra-curricular'),
@@ -108,10 +128,12 @@ const AdminDashboard = () => {
                 fetch('http://localhost:5000/api/academic-council/members'),
                 fetch('http://localhost:5000/api/academic-council/meetings'),
                 fetch('http://localhost:5000/api/code-of-conduct'),
-                fetch('http://localhost:5000/api/departments')
+                fetch('http://localhost:5000/api/recruiters'),
+                fetch('http://localhost:5000/api/departments'),
+                fetch('http://localhost:5000/api/coe-circulars')
             ]);
-            const [dataNews, dataCarousel, dataExtra, dataDocs, dataCal, dataMembers, dataMeetings, dataConduct, dataDepts] = await Promise.all([
-                resNews.json(), resCarousel.json(), resExtra.json(), resDocs.json(), resCal.json(), resMembers.json(), resMeetings.json(), resConduct.json(), resDepts.json()
+            const [dataNews, dataCarousel, dataExtra, dataDocs, dataCal, dataMembers, dataMeetings, dataConduct, dataRecruiters, dataDepts, dataCoe] = await Promise.all([
+                resNews.json(), resCarousel.json(), resExtra.json(), resDocs.json(), resCal.json(), resMembers.json(), resMeetings.json(), resConduct.json(), resRecruiters.json(), resDepts.json(), resCoe.json()
             ]);
 
             if (dataNews.success) setNewsData(dataNews.data);
@@ -122,12 +144,14 @@ const AdminDashboard = () => {
             if (dataMembers.success) setCouncilMembersData(dataMembers.data);
             if (dataMeetings.success) setCouncilMeetingsData(dataMeetings.data);
             if (dataConduct.success) setCodeOfConductData(dataConduct.data);
+            if (dataRecruiters.success) setRecruitersData(dataRecruiters.data);
             if (dataDepts.success) {
                 setDepartmentsData(dataDepts.data);
                 if (!selectedDeptSlug && dataDepts.data.length > 0) {
                     setSelectedDeptSlug(dataDepts.data[0].dept_slug);
                 }
             }
+            if (dataCoe.success) setCoeCircularsData(dataCoe.data);
         } catch (err) {
             console.error('Failed to fetch data:', err);
         } finally {
@@ -158,11 +182,21 @@ const AdminDashboard = () => {
             }
             setExtraImageFile(null);
             setShowExtraModal(true);
-        } else if (activeTab === 'documents') {
+        } else if (['documents', 'mandatory_disclosure', 'aicte_approvals', 'auc_affiliations', 'nba_approval', 'naac_approval', 'autonomous_approval', 'iso_approval'].includes(activeTab)) {
             if (item) {
                 setDocFormData(item);
             } else {
-                setDocFormData({ id: null, category: 'IIC 2026', title: '', file_url: '#' });
+                const defaultCategoryMap = {
+                    'documents': 'IIC 2026',
+                    'mandatory_disclosure': 'Mandatory Disclosure',
+                    'aicte_approvals': 'AICTE Approvals',
+                    'auc_affiliations': 'Anna University Affiliations',
+                    'nba_approval': 'NBA Approval Order',
+                    'naac_approval': 'NAAC Approval Order',
+                    'autonomous_approval': 'Autonomous Approval Order',
+                    'iso_approval': 'ISO Approval Order'
+                };
+                setDocFormData({ id: null, category: defaultCategoryMap[activeTab], title: '', file_url: '#' });
             }
             setDocFile(null);
             setShowDocModal(true);
@@ -197,6 +231,38 @@ const AdminDashboard = () => {
             }
             setConductFile(null);
             setShowConductModal(true);
+        } else if (activeTab === 'students_placed') {
+            if (item) {
+                setStudentsPlacedFormData(item);
+            } else {
+                setStudentsPlacedFormData({ id: null, category: 'Placement', title: '', file_url: '#' });
+            }
+            setStudentsPlacedFile(null);
+            setShowStudentsPlacedModal(true);
+        } else if (activeTab === 'list_of_recruiters') {
+            if (item) {
+                setRecruitersFormData(item);
+            } else {
+                setRecruitersFormData({ id: null, company_name: '', logo_url: '' });
+            }
+            setRecruitersImageFile(null);
+            setShowRecruitersModal(true);
+        } else if (activeTab === 'coe_circulars') {
+            if (item) {
+                setCoeCircularsFormData(item);
+            } else {
+                setCoeCircularsFormData({ id: null, category: 'Circulars & Notifications', academic_term: '', title: '', file_url: '#' });
+            }
+            setCoeCircularsFile(null);
+            setShowCoeCircularsModal(true);
+        } else if (activeTab === 'coe_timetable') {
+            if (item) {
+                setCoeCircularsFormData(item);
+            } else {
+                setCoeCircularsFormData({ id: null, category: 'Exam Time Table', academic_term: '', title: '', file_url: '#' });
+            }
+            setCoeCircularsFile(null);
+            setShowCoeCircularsModal(true);
         } else if (activeTab === 'departments') {
             if (item) {
                 setDeptFormData({ 
@@ -258,7 +324,10 @@ const AdminDashboard = () => {
         setShowCouncilMemberModal(false);
         setShowCouncilMeetingModal(false);
         setShowConductModal(false);
+        setShowStudentsPlacedModal(false);
+        setShowRecruitersModal(false);
         setShowDeptModal(false);
+        setShowCoeCircularsModal(false);
     };
 
     const handleSaveNews = async (e) => {
@@ -610,6 +679,143 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleSaveStudentsPlaced = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('adminToken');
+        let fileUrl = studentsPlacedFormData.file_url;
+
+        try {
+            if (studentsPlacedFile) {
+                const uploadData = new FormData();
+                uploadData.append('file', studentsPlacedFile);
+
+                const uploadRes = await fetch('http://localhost:5000/api/upload', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: uploadData
+                });
+
+                const uploadJson = await uploadRes.json();
+                if (uploadJson.success) {
+                    fileUrl = uploadJson.data.url;
+                } else {
+                    alert(uploadJson.message || 'Error uploading PDF');
+                    return;
+                }
+            } else if (!fileUrl && !isEditing) {
+                alert('Please select a PDF file to upload.');
+                return;
+            }
+
+            const url = isEditing ? `http://localhost:5000/api/documents/${studentsPlacedFormData.id}` : 'http://localhost:5000/api/documents';
+            const method = isEditing ? 'PUT' : 'POST';
+            const payload = { ...studentsPlacedFormData, category: 'Placement', file_url: fileUrl };
+
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchAllData();
+                handleCloseModal();
+            } else {
+                alert(data.message || 'Error saving document');
+            }
+        } catch (err) {
+            console.error('Error saving document:', err);
+            alert('Failed to connect to the server.');
+        }
+    };
+
+    const handleSaveRecruiter = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('adminToken');
+        let logoUrl = recruitersFormData.logo_url;
+
+        try {
+            if (recruitersImageFile) {
+                const uploadData = new FormData();
+                uploadData.append('file', recruitersImageFile);
+
+                const uploadRes = await fetch('http://localhost:5000/api/upload', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: uploadData
+                });
+
+                const uploadJson = await uploadRes.json();
+                if (uploadJson.success) {
+                    logoUrl = uploadJson.data.url;
+                } else {
+                    alert(uploadJson.message || 'Error uploading logo');
+                    return;
+                }
+            }
+
+            const url = isEditing ? `http://localhost:5000/api/recruiters/${recruitersFormData.id}` : 'http://localhost:5000/api/recruiters';
+            const method = isEditing ? 'PUT' : 'POST';
+            const payload = { ...recruitersFormData, logo_url: logoUrl };
+
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchAllData();
+                handleCloseModal();
+            } else {
+                alert(data.message || 'Error saving recruiter');
+            }
+        } catch (err) {
+            console.error('Error saving recruiter:', err);
+            alert('Failed to connect to the server.');
+        }
+    };
+
+    const handleSaveCoeCirculars = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('adminToken');
+        let fileUrl = coeCircularsFormData.file_url;
+        try {
+            if (coeCircularsFile) {
+                const uploadData = new FormData();
+                uploadData.append('file', coeCircularsFile);
+                const uploadRes = await fetch('http://localhost:5000/api/upload', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: uploadData
+                });
+                const uploadJson = await uploadRes.json();
+                if (uploadJson.success) {
+                    fileUrl = uploadJson.data.url;
+                } else {
+                    alert(uploadJson.message || 'Error uploading file');
+                    return;
+                }
+            }
+            const url = isEditing ? `http://localhost:5000/api/coe-circulars/${coeCircularsFormData.id}` : 'http://localhost:5000/api/coe-circulars';
+            const method = isEditing ? 'PUT' : 'POST';
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ ...coeCircularsFormData, file_url: fileUrl })
+            });
+            const data = await res.json();
+            if (data.success) {
+                fetchAllData();
+                handleCloseModal();
+            } else {
+                alert(data.message || 'Error saving entry');
+            }
+        } catch (err) {
+            console.error('Error saving entry:', err);
+        }
+    };
+
     const handleSaveDept = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('adminToken');
@@ -661,11 +867,14 @@ const AdminDashboard = () => {
         let endpoint = 'news';
         if (type === 'carousel_events') endpoint = 'our-events';
         else if (type === 'extra_curricular') endpoint = 'extra-curricular';
-        else if (type === 'documents') endpoint = 'documents';
+        else if (['documents', 'students_placed', 'mandatory_disclosure', 'aicte_approvals', 'auc_affiliations', 'nba_approval', 'naac_approval', 'autonomous_approval', 'iso_approval'].includes(type)) endpoint = 'documents';
         else if (type === 'academic_calendar') endpoint = 'academic-calendars';
         else if (type === 'council_members') endpoint = 'academic-council/members';
         else if (type === 'council_meetings') endpoint = 'academic-council/meetings';
         else if (type === 'code_of_conduct') endpoint = 'code-of-conduct';
+        else if (type === 'students_placed') endpoint = 'documents';
+        else if (type === 'list_of_recruiters') endpoint = 'recruiters';
+        else if (type === 'coe_circulars' || type === 'coe_timetable') endpoint = 'coe-circulars';
         else if (type === 'departments') endpoint = 'departments';
 
         try {
@@ -688,32 +897,91 @@ const AdminDashboard = () => {
     const getActiveData = () => {
         if (activeTab === 'carousel_events') return carouselEventsData;
         if (activeTab === 'extra_curricular') return extraCurricularData;
-        if (activeTab === 'documents') return documentsData;
+        if (activeTab === 'documents') return documentsData.filter(d => !['Placement', 'Mandatory Disclosure', 'AICTE Approvals', 'Anna University Affiliations', 'NBA Approval Order', 'NAAC Approval Order', 'Autonomous Approval Order', 'ISO Approval Order'].includes(d.category));
+        if (activeTab === 'students_placed') return documentsData.filter(d => d.category === 'Placement');
+        
+        if (['mandatory_disclosure', 'aicte_approvals', 'auc_affiliations', 'nba_approval', 'naac_approval', 'autonomous_approval', 'iso_approval'].includes(activeTab)) {
+            const categoryMap = {
+                'mandatory_disclosure': 'Mandatory Disclosure',
+                'aicte_approvals': 'AICTE Approvals',
+                'auc_affiliations': 'Anna University Affiliations',
+                'nba_approval': 'NBA Approval Order',
+                'naac_approval': 'NAAC Approval Order',
+                'autonomous_approval': 'Autonomous Approval Order',
+                'iso_approval': 'ISO Approval Order'
+            };
+            return documentsData.filter(d => d.category === categoryMap[activeTab]);
+        }
+
         if (activeTab === 'academic_calendar') return academicCalendarData;
         if (activeTab === 'council_members') return councilMembersData;
         if (activeTab === 'council_meetings') return councilMeetingsData;
         if (activeTab === 'code_of_conduct') return codeOfConductData;
+        if (activeTab === 'list_of_recruiters') return recruitersData;
+        if (activeTab === 'coe_circulars') return coeCircularsData.filter(item => item.category === 'Circulars & Notifications');
+        if (activeTab === 'coe_timetable') return coeCircularsData.filter(item => item.category === 'Exam Time Table');
         if (activeTab === 'departments') return departmentsData;
         return newsData.filter(item => item.category === activeTab);
     };
 
     const activeData = getActiveData();
 
-    const menuItems = [
-        { id: 'news', label: 'News', icon: '📰' },
-        { id: 'events', label: 'Events', icon: '📅' },
-        { id: 'achievements', label: 'Achievements', icon: '🏆' },
-        { id: 'carousel_events', label: 'Carousel', icon: '🎢' },
-        { id: 'extra_curricular', label: 'Extra-Curricular', icon: '🎨' },
-        { id: 'documents', label: 'Documents', icon: '📄' },
-        { id: 'academic_calendar', label: 'Academic Calendar', icon: '📅' },
-        { id: 'council_members', label: 'Council Members', icon: '👥' },
-        { id: 'council_meetings', label: 'Council Meetings', icon: '🗓️' },
-        { id: 'code_of_conduct', label: 'Code of Conduct', icon: '📜' },
-        { id: 'departments', label: 'Departments', icon: '🏛️' }
+    const menuGroups = [
+        {
+            group: 'General',
+            items: [
+                { id: 'news', label: 'News', icon: '📰' },
+                { id: 'events', label: 'Events', icon: '📅' },
+                { id: 'achievements', label: 'Achievements', icon: '🏆' },
+                { id: 'carousel_events', label: 'Carousel', icon: '🎢' },
+                { id: 'extra_curricular', label: 'Extra-Curricular', icon: '🎨' },
+                { id: 'documents', label: 'Documents', icon: '📄' },
+            ]
+        },
+        {
+            group: 'About',
+            items: [
+                { id: 'council_members', label: 'Council Members', icon: '👥' },
+                { id: 'council_meetings', label: 'Council Meetings', icon: '🗓️' },
+                { id: 'academic_calendar', label: 'Academic Calendar', icon: '📅' },
+                { id: 'code_of_conduct', label: 'Code of Conduct', icon: '📜' },
+            ]
+        },
+        {
+            group: 'Placement',
+            items: [
+                { id: 'students_placed', label: 'Students Placed', icon: '🎓' },
+                { id: 'list_of_recruiters', label: 'List of Recruiters', icon: '🏢' },
+            ]
+        },
+        {
+            group: 'Institutional Approvals',
+            items: [
+                { id: 'mandatory_disclosure', label: 'Mandatory Disclosure', icon: '📜' },
+                { id: 'aicte_approvals', label: 'AICTE Approvals', icon: '🏛️' },
+                { id: 'auc_affiliations', label: 'Anna Univ Affiliations', icon: '🎓' },
+                { id: 'nba_approval', label: 'NBA Approval', icon: '🏆' },
+                { id: 'naac_approval', label: 'NAAC Approval', icon: '🌟' },
+                { id: 'autonomous_approval', label: 'Autonomous Approval', icon: '🏢' },
+                { id: 'iso_approval', label: 'ISO Approval', icon: '✅' },
+            ]
+        },
+        {
+            group: 'Controller of Examinations',
+            items: [
+                { id: 'coe_circulars', label: 'Circulars & Notifications', icon: '📢' },
+                { id: 'coe_timetable', label: 'Exam Time Table', icon: '📅' }
+            ]
+        },
+        {
+            group: 'Academics',
+            items: [
+                { id: 'departments', label: 'Departments', icon: '🏛️' }
+            ]
+        }
     ];
 
-    const activeMenu = menuItems.find(i => i.id === activeTab) || menuItems[0];
+    const activeMenu = menuGroups.flatMap(g => g.items).find(i => i.id === activeTab) || menuGroups[0].items[0];
 
     return (
         <div className="flex h-screen bg-[#f1f5f9] text-slate-800 font-sans overflow-hidden">
@@ -727,24 +995,31 @@ const AdminDashboard = () => {
                     <p className="text-blue-300/60 text-xs mt-2 font-medium tracking-widest uppercase">Content Manager</p>
                 </div>
 
-                <nav className="flex-1 p-4 space-y-2 mt-4 overflow-y-auto">
-                    {menuItems.map((item) => (
-                        <button
-                            key={item.id}
-                            onClick={() => setActiveTab(item.id)}
-                            className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-200 group ${activeTab === item.id
-                                ? 'bg-white/10 text-white shadow-inner border border-white/10'
-                                : 'text-blue-200/70 hover:bg-white/5 hover:text-white'
-                            }`}
-                        >
-                            <span className={`text-xl transition-transform duration-200 ${activeTab === item.id ? 'scale-110' : 'group-hover:scale-110'}`}>
-                                {item.icon}
-                            </span>
-                            <span className="font-bold text-[15px]">{item.label}</span>
-                            {activeTab === item.id && (
-                                <div className="ml-auto w-1.5 h-1.5 bg-blue-400 rounded-full shadow-[0_0_8px_rgba(96,165,250,0.8)]"></div>
-                            )}
-                        </button>
+                <nav className="flex-1 p-4 mt-2 overflow-y-auto space-y-6">
+                    {menuGroups.map((group, gIndex) => (
+                        <div key={gIndex} className="space-y-2">
+                            <h4 className="text-[10px] font-black text-blue-300/50 uppercase tracking-[0.2em] px-4 mb-2">
+                                {group.group}
+                            </h4>
+                            {group.items.map((item) => (
+                                <button
+                                    key={item.id}
+                                    onClick={() => setActiveTab(item.id)}
+                                    className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group ${activeTab === item.id
+                                        ? 'bg-white/10 text-white shadow-inner border border-white/10'
+                                        : 'text-blue-200/70 hover:bg-white/5 hover:text-white'
+                                    }`}
+                                >
+                                    <span className={`text-xl transition-transform duration-200 ${activeTab === item.id ? 'scale-110' : 'group-hover:scale-110'}`}>
+                                        {item.icon}
+                                    </span>
+                                    <span className="font-bold text-[14px]">{item.label}</span>
+                                    {activeTab === item.id && (
+                                        <div className="ml-auto w-1.5 h-1.5 bg-blue-400 rounded-full shadow-[0_0_8px_rgba(96,165,250,0.8)]"></div>
+                                    )}
+                                </button>
+                            ))}
+                        </div>
                     ))}
                 </nav>
 
@@ -942,9 +1217,9 @@ const AdminDashboard = () => {
                                                     <th className="p-8">Category</th>
                                                     <th className="p-8 text-right">Actions</th>
                                                 </>
-                                            ) : activeTab === 'carousel_events' || activeTab === 'extra_curricular' || activeTab === 'documents' || activeTab === 'academic_calendar' || activeTab === 'council_meetings' || activeTab === 'code_of_conduct' ? (
+                                            ) : activeTab === 'carousel_events' || activeTab === 'extra_curricular' || ['documents', 'students_placed', 'mandatory_disclosure', 'aicte_approvals', 'auc_affiliations', 'nba_approval', 'naac_approval', 'autonomous_approval', 'iso_approval'].includes(activeTab) || activeTab === 'academic_calendar' || activeTab === 'council_meetings' || activeTab === 'code_of_conduct' || activeTab === 'list_of_recruiters' || activeTab === 'coe_circulars' || activeTab === 'coe_timetable' ? (
                                                 <>
-                                                    <th className="p-8">{activeTab === 'documents' ? 'Category' : activeTab === 'academic_calendar' || activeTab === 'council_meetings' || activeTab === 'code_of_conduct' ? 'Order' : 'Preview'}</th>
+                                                    <th className="p-8">{['documents', 'students_placed', 'mandatory_disclosure', 'aicte_approvals', 'auc_affiliations', 'nba_approval', 'naac_approval', 'autonomous_approval', 'iso_approval'].includes(activeTab) ? 'Category' : activeTab === 'academic_calendar' || activeTab === 'council_meetings' || activeTab === 'code_of_conduct' ? 'Order' : activeTab === 'coe_circulars' || activeTab === 'coe_timetable' ? 'Term' : 'Preview'}</th>
                                                     <th className="p-8">Information</th>
                                                     <th className="p-8 text-right">Actions</th>
                                                 </>
@@ -975,25 +1250,33 @@ const AdminDashboard = () => {
                                                             </span>
                                                         </td>
                                                     </>
-                                                ) : activeTab === 'carousel_events' || activeTab === 'extra_curricular' || activeTab === 'documents' || activeTab === 'academic_calendar' || activeTab === 'council_meetings' || activeTab === 'code_of_conduct' ? (
+                                                ) : activeTab === 'carousel_events' || activeTab === 'extra_curricular' || ['documents', 'students_placed', 'mandatory_disclosure', 'aicte_approvals', 'auc_affiliations', 'nba_approval', 'naac_approval', 'autonomous_approval', 'iso_approval'].includes(activeTab) || activeTab === 'academic_calendar' || activeTab === 'council_meetings' || activeTab === 'code_of_conduct' || activeTab === 'list_of_recruiters' || activeTab === 'coe_circulars' || activeTab === 'coe_timetable' ? (
                                                     <>
                                                         <td className="p-8 w-56">
                                                             {activeTab === 'academic_calendar' || activeTab === 'council_meetings' || activeTab === 'code_of_conduct' ? (
                                                                 <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-black text-[10px] uppercase tracking-widest border border-blue-200">
                                                                     #{item.display_order}
                                                                 </span>
-                                                            ) : activeTab === 'documents' ? (
+                                                            ) : ['documents', 'students_placed', 'mandatory_disclosure', 'aicte_approvals', 'auc_affiliations', 'nba_approval', 'naac_approval', 'autonomous_approval', 'iso_approval'].includes(activeTab) ? (
                                                                 <span className="bg-slate-100 text-slate-600 px-4 py-2 rounded-lg font-black text-[10px] uppercase tracking-widest border border-slate-200">
                                                                     {item.category}
                                                                 </span>
+                                                            ) : activeTab === 'coe_circulars' || activeTab === 'coe_timetable' ? (
+                                                                <span className="bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg font-bold text-[10px] uppercase tracking-widest border border-indigo-200 block text-center break-words">
+                                                                    {item.academic_term}
+                                                                </span>
                                                             ) : (
                                                                 <div className="relative overflow-hidden rounded-2xl w-40 h-24 border border-slate-200 shadow-sm bg-slate-100">
-                                                                    <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                                                                    {item.image || item.logo_url ? (
+                                                                        <img src={item.image || item.logo_url} alt={item.title || item.company_name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                                                                    ) : (
+                                                                        <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs font-bold bg-slate-100">No Image</div>
+                                                                    )}
                                                                 </div>
                                                             )}
                                                         </td>
                                                         <td className="p-8">
-                                                            <h5 className="font-black text-xl text-slate-900 group-hover:text-blue-700 transition-colors">{item.title}</h5>
+                                                            <h5 className="font-black text-xl text-slate-900 group-hover:text-blue-700 transition-colors">{item.title || item.company_name}</h5>
                                                             {item.date && <div className="text-xs font-black text-blue-600 mt-1 uppercase tracking-widest">{item.date}</div>}
                                                             {item.description && <p className="text-slate-500 text-sm mt-3 line-clamp-2 max-w-2xl font-medium leading-relaxed">{item.description}</p>}
                                                             {item.file_url && item.file_url !== '#' && (
@@ -1241,6 +1524,42 @@ const AdminDashboard = () => {
                     </div>
                 </div>
             )}
+            {/* Students Placed Modal */}
+            {showStudentsPlacedModal && (
+                <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+                    <div className="bg-white rounded-[32px] shadow-2xl w-full max-w-lg overflow-hidden border border-white/20 animate-in fade-in zoom-in duration-200">
+                        <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                            <div>
+                                <h3 className="text-2xl font-black text-slate-900">{isEditing ? 'Edit Placement Record' : 'New Placement Record'}</h3>
+                                <p className="text-slate-500 text-sm font-medium mt-1">Upload list of students placed.</p>
+                            </div>
+                            <button onClick={handleCloseModal} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-400 text-2xl transition-colors">&times;</button>
+                        </div>
+                        <form onSubmit={handleSaveStudentsPlaced} className="p-8 space-y-6">
+                            <div>
+                                <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Record Title</label>
+                                <input type="text" required placeholder="e.g. LIST OF STUDENTS PLACED IN THE YEAR 2024-2025" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+                                    value={studentsPlacedFormData.title} onChange={(e) => setStudentsPlacedFormData({ ...studentsPlacedFormData, title: e.target.value })} />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">PDF Upload</label>
+                                <div className="relative group/file">
+                                    <input type="file" accept=".pdf" className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                        onChange={(e) => setStudentsPlacedFile(e.target.files[0])} />
+                                    <div className="border-2 border-dashed border-slate-200 rounded-2xl p-4 bg-slate-50 group-hover/file:border-blue-400 group-hover/file:bg-blue-50 transition-all flex items-center justify-center gap-3">
+                                        <span className="text-2xl">📄</span>
+                                        <span className="text-xs font-black text-slate-400 uppercase tracking-widest">{studentsPlacedFile ? studentsPlacedFile.name : 'Choose PDF File'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex gap-4 pt-4">
+                                <button type="button" onClick={handleCloseModal} className="flex-1 px-6 py-4 text-slate-500 hover:bg-slate-100 font-black rounded-2xl transition-all uppercase tracking-widest text-xs">Cancel</button>
+                                <button type="submit" className="flex-[2] bg-[#001a66] hover:bg-[#0b2a8a] text-white px-8 py-4 font-black rounded-2xl shadow-xl shadow-blue-900/20 transition-all uppercase tracking-widest text-xs">Save Record</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
             {/* Academic Calendar Modal */}
             {showCalendarModal && (
                 <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-[100] flex items-center justify-center p-4">
@@ -1407,6 +1726,42 @@ const AdminDashboard = () => {
                             <div className="flex gap-4 pt-4">
                                 <button type="button" onClick={handleCloseModal} className="flex-1 px-6 py-4 text-slate-500 hover:bg-slate-100 font-black rounded-2xl transition-all uppercase tracking-widest text-xs">Cancel</button>
                                 <button type="submit" className="flex-[2] bg-[#001a66] hover:bg-[#0b2a8a] text-white px-8 py-4 font-black rounded-2xl shadow-xl shadow-blue-900/20 transition-all uppercase tracking-widest text-xs">Save Document</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+            {/* Recruiters Modal */}
+            {showRecruitersModal && (
+                <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+                    <div className="bg-white rounded-[32px] shadow-2xl w-full max-w-lg overflow-hidden border border-white/20 animate-in fade-in zoom-in duration-200">
+                        <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                            <div>
+                                <h3 className="text-2xl font-black text-slate-900">{isEditing ? 'Edit Recruiter' : 'New Recruiter'}</h3>
+                                <p className="text-slate-500 text-sm font-medium mt-1">Add a company to the placement list.</p>
+                            </div>
+                            <button onClick={handleCloseModal} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-400 text-2xl transition-colors">&times;</button>
+                        </div>
+                        <form onSubmit={handleSaveRecruiter} className="p-8 space-y-6">
+                            <div>
+                                <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Company Name</label>
+                                <input type="text" required placeholder="e.g. AGS HEALTH" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+                                    value={recruitersFormData.company_name} onChange={(e) => setRecruitersFormData({ ...recruitersFormData, company_name: e.target.value })} />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Company Logo (Optional)</label>
+                                <div className="relative group/file">
+                                    <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                        onChange={(e) => setRecruitersImageFile(e.target.files[0])} />
+                                    <div className="border-2 border-dashed border-slate-200 rounded-2xl p-6 bg-slate-50 group-hover/file:border-blue-400 group-hover/file:bg-blue-50 transition-all flex flex-col items-center justify-center gap-2">
+                                        <span className="text-3xl">🖼️</span>
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{recruitersImageFile ? recruitersImageFile.name : 'Drag & Drop or Click to Upload Image'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex gap-4 pt-4">
+                                <button type="button" onClick={handleCloseModal} className="flex-1 px-6 py-4 text-slate-500 hover:bg-slate-100 font-black rounded-2xl transition-all uppercase tracking-widest text-xs">Cancel</button>
+                                <button type="submit" className="flex-[2] bg-[#001a66] hover:bg-[#0b2a8a] text-white px-8 py-4 font-black rounded-2xl shadow-xl shadow-blue-900/20 transition-all uppercase tracking-widest text-xs">Save Recruiter</button>
                             </div>
                         </form>
                     </div>
@@ -1844,6 +2199,83 @@ const AdminDashboard = () => {
                             <div className="flex gap-4 pt-4 border-t border-slate-100">
                                 <button type="button" onClick={handleCloseModal} className="flex-1 px-6 py-4 text-slate-500 hover:bg-slate-100 font-black rounded-2xl transition-all uppercase tracking-widest text-xs">Cancel</button>
                                 <button type="submit" className="flex-[2] bg-[#001a66] hover:bg-[#0b2a8a] text-white px-8 py-4 font-black rounded-2xl shadow-xl shadow-blue-900/20 transition-all uppercase tracking-widest text-xs">Save Department</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+            {/* COE Circulars Modal */}
+            {showCoeCircularsModal && (
+                <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-[32px] shadow-2xl w-full max-w-2xl overflow-hidden border border-slate-100">
+                        <div className="bg-slate-50 px-8 py-6 border-b border-slate-100 flex justify-between items-center">
+                            <div>
+                                <h3 className="text-xl font-black text-slate-900">{isEditing ? `Edit ${coeCircularsFormData.category}` : `Add New ${coeCircularsFormData.category}`}</h3>
+                                <p className="text-slate-500 text-sm mt-1 font-medium">Fill in the details below</p>
+                            </div>
+                            <button onClick={() => setShowCoeCircularsModal(false)} className="text-slate-400 hover:text-red-500 transition-colors text-2xl font-light">&times;</button>
+                        </div>
+                        <form onSubmit={handleSaveCoeCirculars} className="p-8">
+                            <div className="space-y-6">
+                                <div>
+                                    <label className="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3">Academic Term</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={coeCircularsFormData.academic_term}
+                                        onChange={(e) => setCoeCircularsFormData({ ...coeCircularsFormData, academic_term: e.target.value })}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-slate-700 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all font-medium"
+                                        placeholder="e.g. AY: 2025-2026, EVEN Semester (Apr / May 2026)"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3">Title</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={coeCircularsFormData.title}
+                                        onChange={(e) => setCoeCircularsFormData({ ...coeCircularsFormData, title: e.target.value })}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-slate-700 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all font-medium"
+                                        placeholder="e.g. Model Exam Time Table"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3">PDF File</label>
+                                    <input
+                                        type="file"
+                                        accept=".pdf"
+                                        onChange={(e) => setCoeCircularsFile(e.target.files[0])}
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-slate-700 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all font-medium file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                    />
+                                    {coeCircularsFormData.file_url && coeCircularsFormData.file_url !== '#' && (
+                                        <p className="mt-3 text-sm text-slate-500">
+                                            Current file: <a href={coeCircularsFormData.file_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">View Document</a>
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="mt-10 flex justify-end gap-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowCoeCircularsModal(false)}
+                                    className="px-8 py-4 rounded-xl text-slate-600 font-bold hover:bg-slate-100 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={isUploadingCoeCirculars}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold transition-colors shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                >
+                                    {isUploadingCoeCirculars ? (
+                                        <>
+                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                            <span>Saving...</span>
+                                        </>
+                                    ) : (
+                                        <span>Save Entry</span>
+                                    )}
+                                </button>
                             </div>
                         </form>
                     </div>

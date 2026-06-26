@@ -17,7 +17,9 @@ const documentRoutes = require('./document');
 const academicCalendarRoutes = require('./academicCalendar');
 const academicCouncilRoutes = require('./academicCouncil');
 const codeOfConductRoutes = require('./codeOfConduct');
+const recruiterRoutes = require('./recruiterRoutes');
 const departmentRoutes = require('./department');
+const coeCircularRoutes = require('./coeCircularRoutes');
 
 router.use('/auth', authRoutes);
 router.use('/news', newsRoutes);
@@ -27,7 +29,9 @@ router.use('/documents', documentRoutes);
 router.use('/academic-calendars', academicCalendarRoutes);
 router.use('/academic-council', academicCouncilRoutes);
 router.use('/code-of-conduct', codeOfConductRoutes);
+router.use('/recruiters', recruiterRoutes);
 router.use('/departments', departmentRoutes);
+router.use('/coe-circulars', coeCircularRoutes);
 
 const uploadRoutes = require('./upload');
 router.use('/upload', uploadRoutes);

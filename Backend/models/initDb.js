@@ -324,6 +324,76 @@ const initDb = async () => {
             console.log('code_of_conduct seeded successfully.');
         }
 
+        // Create coe_circulars table (will act as generic COE documents table)
+        const createCoeCircularsTableQuery = `
+            CREATE TABLE IF NOT EXISTS coe_circulars (
+                id SERIAL PRIMARY KEY,
+                category VARCHAR(255) DEFAULT 'Circulars & Notifications',
+                academic_term VARCHAR(255) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                file_url VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+        await db.query(createCoeCircularsTableQuery);
+        // Add category column if it doesn't exist (for existing DBs)
+        await db.query(`ALTER TABLE coe_circulars ADD COLUMN IF NOT EXISTS category VARCHAR(255) DEFAULT 'Circulars & Notifications'`);
+
+        // Seed coe_circulars if empty
+        const { rows: coeRows } = await db.query(`SELECT COUNT(*) FROM coe_circulars`);
+        if (parseInt(coeRows[0].count) === 0) {
+            console.log('Seeding coe_circulars table...');
+            const initialCoeCirculars = [
+                { category: 'Circulars & Notifications', academic_term: 'AY: 2025-2026, EVEN Semester (Apr / May 2026)', title: 'Model Exam Time Table: Regulation (R2021 & R2024)', file_url: '#' },
+                { category: 'Circulars & Notifications', academic_term: 'AY: 2025-2026, ODD Semester (Nov / Dec 2025)', title: 'End Semester Exam Schedule', file_url: '#' },
+                { category: 'Circulars & Notifications', academic_term: 'AY: 2024-2025, EVEN Semester (Apr / May 2025)', title: 'Practical Exam Notifications', file_url: '#' },
+                { category: 'Exam Time Table', academic_term: 'AY: 2025-2026, EVEN Semester (Apr / May 2026)', title: 'Apr/May 2026: UG/PG/PhD: Theory Exam Time Table (R-2021 & R-2024)', file_url: '#' },
+                { category: 'Exam Time Table', academic_term: 'AY: 2025-2026, EVEN Semester (Apr / May 2026)', title: 'Apr/May 2026: UG/PG: Practical Exam Time Table (R-2021 & R-2024)', file_url: '#' },
+                { category: 'Exam Time Table', academic_term: 'AY: 2024-2025, ODD Semester (Nov / Dec 2024)', title: 'End Semester Exam Time Table', file_url: '#' }
+            ];
+            for (const item of initialCoeCirculars) {
+                await db.query(
+                    `INSERT INTO coe_circulars (category, academic_term, title, file_url) VALUES ($1, $2, $3, $4)`,
+                    [item.category, item.academic_term, item.title, item.file_url]
+                );
+            }
+            console.log('coe_circulars seeded successfully.');
+        }
+
+        // Create recruiters table
+        const createRecruitersTableQuery = `
+            CREATE TABLE IF NOT EXISTS recruiters (
+                id SERIAL PRIMARY KEY,
+                company_name VARCHAR(255) NOT NULL,
+                logo_url VARCHAR(255) DEFAULT '',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+        await db.query(createRecruitersTableQuery);
+
+        // Seed recruiters if empty
+        const { rows: recruiterRows } = await db.query(`SELECT COUNT(*) FROM recruiters`);
+        if (parseInt(recruiterRows[0].count) === 0) {
+            console.log('Seeding recruiters table...');
+            const initialRecruiters = [
+                { company_name: 'AGS HEALTH', logo_url: '' },
+                { company_name: 'ANJAN DRUG', logo_url: '' },
+                { company_name: 'ASCENT HR', logo_url: '' },
+                { company_name: 'ASPIRE SYSTEMS', logo_url: '' },
+                { company_name: 'BHARATHI CEMENTS', logo_url: '' },
+                { company_name: 'RELIANCE', logo_url: '/uploads/reliance.png' },
+                { company_name: 'MRF', logo_url: '/uploads/mrf.png' },
+                { company_name: 'ICICI Bank', logo_url: '/uploads/icici.png' },
+            ];
+            for (const item of initialRecruiters) {
+                await db.query(
+                    `INSERT INTO recruiters (company_name, logo_url) VALUES ($1, $2)`,
+                    [item.company_name, item.logo_url]
+                );
+            }
+            console.log('recruiters seeded successfully.');
+        }
+
         // Create departments table
         const createDepartmentsTableQuery = `
             CREATE TABLE IF NOT EXISTS departments (
