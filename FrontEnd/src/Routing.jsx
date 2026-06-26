@@ -45,6 +45,9 @@ import Overview from './pages/inner/placement/Overview'
 import Rules from './pages/inner/placement/Rules'
 import PlacementCodeOfConduct from './pages/inner/placement/PlacementCodeOfConduct'
 
+// Courses Offered Pages
+import { UgCourses, PgCourses } from './pages/CoursesOffered'
+
 
 // Department slugs from sidebarConfig
 const deptSlugs = [
@@ -70,6 +73,10 @@ const routes = [
   { path: '/about/academic-calendar',     component: <AcademicCalendar /> },
   { path: '/about/code-of-conduct',       component: <CodeOfConduct /> },
   { path: '/about/org-structure',         component: <OrgStructure /> },
+
+  // Courses Offered section
+  { path: '/academics/courses/ug',          component: <UgCourses /> },
+  { path: '/academics/courses/pg',          component: <PgCourses /> },
 
   // Research section
   { path: '/research',            component: <AboutResearch /> },
