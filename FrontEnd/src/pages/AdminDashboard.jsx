@@ -73,7 +73,9 @@ const AdminDashboard = () => {
     const [newMission, setNewMission] = useState('');
     const [newHighlight, setNewHighlight] = useState({ label: '', value: '' });
     const [newCurriculum, setNewCurriculum] = useState({ name: '', file_url: '#' });
-    const [deptModalTab, setDeptModalTab] = useState('general');
+    const [newCurriculumFile, setNewCurriculumFile] = useState(null);
+    const [isUploadingCurriculum, setIsUploadingCurriculum] = useState(false);
+    const [deptModalTab, setDeptModalTab] = useState('curriculum');
     const [newPeo, setNewPeo] = useState({ type: 'PEO', code: '', statement: '' });
     const [newFaculty, setNewFaculty] = useState({ name: '', designation: '', qualification: '', specialization: '', image_url: '/default-avatar.png' });
     const [newInfra, setNewInfra] = useState({ name: '', description: '', image_url: '' });
@@ -221,6 +223,8 @@ const AdminDashboard = () => {
             setNewMission('');
             setNewHighlight({ label: '', value: '' });
             setNewCurriculum({ name: '', file_url: '#' });
+            setNewCurriculumFile(null);
+            setIsUploadingCurriculum(false);
             setNewPeo({ type: 'PEO', code: '', statement: '' });
             setNewFaculty({ name: '', designation: '', qualification: '', specialization: '', image_url: '/default-avatar.png' });
             setNewInfra({ name: '', description: '', image_url: '' });
@@ -229,7 +233,7 @@ const AdminDashboard = () => {
             setNewAchievement({ title: '', description: '', image_url: '' });
             setNewPlacement({ academic_year: '', students_placed: '', average_salary: '', image_or_file: '' });
             setNewAlumni({ name: '', batch: '', designation: '', company: '', feedback: '' });
-            setDeptModalTab('general');
+            setDeptModalTab('curriculum');
             setShowDeptModal(true);
         } else {
             if (item) {
@@ -1418,7 +1422,6 @@ const AdminDashboard = () => {
                         {/* Tab Selector */}
                         <div className="flex bg-slate-50 border-b border-slate-100 p-2 overflow-x-auto gap-2 flex-shrink-0 no-scrollbar">
                             {[
-                                { id: 'general', label: 'General' },
                                 { id: 'curriculum', label: 'Curriculum' },
                                 { id: 'peos', label: "PEOs/PSOs/POs" },
                                 { id: 'faculty', label: 'Faculty' },
@@ -1442,96 +1445,7 @@ const AdminDashboard = () => {
                             ))}
                         </div>
                         <form onSubmit={handleSaveDept} className="p-8 space-y-5 overflow-y-auto flex-1">
-                            {deptModalTab === 'general' && (
-                                <div className="space-y-5 animate-in fade-in duration-200">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Slug</label>
-                                            <input type="text" required placeholder="e.g. cse" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
-                                                value={deptFormData.dept_slug} onChange={(e) => setDeptFormData({ ...deptFormData, dept_slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') })} />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Department Name</label>
-                                            <input type="text" required placeholder="e.g. Computer Science & Engineering" className="w-full border-2 border-slate-100 rounded-2xl p-3.5 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
-                                                value={deptFormData.dept_name} onChange={(e) => setDeptFormData({ ...deptFormData, dept_name: e.target.value })} />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Banner Image</label>
-                                        <div className="relative group/file">
-                                            <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10"
-                                                onChange={(e) => setDeptBannerFile(e.target.files[0])} />
-                                            <div className="border-2 border-dashed border-slate-200 rounded-2xl p-3 bg-slate-50 group-hover/file:border-blue-400 group-hover/file:bg-blue-50 transition-all flex items-center justify-center gap-2">
-                                                <span className="text-xl">🖼️</span>
-                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{deptBannerFile ? deptBannerFile.name : (deptFormData.banner_image || 'Choose Image')}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* Courses */}
-                                    <div>
-                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Courses Offered</label>
-                                        <div className="flex flex-wrap gap-2 mb-2">
-                                            {(deptFormData.courses || []).map((c, i) => (
-                                                <span key={i} className="bg-[#0d2060] text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2">
-                                                    {c}
-                                                    <button type="button" onClick={() => setDeptFormData({ ...deptFormData, courses: deptFormData.courses.filter((_, idx) => idx !== i) })} className="text-white/60 hover:text-white">&times;</button>
-                                                </span>
-                                            ))}
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <input type="text" placeholder="e.g. UG – B.E. CSE" className="flex-1 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 focus:border-blue-500 outline-none text-sm font-bold"
-                                                value={newCourse} onChange={(e) => setNewCourse(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (newCourse.trim()) { setDeptFormData({ ...deptFormData, courses: [...(deptFormData.courses || []), newCourse.trim()] }); setNewCourse(''); } } }} />
-                                            <button type="button" onClick={() => { if (newCourse.trim()) { setDeptFormData({ ...deptFormData, courses: [...(deptFormData.courses || []), newCourse.trim()] }); setNewCourse(''); } }} className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl font-black text-xs hover:bg-blue-100">Add</button>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Introduction</label>
-                                        <textarea rows="3" placeholder="Department introduction..." className="w-full border-2 border-slate-100 rounded-2xl p-4 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold text-slate-700 resize-none text-sm"
-                                            value={deptFormData.introduction || ''} onChange={(e) => setDeptFormData({ ...deptFormData, introduction: e.target.value })}></textarea>
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Vision</label>
-                                        <textarea rows="2" placeholder="Department vision..." className="w-full border-2 border-slate-100 rounded-2xl p-4 bg-slate-50 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold text-slate-700 resize-none text-sm"
-                                            value={deptFormData.vision || ''} onChange={(e) => setDeptFormData({ ...deptFormData, vision: e.target.value })}></textarea>
-                                    </div>
-                                    {/* Mission */}
-                                    <div>
-                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Mission Points</label>
-                                        <ul className="space-y-1 mb-2">
-                                            {(deptFormData.mission || []).map((m, i) => (
-                                                <li key={i} className="flex items-center gap-2 bg-slate-50 rounded-lg px-3 py-2 text-sm">
-                                                    <span className="flex-1 font-medium text-slate-700">{m}</span>
-                                                    <button type="button" onClick={() => setDeptFormData({ ...deptFormData, mission: deptFormData.mission.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold">&times;</button>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                        <div className="flex gap-2">
-                                            <input type="text" placeholder="Add mission point" className="flex-1 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 focus:border-blue-500 outline-none text-sm font-bold"
-                                                value={newMission} onChange={(e) => setNewMission(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (newMission.trim()) { setDeptFormData({ ...deptFormData, mission: [...(deptFormData.mission || []), newMission.trim()] }); setNewMission(''); } } }} />
-                                            <button type="button" onClick={() => { if (newMission.trim()) { setDeptFormData({ ...deptFormData, mission: [...(deptFormData.mission || []), newMission.trim()] }); setNewMission(''); } }} className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl font-black text-xs hover:bg-blue-100">Add</button>
-                                        </div>
-                                    </div>
-                                    {/* Highlights */}
-                                    <div>
-                                        <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Highlights</label>
-                                        <div className="grid grid-cols-3 gap-2 mb-2">
-                                            {(deptFormData.highlights || []).map((h, i) => (
-                                                <div key={i} className="bg-slate-50 rounded-lg p-2 text-sm border border-slate-100 flex items-center justify-between">
-                                                    <div><p className="text-[9px] font-bold text-slate-400 uppercase">{h.label}</p><p className="font-black text-slate-700">{h.value}</p></div>
-                                                    <button type="button" onClick={() => setDeptFormData({ ...deptFormData, highlights: deptFormData.highlights.filter((_, idx) => idx !== i) })} className="text-red-400 hover:text-red-600 font-bold text-lg">&times;</button>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <input type="text" placeholder="Label" className="w-1/3 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 focus:border-blue-500 outline-none text-sm font-bold"
-                                                value={newHighlight.label} onChange={(e) => setNewHighlight({ ...newHighlight, label: e.target.value })} />
-                                            <input type="text" placeholder="Value" className="w-1/3 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 focus:border-blue-500 outline-none text-sm font-bold"
-                                                value={newHighlight.value} onChange={(e) => setNewHighlight({ ...newHighlight, value: e.target.value })} />
-                                            <button type="button" onClick={() => { if (newHighlight.label.trim() && newHighlight.value.trim()) { setDeptFormData({ ...deptFormData, highlights: [...(deptFormData.highlights || []), { ...newHighlight }] }); setNewHighlight({ label: '', value: '' }); } }} className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl font-black text-xs hover:bg-blue-100">Add</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
+
 
                             {deptModalTab === 'curriculum' && (
                                 <div className="space-y-5 animate-in fade-in duration-200">
@@ -1547,12 +1461,74 @@ const AdminDashboard = () => {
                                             </div>
                                         ))}
                                     </div>
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-2 items-center">
                                         <input type="text" placeholder="Regulation Name (e.g. Regulation-2024)" className="w-1/2 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 focus:border-blue-500 outline-none text-sm font-bold"
                                             value={newCurriculum.name} onChange={(e) => setNewCurriculum({ ...newCurriculum, name: e.target.value })} />
-                                        <input type="text" placeholder="PDF Link (e.g. #)" className="w-1/2 border-2 border-slate-100 rounded-xl p-2.5 bg-slate-50 focus:border-blue-500 outline-none text-sm font-bold"
-                                            value={newCurriculum.file_url} onChange={(e) => setNewCurriculum({ ...newCurriculum, file_url: e.target.value })} />
-                                        <button type="button" onClick={() => { if (newCurriculum.name.trim()) { setDeptFormData({ ...deptFormData, curriculum: [...(deptFormData.curriculum || []), { name: newCurriculum.name.trim(), file_url: newCurriculum.file_url.trim() || '#' }] }); setNewCurriculum({ name: '', file_url: '#' }); } }} className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl font-black text-xs hover:bg-blue-100 flex-shrink-0 font-bold">Add</button>
+                                        
+                                        <div className="relative w-1/2 group/file">
+                                            <input type="file" accept=".pdf" className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                                onChange={(e) => setNewCurriculumFile(e.target.files[0])} />
+                                            <div className="border-2 border-dashed border-slate-200 rounded-xl p-2.5 bg-slate-50 group-hover/file:border-blue-400 group-hover/file:bg-blue-50 transition-all flex items-center justify-center gap-2 h-[46px]">
+                                                <span className="text-lg">📄</span>
+                                                <span className="text-xs font-black text-slate-400 uppercase tracking-widest truncate max-w-[150px]">
+                                                    {newCurriculumFile ? newCurriculumFile.name : 'Choose PDF File'}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <button 
+                                            type="button" 
+                                            disabled={isUploadingCurriculum}
+                                            onClick={async () => { 
+                                                if (!newCurriculum.name.trim()) {
+                                                    alert('Please enter a Regulation Name');
+                                                    return;
+                                                }
+                                                let fileUrl = '#';
+                                                if (newCurriculumFile) {
+                                                    setIsUploadingCurriculum(true);
+                                                    try {
+                                                        const token = localStorage.getItem('adminToken');
+                                                        const uploadData = new FormData();
+                                                        uploadData.append('file', newCurriculumFile);
+
+                                                        const uploadRes = await fetch('http://localhost:5000/api/upload', {
+                                                            method: 'POST',
+                                                            headers: { 'Authorization': `Bearer ${token}` },
+                                                            body: uploadData
+                                                        });
+
+                                                        const uploadJson = await uploadRes.json();
+                                                        if (uploadJson.success) {
+                                                            fileUrl = uploadJson.data.url;
+                                                        } else {
+                                                            alert(uploadJson.message || 'Error uploading PDF');
+                                                            setIsUploadingCurriculum(false);
+                                                            return;
+                                                        }
+                                                    } catch (err) {
+                                                        console.error('Error uploading PDF:', err);
+                                                        alert('Failed to upload PDF');
+                                                        setIsUploadingCurriculum(false);
+                                                        return;
+                                                    } finally {
+                                                        setIsUploadingCurriculum(false);
+                                                    }
+                                                } else {
+                                                    alert('Please select a PDF file to upload.');
+                                                    return;
+                                                }
+                                                setDeptFormData({ 
+                                                    ...deptFormData, 
+                                                    curriculum: [...(deptFormData.curriculum || []), { name: newCurriculum.name.trim(), file_url: fileUrl }] 
+                                                }); 
+                                                setNewCurriculum({ name: '', file_url: '#' }); 
+                                                setNewCurriculumFile(null);
+                                            }} 
+                                            className="bg-blue-50 text-blue-600 px-5 py-3.5 rounded-xl font-black text-xs hover:bg-blue-100 flex-shrink-0 font-bold disabled:opacity-50"
+                                        >
+                                            {isUploadingCurriculum ? 'Uploading...' : 'Add'}
+                                        </button>
                                     </div>
                                 </div>
                             )}

@@ -96,6 +96,34 @@ const routes = [
     path: `/academics/dept/${slug}/curriculum`,
     component: <DeptPage slug={slug} subpage="curriculum" />,
   })),
+  ...deptSlugs.map(slug => ({
+    path: `/academics/dept/${slug}/peo-pso-po`,
+    component: <DeptPage slug={slug} subpage="peo-pso-po" />,
+  })),
+  ...deptSlugs.map(slug => ({
+    path: `/academics/dept/${slug}/faculty`,
+    component: <DeptPage slug={slug} subpage="faculty" />,
+  })),
+  ...deptSlugs.map(slug => ({
+    path: `/academics/dept/${slug}/facilities`,
+    component: <DeptPage slug={slug} subpage="infrastructure" />,
+  })),
+  ...deptSlugs.map(slug => ({
+    path: `/academics/dept/${slug}/events`,
+    component: <DeptPage slug={slug} subpage="activities" />,
+  })),
+  ...deptSlugs.map(slug => ({
+    path: `/academics/dept/${slug}/placement`,
+    component: <DeptPage slug={slug} subpage="placement" />,
+  })),
+  ...deptSlugs.map(slug => ({
+    path: `/academics/dept/${slug}/gallery`,
+    component: <DeptPage slug={slug} subpage="achievements" />,
+  })),
+  ...deptSlugs.map(slug => ({
+    path: `/academics/dept/${slug}/alumni-feedback`,
+    component: <DeptPage slug={slug} subpage="alumni" />,
+  })),
 
   // Admin routes
   { path: '/admin-login',         component: <AdminLogin /> },

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import InnerPageLayout from '../../components/InnerPageLayout'
 import { PageHeader, SectionBlock, BodyText, BannerImage, CourseChip, BulletList } from '../../components/blocks'
 import { deptSidebar } from '../../utils/sidebarConfig'
+import { staticDepartments } from '../../utils/departmentsStatic'
 
 /**
  * Generic dynamic department page.
@@ -35,9 +36,81 @@ const DeptPage = ({ slug, subpage }) => {
     fetchDept()
   }, [slug])
 
+  const staticData = staticDepartments[slug]
+
   // Build sidebar from slug
-  const deptNameForSidebar = dept?.dept_name || slug.toUpperCase()
+  const deptNameForSidebar = staticData?.dept_name || dept?.dept_name || slug.toUpperCase()
   const sidebar = deptSidebar(deptNameForSidebar, `/academics/dept/${slug}`)
+
+  // Render static general (courses) page immediately if available
+  if ((subpage === 'courses' || !subpage) && staticData) {
+    const courses = staticData.courses || []
+    const mission = staticData.mission || []
+    const highlights = staticData.highlights || []
+    const introParas = (staticData.introduction || '').split('\n').filter(p => p.trim())
+
+    return (
+      <InnerPageLayout sidebarTitle={sidebar.title} sidebarLinks={sidebar.links}>
+        {/* Banner */}
+        {staticData.banner_image && (
+          <BannerImage src={staticData.banner_image} alt={`Department of ${staticData.dept_name}`} />
+        )}
+
+        {/* Title */}
+        <PageHeader title={`Department of ${staticData.dept_name}`} />
+
+        {/* Courses Offered */}
+        {courses.length > 0 && (
+          <SectionBlock title="Courses Offered">
+            <div className="space-y-3">
+              {courses.map((c, i) => (
+                <CourseChip key={i} label={c} />
+              ))}
+            </div>
+          </SectionBlock>
+        )}
+
+        {/* Introduction */}
+        {staticData.introduction && (
+          <SectionBlock title="Introduction">
+            {introParas.map((para, i) => (
+              <BodyText key={i} className={i > 0 ? 'mt-4' : ''}>
+                {para}
+              </BodyText>
+            ))}
+          </SectionBlock>
+        )}
+
+        {/* Vision */}
+        {staticData.vision && (
+          <SectionBlock title="Vision">
+            <BodyText>{staticData.vision}</BodyText>
+          </SectionBlock>
+        )}
+
+        {/* Mission */}
+        {mission.length > 0 && (
+          <SectionBlock title="Mission">
+            <BulletList items={mission} />
+          </SectionBlock>
+        )}
+
+        {/* Highlights */}
+        {highlights.length > 0 && (
+          <SectionBlock title="Department Highlights">
+            <div className="grid gap-4 sm:grid-cols-3">
+              {highlights.map((s, i) => (
+                <div key={i} className="rounded-lg border border-blue-100 bg-[#f0f5ff] px-5 py-4">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#001a66]/60">{s.label}</p>
+                  <p className="mt-1 text-[20px] font-extrabold text-[#001a66]">{s.value}</p>
+                </div>
+              ))}
+            </div>
+          </SectionBlock>
+        )}
+      </InnerPageLayout>
+    )
+  }
 
   // Loading state
   if (loading) {
@@ -113,62 +186,108 @@ const DeptPage = ({ slug, subpage }) => {
 
     return (
       <InnerPageLayout sidebarTitle={sidebar.title} sidebarLinks={sidebar.links}>
-        <PageHeader title="PEOs, PSOs & POs" />
-        
-        <SectionBlock title="Program Educational Objectives (PEOs)">
-          {peos.length > 0 ? (
-            <div className="space-y-4">
-              {peos.map((p, i) => (
-                <div key={i} className="flex gap-4 p-5 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
-                  <div className="flex-shrink-0 flex items-center justify-center w-16 h-10 bg-blue-50 text-[#001a66] font-black rounded-lg text-xs tracking-wider">
-                    {p.code}
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-slate-600 font-semibold text-sm leading-relaxed">{p.statement}</p>
-                  </div>
-                </div>
-              ))}
+        <div className="bg-white border border-slate-200 rounded-[32px] p-8 md:p-12 shadow-sm space-y-10">
+          
+          {/* Centered Heading */}
+          <div className="text-center mb-4">
+            <h2 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">
+              Programme's <span className="underline decoration-[#001a66] decoration-2 underline-offset-4">PEO's</span>, <span className="underline decoration-red-600 decoration-2 underline-offset-4">PSO's</span> and <span className="underline decoration-[#001a66] decoration-2 underline-offset-4">PO's</span>
+            </h2>
+            <div className="flex justify-center items-center mt-3 gap-0.5">
+              <div className="w-12 h-1 bg-red-600 rounded-l"></div>
+              <div className="w-12 h-1 bg-[#001a66] rounded-r"></div>
             </div>
-          ) : (
-            <p className="text-slate-400 italic text-sm">Objectives details are being updated.</p>
-          )}
-        </SectionBlock>
+          </div>
 
-        <SectionBlock title="Program Specific Outcomes (PSOs)">
-          {psos.length > 0 ? (
-            <div className="space-y-4">
-              {psos.map((p, i) => (
-                <div key={i} className="flex gap-4 p-5 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300">
-                  <div className="flex-shrink-0 flex items-center justify-center w-16 h-10 bg-[#0d2060]/5 text-[#0d2060] font-black rounded-lg text-xs tracking-wider">
-                    {p.code}
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-slate-600 font-semibold text-sm leading-relaxed">{p.statement}</p>
-                  </div>
-                </div>
-              ))}
+          {/* PEO Section */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 border-l-4 border-l-[#001a66] pl-3">
+              <h3 className="text-xl font-black text-slate-800 tracking-tight">
+                Program Educational Objectives (PEO)
+              </h3>
             </div>
-          ) : (
-            <p className="text-slate-400 italic text-sm">Outcome details are being updated.</p>
-          )}
-        </SectionBlock>
+            
+            {peos.length > 0 ? (
+              <div className="space-y-5 pl-1">
+                {peos.map((p, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    {/* Red document/pdf icon badge */}
+                    <div className="flex-shrink-0 mt-1 bg-red-600 text-white rounded p-0.5 w-5 h-5 flex items-center justify-center">
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <p className="text-slate-700 font-semibold text-[15px] leading-relaxed">
+                      <span className="font-extrabold text-slate-900">{p.code}: </span>
+                      {p.statement}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-slate-400 italic text-sm pl-4">Objectives details are being updated.</p>
+            )}
+          </div>
 
-        <SectionBlock title="Program Outcomes (POs)">
-          {pos.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-2">
-              {pos.map((p, i) => (
-                <div key={i} className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col gap-2">
-                  <div className="w-fit px-3 py-1 bg-slate-100 text-[#001a66] font-black rounded-md text-[10px] tracking-widest uppercase">
-                    {p.code}
+          {/* PSO Section */}
+          {psos.length > 0 && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 border-l-4 border-l-red-600 pl-3">
+                <h3 className="text-xl font-black text-slate-800 tracking-tight">
+                  Program Specific Outcomes (PSO)
+                </h3>
+              </div>
+              
+              <div className="space-y-5 pl-1">
+                {psos.map((p, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    {/* Red document/pdf icon badge */}
+                    <div className="flex-shrink-0 mt-1 bg-red-600 text-white rounded p-0.5 w-5 h-5 flex items-center justify-center">
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <p className="text-slate-700 font-semibold text-[15px] leading-relaxed">
+                      <span className="font-extrabold text-slate-900">{p.code}: </span>
+                      {p.statement}
+                    </p>
                   </div>
-                  <p className="text-slate-600 font-semibold text-xs leading-relaxed">{p.statement}</p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          ) : (
-            <p className="text-slate-400 italic text-sm">Program Outcomes are being updated.</p>
           )}
-        </SectionBlock>
+
+          {/* PO Section */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 border-l-4 border-l-[#001a66] pl-3">
+              <h3 className="text-xl font-black text-slate-800 tracking-tight">
+                Program Outcomes (POs)
+              </h3>
+            </div>
+            
+            {pos.length > 0 ? (
+              <div className="space-y-5 pl-1">
+                {pos.map((p, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    {/* Red document/pdf icon badge */}
+                    <div className="flex-shrink-0 mt-1 bg-red-600 text-white rounded p-0.5 w-5 h-5 flex items-center justify-center">
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <p className="text-slate-700 font-semibold text-[15px] leading-relaxed">
+                      <span className="font-extrabold text-slate-900">{p.code}: </span>
+                      {p.statement}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-slate-400 italic text-sm pl-4">Program Outcomes are being updated.</p>
+            )}
+          </div>
+
+        </div>
       </InnerPageLayout>
     )
   }
