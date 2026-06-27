@@ -7,11 +7,11 @@ const topNavConfig = [
   {
     label: 'ERP',
     dropdown: [
-      { label: 'GREYTHR', path: '#' },
+      { label: 'GREYTHR', path: 'https://arunai.greythr.com/uas/portal/auth/login?targetUrl=%2Fv3%2Fportal' },
       { label: 'ARUNAI ERP', path: '#' },
     ],
   },
-  { label: 'UGC', path: '#' },
+  { label: 'UGC', path: '/ugc' },
   { label: 'NISP', path: '/nisp' },
   { label: 'IIC', path: '/iic' },
   { label: 'NIRF', path: '/nirf' },

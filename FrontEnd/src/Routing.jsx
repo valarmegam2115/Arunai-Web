@@ -8,6 +8,7 @@ import Home from './pages/Home'
 import NISP from './pages/NISP'
 import NIRF from './pages/NIRF'
 import IIC from './pages/IIC'
+import UGC from './pages/UGC'
 import ContactUs from './pages/ContactUs'
 
 // Inner pages
@@ -153,6 +154,7 @@ const routes = [
   { path: '/documents',           component: <DocumentsPage /> },
   { path: '/iic',                 component: <IIC /> },
   { path: '/nirf',                component: <NIRF /> },
+  { path: '/ugc',                 component: <UGC />   },
   { path: '/contactus', component: <ContactUs /> },
 ]
 
