@@ -5,7 +5,7 @@ import { aboutSidebar } from '../../../utils/sidebarConfig'
 
 const AboutAEC = () => (
   <InnerPageLayout sidebarTitle={aboutSidebar.title} sidebarLinks={aboutSidebar.links}>
-    <BannerImage src="/hero-image.png" alt="Arunai Engineering College" />
+    <BannerImage src="/about.png" alt="Arunai Engineering College" />
 
     <PageHeader title="About Arunai Engineering College" />
 

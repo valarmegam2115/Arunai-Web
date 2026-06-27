@@ -5,6 +5,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
+
 const Img = '/hero-image.png'
 const Coursepg = '/course/course-pg.png'
 const Courseug = '/course/course-ug.png'
@@ -370,6 +371,7 @@ const Home = ({ showHero = false }) => {
               </p>
               <button
                 type="button"
+                
                 className="mt-10 mx-auto bg-[#001a66] px-12 py-2 text-[20px] font-semibold text-white shadow-md transition hover:bg-[#0b2a8a] rounded-lg cursor-pointer"
               >
                 More about Arunai
