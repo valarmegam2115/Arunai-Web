@@ -24,16 +24,17 @@ const CourseList = ({ title, courses }) => {
 export const UgCourses = () => {
   const ugCourses = [
     'B.E., Civil Engineering',
-    'B.E., Computer Science & Engineering',
+    'B.E., Computer Science and Engineering',
     'B.E., CSE (Cyber Security)',
-    'B.E., CSE (Artificial Intelligence & Machine Learning)',
-    'B.E., Electronics & Communication Engineering',
-    'B.E., Electrical & Electronics Engineering',
+    'B.E., CSE (Artificial Intelligence and Machine Learning)',
+    'B.E., Electronics and Communication Engineering',
+    'B.E., Electrical and Electronics Engineering',
     'B.E., Mechanical Engineering',
     'B. Tech., Agricultural Engineering',
-    'B. Tech., Artificial Intelligence & Data Science',
+    'B. Tech., Artificial Intelligence and Data Science',
     'B. Tech., Bio Technology',
     'B. Tech., Chemical Engineering',
+    'B. Tech., Computer Science and Business Systems',
     'B. Tech., Information Technology'
   ];
   return <CourseList title="UG Courses Offered" courses={ugCourses} />;
@@ -41,7 +42,7 @@ export const UgCourses = () => {
 
 export const PgCourses = () => {
   const pgCourses = [
-    'M.E., Computer Science & Engineering',
+    'M.E., Computer Science and Engineering',
     'M.E., Power Electronics and Drives',
     'M.E., Thermal Engineering',
     'M.Tech., Bio Technology',
