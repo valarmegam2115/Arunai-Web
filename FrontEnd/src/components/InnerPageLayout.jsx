@@ -36,6 +36,11 @@ const SidebarLink = ({ item, currentPath, depth = 0 }) => {
   const icon = icons[item.icon] ?? icons.info
 
   const handleClick = (e) => {
+    if (item.path.startsWith('http')) {
+      e.preventDefault()
+      window.open(item.path, '_blank', 'noopener,noreferrer')
+      return
+    }
     e.preventDefault()
     if (hasChildren) {
       setIsOpen(o => !o)

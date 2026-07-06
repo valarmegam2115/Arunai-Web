@@ -48,14 +48,14 @@ export const academicsSidebar = {
 export const researchSidebar = {
   title: 'Research',
   links: [
-    { label: 'About Research',               path: '/research',                icon: 'info' },
-    { label: 'Research Advisory Committee',  path: '/research/advisory',       icon: 'people' },
-    { label: 'Research Centres',             path: '/research/centres',        icon: 'building' },
-    { label: 'Recognized Supervisor List',   path: '/research/supervisors',    icon: 'list' },
-    { label: 'Funded Projects',              path: '/research/funded-projects',icon: 'award' },
-    { label: 'Publication',                  path: '/research/publication',    icon: 'book' },
-    { label: 'Patent',                       path: '/research/patent',         icon: 'star' },
-    { label: 'Memorandum of Understanding',  path: '/research/mou',            icon: 'handshake' },
+    { label: 'About Research',                        path: '/research',                icon: 'info' },
+    { label: 'Research Advisory Committee Members',   path: '/research/advisory',       icon: 'people' },
+    { label: 'Research Centres',                      path: '/research/centres',        icon: 'building' },
+    { label: 'Recognized Supervisor List',            path: '/research/supervisors',    icon: 'list' },
+    { label: 'Funded Projects',                       path: '/research/funded-projects',icon: 'award' },
+    { label: 'Publication',                           path: '/research/publication',    icon: 'book' },
+    { label: 'Patent',                                path: '/research/patent',         icon: 'star' },
+    { label: 'Memorandum of Understanding',           path: '/research/mou',            icon: 'handshake' },
   ],
 }
 
@@ -72,12 +72,14 @@ export const admissionSidebar = {
 export const facilitiesSidebar = {
   title: 'Facilities',
   links: [
-    { label: 'Infrastructure',    path: '/facilities',                  icon: 'building' },
-    { label: 'Digital Library',   path: '/facilities/library',          icon: 'book' },
-    { label: 'Laboratories',      path: '/facilities/labs',             icon: 'flask' },
-    { label: 'Hostels',           path: '/facilities/hostels',          icon: 'building' },
-    { label: 'Transportation',    path: '/facilities/transportation',   icon: 'gear' },
-    { label: 'Sports',            path: '/facilities/sports',           icon: 'award' },
+    { label: 'Library',                       path: '/facilities',                    icon: 'book' },
+    { label: 'Hostel',                        path: '/facilities/hostel',             icon: 'building' },
+    { label: 'Computing & Internet Facility', path: '/facilities/computing',          icon: 'gear' },
+    { label: 'ICT Class rooms',               path: '/facilities/ict',               icon: 'chart' },
+    { label: 'Health Care',                   path: '/facilities/healthcare',         icon: 'star' },
+    { label: 'Transport',                     path: '/facilities/transport',          icon: 'gear' },
+    { label: 'Sports',                        path: '/facilities/sports',             icon: 'award' },
+    { label: 'Auditorium',                    path: '/facilities/auditorium',         icon: 'building' },
   ],
 }
 
@@ -106,16 +108,16 @@ export const approvalSidebar = {
 }
 
 export const coeSidebar = {
-  title: 'COE',
+  title: 'Controller of Examinations',
   links: [
-    { label: 'About COE',                  path: '/coe/aboutCOE',             icon: 'star' },
-    { label: 'COE Officials',              path: '/coe/coeOfficials',         icon: 'star' },
-    { label: 'Circulars & Notifications',  path: '/coe/coeCircular',          icon: 'star' },
-    { label: 'Malpractice Punishment',     path: '/coe/coePunishment',        icon: 'star' },
-    { label: 'Exam Timetable',             path: '/coe/coeTimetable',         icon: 'star' },
-    { label: 'Download Forms',             path: '/coe/coeForms',             icon: 'star' },
-    { label: 'Faculty Login',              path: 'https://arunaicoe.org/stafflogin/login.php?done=/stafflogin/',          icon: 'star' },
-    { label: 'Student Login',              path: '/coe/coeForms',             icon: 'star' },
+    { label: 'About COE',                  path: '/coe/aboutCOE',             icon: 'info' },
+    { label: 'COE Officials',              path: '/coe/coeOfficials',         icon: 'people' },
+    { label: 'Circulars and Notifications', path: '/coe/coeCircular',          icon: 'doc' },
+    { label: 'Malpractice Punishment',     path: '/coe/coePunishment',        icon: 'scales' },
+    { label: 'Exam Time Table',             path: '/coe/coeTimetable',         icon: 'calendar' },
+    { label: 'Download Forms',             path: '/coe/coeForms',             icon: 'doc' },
+    { label: 'Staff Login',                path: 'https://arunaicoe.org/stafflogin/login.php?done=/stafflogin/',          icon: 'person' },
+    { label: 'Student Login',              path: 'https://arunaicoe.org/studentlogin/login.php?done=/studentlogin/',          icon: 'person' },
   ],
 }
    

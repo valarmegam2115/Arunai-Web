@@ -28,6 +28,15 @@ import OrgStructure from './pages/inner/about/OrgStructure'
 import AboutResearch from './pages/inner/AboutResearch'
 import DeptPage from './pages/inner/DeptPage'
 
+// Research Pages
+import ResearchAdvisory from './pages/inner/research/ResearchAdvisory'
+import ResearchCentres from './pages/inner/research/ResearchCentres'
+import RecognizedSupervisors from './pages/inner/research/RecognizedSupervisors'
+import FundedProjects from './pages/inner/research/FundedProjects'
+import Publication from './pages/inner/research/Publication'
+import Patent from './pages/inner/research/Patent'
+import MoU from './pages/inner/research/MoU'
+
 // Admin pages
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
@@ -38,6 +47,12 @@ import { IICPage, NIRFPage } from './pages/DocumentPages'
 //COE Pages
 import AboutCOE from './pages/inner/coe/aboutCOE'
 import CoeAccordionLayout from './pages/inner/coe/CoeAccordionLayout'
+import CoeOfficials from './pages/inner/coe/coeOfficials'
+import CoePunishment from './pages/inner/coe/coePunishment'
+import CoeForms from './pages/inner/coe/coeForms'
+
+// Facilities Pages
+import FacilitiesPage from './pages/inner/facilities/FacilitiesPage'
 
 //Approval Pages
 import ApprovalLayout from './pages/inner/approvals/ApprovalLayout'
@@ -52,7 +67,6 @@ import PlacementContactUs from './pages/inner/placement/ContactUs'
 
 // Courses Offered Pages
 import { UgCourses, PgCourses } from './pages/CoursesOffered'
-
 
 // Department slugs from sidebarConfig
 const deptSlugs = [
@@ -84,14 +98,34 @@ const routes = [
   { path: '/academics/courses/pg',          component: <PgCourses /> },
 
   // Research section
-  { path: '/research',            component: <AboutResearch /> },
+  { path: '/research',                      component: <AboutResearch /> },
+  { path: '/research/advisory',             component: <ResearchAdvisory /> },
+  { path: '/research/centres',              component: <ResearchCentres /> },
+  { path: '/research/supervisors',          component: <RecognizedSupervisors /> },
+  { path: '/research/funded-projects',      component: <FundedProjects /> },
+  { path: '/research/publication',          component: <Publication /> },
+  { path: '/research/patent',               component: <Patent /> },
+  { path: '/research/mou',                  component: <MoU /> },
+
+  // Facilities section
+  { path: '/facilities',                    component: <FacilitiesPage facility="library" /> },
+  { path: '/facilities/hostel',             component: <FacilitiesPage facility="hostel" /> },
+  { path: '/facilities/computing',          component: <FacilitiesPage facility="computing" /> },
+  { path: '/facilities/ict',               component: <FacilitiesPage facility="ict" /> },
+  { path: '/facilities/healthcare',         component: <FacilitiesPage facility="healthcare" /> },
+  { path: '/facilities/transport',          component: <FacilitiesPage facility="transport" /> },
+  { path: '/facilities/sports',             component: <FacilitiesPage facility="sports" /> },
+  { path: '/facilities/auditorium',         component: <FacilitiesPage facility="auditorium" /> },
 
 
 
   // COE Section
   { path: '/coe/aboutCOE',                       component: <AboutCOE /> },
+  { path: '/coe/coeOfficials',                   component: <CoeOfficials /> },
   { path: '/coe/coeCircular',                    component: <CoeAccordionLayout title="Circulars and Notifications" category="Circulars & Notifications" /> },
+  { path: '/coe/coePunishment',                  component: <CoePunishment /> },
   { path: '/coe/coeTimetable',                   component: <CoeAccordionLayout title="Exam Time Table" category="Exam Time Table" /> },
+  { path: '/coe/coeForms',                       component: <CoeForms /> },
 
   // Approval Section
   { path: '/approvals/MandatoryDisclosure',      component: <ApprovalLayout title="Mandatory Disclosure" category="Mandatory Disclosure" /> },
